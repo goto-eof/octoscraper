@@ -12,7 +12,7 @@ async fn main() {
     let id_map_arc: Arc<Mutex<i64>> = Arc::new(Mutex::new(0));
     let mut handles = vec![];
 
-    for _ in 0..10 {
+    for _ in 0..1 {
         let links_map_arc = links_map_arc.clone();
         let id_map_arc = id_map_arc.clone();
         let handle = tokio::spawn(async move {
@@ -20,7 +20,7 @@ async fn main() {
             let links: Vec<String> = self::extract_links().await;
 
             links.iter().for_each(|item| {
-                let mut value = 0;
+                let mut value = 1;
                 if links_map_arc.lock().unwrap().get(item).is_some() {
                     value = links_map_arc.lock().unwrap().get(item).unwrap() + 1;
                 }
@@ -49,7 +49,7 @@ async fn main() {
 }
 
 async fn extract_links() -> Vec<String> {
-    let res = reqwest::get("https://www.rust-lang.org/en-US/")
+    let res = reqwest::get("http://www.dodu.it")
         .await
         .unwrap()
         .text()

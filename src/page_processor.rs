@@ -3,8 +3,10 @@ use rand::prelude::Distribution;
 use select::document::Document;
 use select::predicate::Name;
 use std::collections::HashSet;
-use std::fs::File;
+use std::fmt::format;
+use std::fs::{self, File};
 use std::io::Write;
+use std::path::Path;
 
 pub async fn extract_links_and_process_data(
     link: &str,
@@ -51,18 +53,31 @@ async fn download(link: &str) {
         .unwrap_or(bkname.as_ref());
     let image_file = image_file.bytes().await.unwrap();
     let image_file = &image_file.to_vec();
-
+    if !Path::new("./images").is_dir() {
+        fs::create_dir("./images").unwrap();
+    }
+    let fname = format!("./directory/{}", fname);
     let mut file = File::create(fname).unwrap();
     file.write_all(image_file).unwrap();
 }
 
 pub async fn extract_links(link: &str) -> Vec<String> {
-    let res = reqwest::get(link).await.unwrap().text().await.unwrap();
-    return Document::from(res.as_str())
+    let response = reqwest::get(link).await.unwrap().text().await.unwrap();
+    let mut urls: Vec<String> = Document::from(response.as_str())
         .find(Name("a"))
         .filter_map(|n| n.attr("href"))
         .map(|item| item.to_string())
         .collect();
+
+    let src: Vec<String> = Document::from(response.as_str())
+        .find(Name("img"))
+        .filter_map(|n| n.attr("src"))
+        .map(|item| item.to_string())
+        .collect();
+
+    src.iter().for_each(|item| urls.push(item.to_owned()));
+
+    return urls;
 }
 
 fn is_same_domain(domain: &str, link: &str) -> Option<String> {
@@ -74,6 +89,7 @@ fn is_same_domain(domain: &str, link: &str) -> Option<String> {
 }
 fn contains_extension(extensions: Vec<String>, link: &str) -> Option<String> {
     for extension in extensions {
+        println!("{}|{}", extension, link);
         if link.ends_with(&extension) {
             return Some(link.to_string());
         }

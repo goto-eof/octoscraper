@@ -1,4 +1,4 @@
-use crate::page_processor::extract_links_and_process_data;
+use crate::page_processor::{extract_links_and_process_data, DomainFilter, ExtensionFilter};
 use std::collections::HashSet;
 
 mod page_processor;
@@ -27,6 +27,21 @@ async fn main() {
         let link = processing.clone();
         let link = link.iter().next().unwrap();
         processing.remove(link.as_str());
-        extract_links_and_process_data(link, domain, &mut processing, &mut processed).await;
+        extract_links_and_process_data(
+            link,
+            domain,
+            &mut processing,
+            &mut processed,
+            DomainFilter {
+                is_same_domain: true,
+                domain: domain.to_string(),
+            },
+            &mut ExtensionFilter {
+                enabled: true,
+                extensions: vec![".png".to_owned(), ".jpg".to_owned(), ".jpeg".to_owned()],
+            },
+        )
+        .await;
+        processed.insert(link.to_string());
     }
 }

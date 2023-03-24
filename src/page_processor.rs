@@ -1,34 +1,85 @@
+use rand::distributions::Uniform;
+use rand::prelude::Distribution;
 use select::document::Document;
 use select::predicate::Name;
 use std::collections::HashSet;
+use std::fs::File;
+use std::io::Write;
 
 pub async fn extract_links_and_process_data(
     link: &str,
     domain: &str,
     processing: &mut HashSet<String>,
     processed: &mut HashSet<String>,
+    domain_filter: DomainFilter,
+    extension_filter: &mut ExtensionFilter,
 ) {
     println!("processing: {}", link);
     // retrieve all page links
     let extracted_links = extract_links(link).await;
+    // first links filter
+    let filtered_links = apply_filters(extracted_links.clone(), &domain_filter, None);
     // save results in the map
-    let filtered_links = apply_filters(
-        extracted_links.clone(),
-        DomainFilter {
-            is_same_domain: true,
-            domain: domain.to_string(),
-        },
-        ExtensionFilter {
-            enabled: false,
-            extensions: vec![],
-        },
-    );
     filtered_links.iter().for_each(|item| {
         if !processed.contains(item.as_str()) {
             processing.insert(item.to_string());
-            processed.insert(item.to_string());
         }
     });
+
+    let filtered_links = apply_filters(
+        extracted_links.clone(),
+        &domain_filter,
+        Some(&extension_filter),
+    );
+    for ele in filtered_links.iter() {
+        println!("Saving: {}", ele);
+        download(ele).await;
+    }
+}
+
+async fn download(link: &str) {
+    // let response = reqwest::get(link).await.unwrap();
+    // let tmp_dir = Builder::new().prefix("example").tempdir().unwrap();
+    // let mut dest = {
+    //     let mut rng = rand::thread_rng();
+    //     let die = Uniform::from(1..100000);
+    //     let rndd = die.sample(&mut rng);
+    //     let bkname = format!("random-{}.png", rndd);
+    //     let fname = response
+    //         .url()
+    //         .path_segments()
+    //         .and_then(|segments| segments.last())
+    //         .and_then(|name| if name.is_empty() { None } else { Some(name) })
+    //         .unwrap_or(bkname.as_ref());
+
+    //     println!("file to download: '{}'", fname);
+    //     // let fname = tmp_dir.path().join(fname);
+    //     println!("will be located under: '{:?}'", fname);
+    //     File::create(fname).unwrap()
+    // };
+    // let content = response.text().await.unwrap();
+    // copy(&mut content.as_bytes(), &mut dest).unwrap();
+    let mut rng = rand::thread_rng();
+    let die = Uniform::from(1..100000);
+    let rndd = die.sample(&mut rng);
+    let bkname = format!("random-{}.png", rndd);
+
+    //     println!("file to download: '{}'", fname);
+    let image_file = reqwest::get(link).await.unwrap();
+
+    let fname = image_file
+        .url()
+        .path_segments()
+        .and_then(|segments| segments.last())
+        .and_then(|name| if name.is_empty() { None } else { Some(name) })
+        .unwrap_or(bkname.as_ref());
+    let image_file = reqwest::get(link).await.unwrap();
+    let image_file = image_file.bytes().await.unwrap();
+    let mut file = std::fs::File::create(fname).unwrap();
+    let image_file = &image_file.to_vec();
+
+    let mut file = File::create(fname).unwrap();
+    file.write_all(image_file).unwrap();
 }
 
 pub async fn extract_links(link: &str) -> Vec<String> {
@@ -47,9 +98,10 @@ fn is_same_domain(domain: &str, link: &str) -> Option<String> {
         None
     };
 }
-fn contains_extension(extensions: Vec<String>, link: &str) -> Option<String> {
+fn contains_extension(extensions: Vec<String>, link: &str, contains: bool) -> Option<String> {
     for extension in extensions {
-        if link.ends_with(&extension) {
+        let check: bool = link.ends_with(&extension);
+        if check {
             return Some(link.to_string());
         }
     }
@@ -58,8 +110,8 @@ fn contains_extension(extensions: Vec<String>, link: &str) -> Option<String> {
 
 fn apply_filters(
     links: Vec<String>,
-    domain_filter: DomainFilter,
-    extension_filter: ExtensionFilter,
+    domain_filter: &DomainFilter,
+    extension_filter: Option<&ExtensionFilter>,
 ) -> Vec<String> {
     let mut filtered_links: Vec<String> = links;
     if domain_filter.is_same_domain {
@@ -68,20 +120,26 @@ fn apply_filters(
             .filter_map(|link| is_same_domain(&domain_filter.domain, link))
             .collect();
     }
-    if extension_filter.enabled {
-        filtered_links = filtered_links
-            .iter()
-            .filter_map(|link| contains_extension(extension_filter.extensions.clone(), link))
-            .collect();
+
+    if extension_filter.is_some() {
+        let extension_filter = extension_filter.unwrap();
+        if extension_filter.enabled {
+            filtered_links = filtered_links
+                .iter()
+                .filter_map(|link| {
+                    contains_extension(extension_filter.extensions.clone(), link, false)
+                })
+                .collect();
+        }
     }
     return filtered_links;
 }
 
-struct DomainFilter {
-    is_same_domain: bool,
-    domain: String,
+pub struct DomainFilter {
+    pub is_same_domain: bool,
+    pub domain: String,
 }
-struct ExtensionFilter {
-    enabled: bool,
-    extensions: Vec<String>,
+pub struct ExtensionFilter {
+    pub enabled: bool,
+    pub extensions: Vec<String>,
 }

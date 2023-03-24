@@ -7,7 +7,7 @@
                                        |_|              
 ```    
 
-OctoScraper is a web scraper that allows to donwload web resources. Currenlty it clones images from any website.
+OctoScraper is a web scraper that allows to donwload web resources. Currenlty it clones images from websites.
 
 Allow reqwest to work propertly:
 ```

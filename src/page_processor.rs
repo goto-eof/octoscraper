@@ -38,33 +38,11 @@ pub async fn extract_links_and_process_data(
 }
 
 async fn download(link: &str) {
-    // let response = reqwest::get(link).await.unwrap();
-    // let tmp_dir = Builder::new().prefix("example").tempdir().unwrap();
-    // let mut dest = {
-    //     let mut rng = rand::thread_rng();
-    //     let die = Uniform::from(1..100000);
-    //     let rndd = die.sample(&mut rng);
-    //     let bkname = format!("random-{}.png", rndd);
-    //     let fname = response
-    //         .url()
-    //         .path_segments()
-    //         .and_then(|segments| segments.last())
-    //         .and_then(|name| if name.is_empty() { None } else { Some(name) })
-    //         .unwrap_or(bkname.as_ref());
-
-    //     println!("file to download: '{}'", fname);
-    //     // let fname = tmp_dir.path().join(fname);
-    //     println!("will be located under: '{:?}'", fname);
-    //     File::create(fname).unwrap()
-    // };
-    // let content = response.text().await.unwrap();
-    // copy(&mut content.as_bytes(), &mut dest).unwrap();
     let mut rng = rand::thread_rng();
     let die = Uniform::from(1..100000);
     let rndd = die.sample(&mut rng);
     let bkname = format!("random-{}.png", rndd);
 
-    //     println!("file to download: '{}'", fname);
     let image_file = reqwest::get(link).await.unwrap();
 
     let fname = image_file
@@ -75,7 +53,6 @@ async fn download(link: &str) {
         .unwrap_or(bkname.as_ref());
     let image_file = reqwest::get(link).await.unwrap();
     let image_file = image_file.bytes().await.unwrap();
-    let mut file = std::fs::File::create(fname).unwrap();
     let image_file = &image_file.to_vec();
 
     let mut file = File::create(fname).unwrap();

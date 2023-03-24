@@ -1,65 +1,32 @@
-use select::document::Document;
-use select::predicate::Name;
-use std::collections::HashMap;
-use std::sync::{Arc, Mutex};
+use crate::page_processor::extract_links_and_process_data;
+use std::collections::HashSet;
+
+mod page_processor;
 
 #[tokio::main]
 async fn main() {
-    println!("=======================");
-    println!("Welcome to OctoScraper!");
-    println!("=======================");
-    let links_map_arc: Arc<Mutex<HashMap<String, i64>>> = Arc::new(Mutex::new(HashMap::new()));
-    let id_map_arc: Arc<Mutex<i64>> = Arc::new(Mutex::new(0));
-    let mut handles = vec![];
-
-    for _ in 0..1 {
-        let links_map_arc = links_map_arc.clone();
-        let id_map_arc = id_map_arc.clone();
-        let handle = tokio::spawn(async move {
-            println!("{}", id_map_arc.lock().unwrap());
-            let links: Vec<String> = self::extract_links().await;
-
-            links.iter().for_each(|item| {
-                let mut value = 1;
-                if links_map_arc.lock().unwrap().get(item).is_some() {
-                    value = links_map_arc.lock().unwrap().get(item).unwrap() + 1;
-                }
-
-                links_map_arc
-                    .lock()
-                    .unwrap()
-                    .insert(item.to_string(), value);
-            });
-        });
-        handles.push(handle);
+    println!("====================================================================");
+    println!("Welcome to");
+    println!(
+        r#"
+    ___     _        __                                
+    /___\___| |_ ___ / _\ ___ _ __ __ _ _ __   ___ _ __ 
+   //  // __| __/ _ \\ \ / __| '__/ _` | '_ \ / _ \ '__|
+  / \_// (__| || (_) |\ \ (__| | | (_| | |_) |  __/ |   
+  \___/ \___|\__\___/\__/\___|_|  \__,_| .__/ \___|_|   
+                                       |_|              
+    "#,
+    );
+    println!("====================================================================");
+    let website = "http://dodu.it";
+    let domain = website.clone();
+    let mut processing: HashSet<String> = HashSet::new();
+    let mut processed: HashSet<String> = HashSet::new();
+    processing.insert(website.to_string());
+    while processing.len() > 0 {
+        let link = processing.clone();
+        let link = link.iter().next().unwrap();
+        processing.remove(link.as_str());
+        extract_links_and_process_data(link, domain, &mut processing, &mut processed).await;
     }
-
-    for handle in handles {
-        handle.await.unwrap();
-    }
-
-    links_map_arc
-        .lock()
-        .unwrap()
-        .iter()
-        .for_each(|item| println!("{}|{}", item.0.to_owned(), item.1));
-    println!("=======================");
-    println!("Done!");
-    println!("=======================");
-}
-
-async fn extract_links() -> Vec<String> {
-    let res = reqwest::get("http://www.dodu.it")
-        .await
-        .unwrap()
-        .text()
-        .await
-        .unwrap();
-
-    let mut data: Vec<String> = Document::from(res.as_str())
-        .find(Name("a"))
-        .filter_map(|n| n.attr("href"))
-        .map(|item| item.to_string())
-        .collect();
-    return data;
 }

@@ -8,7 +8,6 @@ use std::io::Write;
 
 pub async fn extract_links_and_process_data(
     link: &str,
-    domain: &str,
     processing: &mut HashSet<String>,
     processed: &mut HashSet<String>,
     domain_filter: DomainFilter,
@@ -44,14 +43,12 @@ async fn download(link: &str) {
     let bkname = format!("random-{}.png", rndd);
 
     let image_file = reqwest::get(link).await.unwrap();
-
-    let fname = image_file
-        .url()
+    let url = image_file.url().clone();
+    let fname = url
         .path_segments()
         .and_then(|segments| segments.last())
         .and_then(|name| if name.is_empty() { None } else { Some(name) })
         .unwrap_or(bkname.as_ref());
-    let image_file = reqwest::get(link).await.unwrap();
     let image_file = image_file.bytes().await.unwrap();
     let image_file = &image_file.to_vec();
 
@@ -75,10 +72,9 @@ fn is_same_domain(domain: &str, link: &str) -> Option<String> {
         None
     };
 }
-fn contains_extension(extensions: Vec<String>, link: &str, contains: bool) -> Option<String> {
+fn contains_extension(extensions: Vec<String>, link: &str) -> Option<String> {
     for extension in extensions {
-        let check: bool = link.ends_with(&extension);
-        if check {
+        if link.ends_with(&extension) {
             return Some(link.to_string());
         }
     }
@@ -103,9 +99,7 @@ fn apply_filters(
         if extension_filter.enabled {
             filtered_links = filtered_links
                 .iter()
-                .filter_map(|link| {
-                    contains_extension(extension_filter.extensions.clone(), link, false)
-                })
+                .filter_map(|link| contains_extension(extension_filter.extensions.clone(), link))
                 .collect();
         }
     }

@@ -19,7 +19,6 @@ async fn main() {
     );
     println!("====================================================================");
     let website = "http://dodu.it";
-    let domain = website.clone();
     let mut processing: HashSet<String> = HashSet::new();
     let mut processed: HashSet<String> = HashSet::new();
     processing.insert(website.to_string());
@@ -29,12 +28,11 @@ async fn main() {
         processing.remove(link.as_str());
         extract_links_and_process_data(
             link,
-            domain,
             &mut processing,
             &mut processed,
             DomainFilter {
                 is_same_domain: true,
-                domain: domain.to_string(),
+                domain: website.to_string(),
             },
             &mut ExtensionFilter {
                 enabled: true,

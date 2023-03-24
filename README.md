@@ -7,7 +7,7 @@
                                        |_|              
 ```    
 
-
+OctoScraper is a web scraper that will allow to donwload resources. 
 
 Allow reqwest to work propertly:
 ```

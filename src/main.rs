@@ -18,7 +18,7 @@ async fn main() {
     "#,
     );
     println!("====================================================================");
-    let website = "http://dodu.it";
+    let website = "http://www.dodu.it/";
     let mut processing: HashSet<String> = HashSet::new();
     let mut processed: HashSet<String> = HashSet::new();
     processing.insert(website.to_string());

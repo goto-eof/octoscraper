@@ -81,7 +81,7 @@ pub async fn extract_links(link: &str) -> Vec<String> {
 }
 
 fn is_same_domain(domain: &str, link: &str) -> Option<String> {
-    return if link.starts_with(domain) {
+    return if link.contains(domain) {
         Some(link.to_string())
     } else {
         None
@@ -89,7 +89,6 @@ fn is_same_domain(domain: &str, link: &str) -> Option<String> {
 }
 fn contains_extension(extensions: Vec<String>, link: &str) -> Option<String> {
     for extension in extensions {
-        println!("{}|{}", extension, link);
         if link.ends_with(&extension) {
             return Some(link.to_string());
         }

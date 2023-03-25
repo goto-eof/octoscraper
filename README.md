@@ -7,9 +7,9 @@
                                        |_|              
 ```    
 
-OctoScraper is a web scraper that allows to donwload web resources. Currenlty it clones images from websites.
+OctoScraper is a web scraper that allows to download web resources. Currenlty it clones images from websites.
 
-Allow reqwest to work propertly:
+Allow reqwest crate to work propertly:
 ```
 sudo apt install libssl-dev
 ```

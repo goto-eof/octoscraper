@@ -11,6 +11,7 @@ pub async fn extract_links_and_process_data(
     link: &str,
     processing: &mut HashSet<String>,
     processed: &mut HashSet<String>,
+    processed_resources: &mut HashSet<String>,
     domain_filter: DomainFilter,
     extension_filter: &mut ExtensionFilter,
 ) {
@@ -31,7 +32,11 @@ pub async fn extract_links_and_process_data(
         Some(&extension_filter),
     );
     for ele in filtered_links.iter() {
-        download(ele).await;
+        if !processed_resources.contains(ele) {
+            download(ele).await;
+            processed.insert(ele.to_string());
+            processed_resources.insert(ele.to_owned());
+        }
     }
 }
 

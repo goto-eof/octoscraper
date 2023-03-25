@@ -29,6 +29,7 @@ async fn main() {
     let website = config.website;
     let mut processing: HashSet<String> = HashSet::new();
     let mut processed: HashSet<String> = HashSet::new();
+    let mut processed_resources: HashSet<String> = HashSet::new();
     processing.insert(website.to_string());
     while processing.len() > 0 {
         let link = processing.clone();
@@ -39,6 +40,7 @@ async fn main() {
             link,
             &mut processing,
             &mut processed,
+            &mut processed_resources,
             DomainFilter {
                 is_same_domain: true,
                 domain: website.to_string(),

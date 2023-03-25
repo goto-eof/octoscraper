@@ -21,6 +21,7 @@ pub async fn extract_links_and_process_data(
     let filtered_links = apply_filters(extracted_links.clone(), &domain_filter, None);
     // save results in the map
     filtered_links.iter().for_each(|item| {
+        let item = &link_normalizer(item);
         if !processed.contains(item.as_str()) {
             processing.insert(item.to_string());
         }
@@ -32,12 +33,21 @@ pub async fn extract_links_and_process_data(
         Some(&extension_filter),
     );
     for ele in filtered_links.iter() {
+        let ele = &link_normalizer(ele);
         if !processed_resources.contains(ele) {
             download(ele).await;
             processed.insert(ele.to_string());
             processed_resources.insert(ele.to_owned());
         }
     }
+}
+
+pub fn link_normalizer(link: &str) -> String {
+    let mut link = link.to_owned();
+    if !link.starts_with("http:") {
+        link = format!("http:{}", link);
+    }
+    return link;
 }
 
 async fn download(link: &str) {
@@ -82,7 +92,7 @@ pub async fn extract_links(link: &str) -> Vec<String> {
 }
 
 fn is_same_domain(domain: &str, link: &str) -> Option<String> {
-    return if link.starts_with(domain) {
+    return if link.contains(domain) {
         Some(link.to_string())
     } else {
         None

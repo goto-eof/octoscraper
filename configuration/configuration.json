@@ -1,4 +1,4 @@
 {
-  "website": "http://dodu.it",
-  "extensions": ["jpg", "jpeg", "png", "bmp"]
+  "website": "dodu.it",
+  "extensions": [".jpg", ".jpeg", ".png", ".bmp"]
 }

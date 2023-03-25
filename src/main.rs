@@ -26,7 +26,10 @@ async fn main() {
     println!("====================================================================");
 
     let config = Config::from_config_file("configuration/configuration.json").unwrap();
-    let website = config.website;
+    let mut website = config.website.clone();
+    if !website.starts_with("http://") {
+        website = format!("http://{}", website);
+    }
     let mut processing: HashSet<String> = HashSet::new();
     let mut processed: HashSet<String> = HashSet::new();
     let mut processed_resources: HashSet<String> = HashSet::new();
@@ -43,7 +46,7 @@ async fn main() {
             &mut processed_resources,
             DomainFilter {
                 is_same_domain: true,
-                domain: website.to_string(),
+                domain: config.website.to_owned(),
             },
             &mut ExtensionFilter {
                 enabled: true,

@@ -47,7 +47,7 @@ async fn main() {
             },
             &mut ExtensionFilter {
                 enabled: true,
-                extensions: vec![".png".to_owned(), ".jpg".to_owned(), ".jpeg".to_owned()],
+                extensions: config.extensions.clone(),
             },
         )
         .await;

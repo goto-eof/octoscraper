@@ -3,7 +3,6 @@ use rand::prelude::Distribution;
 use select::document::Document;
 use select::predicate::Name;
 use std::collections::HashSet;
-use std::fmt::format;
 use std::fs::{self, File};
 use std::io::Write;
 use std::path::Path;
@@ -23,6 +22,7 @@ pub async fn extract_links_and_process_data(
     // save results in the map
     filtered_links.iter().for_each(|item| {
         if !processed.contains(item.as_str()) {
+            println!("inserting link: {}", item);
             processing.insert(item.to_string());
         }
     });
@@ -32,6 +32,7 @@ pub async fn extract_links_and_process_data(
         &domain_filter,
         Some(&extension_filter),
     );
+    println!("donwloading: {:?}", filtered_links);
     for ele in filtered_links.iter() {
         println!("Saving: {}", ele);
         download(ele).await;
@@ -68,20 +69,20 @@ pub async fn extract_links(link: &str) -> Vec<String> {
         .filter_map(|n| n.attr("href"))
         .map(|item| item.to_string())
         .collect();
-
+    println!("retrieved: {:?}", urls);
     let src: Vec<String> = Document::from(response.as_str())
         .find(Name("img"))
         .filter_map(|n| n.attr("src"))
         .map(|item| item.to_string())
         .collect();
-
+    println!("retrieved: {:?}", src);
     src.iter().for_each(|item| urls.push(item.to_owned()));
 
     return urls;
 }
 
 fn is_same_domain(domain: &str, link: &str) -> Option<String> {
-    return if link.contains(domain) {
+    return if link.starts_with(domain) {
         Some(link.to_string())
     } else {
         None

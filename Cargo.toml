@@ -12,3 +12,5 @@ select = "0.6.0"
 num_cpus = "1.15.0"
 tempfile="3.4.0"
 rand="0.8.5"
+config-file = {version = "0.2.3", features=[ "json"]}
+serde = { version = "1.0.158", features = ["derive"] }

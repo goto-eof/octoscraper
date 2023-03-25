@@ -1,6 +1,12 @@
-use crate::page_processor::{extract_links_and_process_data, DomainFilter, ExtensionFilter};
+use config_file::FromConfigFile;
+
+use crate::{
+    configuration::Config,
+    page_processor::{extract_links_and_process_data, DomainFilter, ExtensionFilter},
+};
 use std::collections::HashSet;
 
+mod configuration;
 mod page_processor;
 
 #[tokio::main]
@@ -18,7 +24,10 @@ async fn main() {
     "#,
     );
     println!("====================================================================");
-    let website = "http://www.dodu.it/";
+
+    let config = Config::from_config_file("configuration/configuration.json").unwrap();
+    println!("HOST: {}", config.host);
+    let website = "http://www.dodu.it";
     let mut processing: HashSet<String> = HashSet::new();
     let mut processed: HashSet<String> = HashSet::new();
     processing.insert(website.to_string());

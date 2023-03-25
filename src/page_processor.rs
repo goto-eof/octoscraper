@@ -36,6 +36,7 @@ pub async fn extract_links_and_process_data(
 }
 
 async fn download(link: &str) {
+    println!("downloading...: {}", link);
     let mut rng = rand::thread_rng();
     let die = Uniform::from(1..100000);
     let rndd = die.sample(&mut rng);

@@ -26,8 +26,7 @@ async fn main() {
     println!("====================================================================");
 
     let config = Config::from_config_file("configuration/configuration.json").unwrap();
-    println!("HOST: {}", config.host);
-    let website = "http://dodu.it";
+    let website = config.website;
     let mut processing: HashSet<String> = HashSet::new();
     let mut processed: HashSet<String> = HashSet::new();
     processing.insert(website.to_string());

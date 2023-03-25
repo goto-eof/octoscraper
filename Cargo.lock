@@ -539,7 +539,6 @@ dependencies = [
  "reqwest",
  "select",
  "serde",
- "tempfile",
  "tokio",
 ]
 

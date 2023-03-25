@@ -14,7 +14,6 @@ pub async fn extract_links_and_process_data(
     domain_filter: DomainFilter,
     extension_filter: &mut ExtensionFilter,
 ) {
-    println!("processing: {}", link);
     // retrieve all page links
     let extracted_links = extract_links(link).await;
     // first links filter
@@ -22,7 +21,6 @@ pub async fn extract_links_and_process_data(
     // save results in the map
     filtered_links.iter().for_each(|item| {
         if !processed.contains(item.as_str()) {
-            println!("inserting link: {}", item);
             processing.insert(item.to_string());
         }
     });
@@ -32,9 +30,7 @@ pub async fn extract_links_and_process_data(
         &domain_filter,
         Some(&extension_filter),
     );
-    println!("donwloading: {:?}", filtered_links);
     for ele in filtered_links.iter() {
-        println!("Saving: {}", ele);
         download(ele).await;
     }
 }
@@ -57,7 +53,7 @@ async fn download(link: &str) {
     if !Path::new("./images").is_dir() {
         fs::create_dir("./images").unwrap();
     }
-    let fname = format!("./directory/{}", fname);
+    let fname = format!("./images/{}", fname);
     let mut file = File::create(fname).unwrap();
     file.write_all(image_file).unwrap();
 }
@@ -69,13 +65,11 @@ pub async fn extract_links(link: &str) -> Vec<String> {
         .filter_map(|n| n.attr("href"))
         .map(|item| item.to_string())
         .collect();
-    println!("retrieved: {:?}", urls);
     let src: Vec<String> = Document::from(response.as_str())
         .find(Name("img"))
         .filter_map(|n| n.attr("src"))
         .map(|item| item.to_string())
         .collect();
-    println!("retrieved: {:?}", src);
     src.iter().for_each(|item| urls.push(item.to_owned()));
 
     return urls;
@@ -109,7 +103,6 @@ fn apply_filters(
             .filter_map(|link| is_same_domain(&domain_filter.domain, link))
             .collect();
     }
-
     if extension_filter.is_some() {
         let extension_filter = extension_filter.unwrap();
         if extension_filter.enabled {

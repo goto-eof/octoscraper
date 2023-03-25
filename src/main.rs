@@ -27,13 +27,14 @@ async fn main() {
 
     let config = Config::from_config_file("configuration/configuration.json").unwrap();
     println!("HOST: {}", config.host);
-    let website = "http://www.dodu.it";
+    let website = "http://dodu.it";
     let mut processing: HashSet<String> = HashSet::new();
     let mut processed: HashSet<String> = HashSet::new();
     processing.insert(website.to_string());
     while processing.len() > 0 {
         let link = processing.clone();
         let link = link.iter().next().unwrap();
+        println!("processing: {}", link);
         processing.remove(link.as_str());
         extract_links_and_process_data(
             link,

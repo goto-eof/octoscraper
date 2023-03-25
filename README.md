@@ -7,7 +7,7 @@
                                        |_|              
 ```    
 
-OctoScraper is a web scraper that allows to download web resources. Currenlty it clones images from websites.
+OctoScraper is a web scraper implemented in Rust that allows to download web resources. Currenlty it clones images from websites.
 
 Allow reqwest crate to work propertly:
 ```

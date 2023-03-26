@@ -22,7 +22,7 @@ async fn main() {
   \___/ \___|\__\___/\__/\___|_|  \__,_| .__/ \___|_|   
                                        |_|     
                                                 
-    plese configure the configuration.json file"#,
+    plese update the configuration.json file"#,
     );
     println!("====================================================================");
 

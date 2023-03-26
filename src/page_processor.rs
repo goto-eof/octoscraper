@@ -12,31 +12,24 @@ pub async fn extract_links_and_process_data(
     processing: &mut HashSet<String>,
     processed: &mut HashSet<String>,
     processed_resources: &mut HashSet<String>,
-    domain_filter: DomainFilter,
+    domain_filter: &DomainFilter,
     extension_filter: &mut ExtensionFilter,
 ) {
-    // retrieve all page links
-    let extracted_links = extract_links(link).await;
-    // first links filter
-    let filtered_links = apply_filters(extracted_links.clone(), &domain_filter, None);
-    // save results in the map
-    filtered_links.iter().for_each(|item| {
+    let response_str = reqwest::get(link).await.unwrap().text().await.unwrap();
+
+    let extracted_links = extract_links(&response_str, &domain_filter).await;
+    extracted_links.iter().for_each(|item| {
         let item = &link_normalizer(item);
         if !processed.contains(item.as_str()) {
             processing.insert(item.to_string());
         }
     });
 
-    let filtered_links = apply_filters(
-        extracted_links.clone(),
-        &domain_filter,
-        Some(&extension_filter),
-    );
-    for ele in filtered_links.iter() {
+    let resources_links = extract_resources(&response_str, &domain_filter, &extension_filter).await;
+    for ele in resources_links.iter() {
         let ele = &link_normalizer(ele);
         if !processed_resources.contains(ele) {
             download(ele).await;
-            processed.insert(ele.to_string());
             processed_resources.insert(ele.to_owned());
         }
     }
@@ -74,21 +67,30 @@ async fn download(link: &str) {
     file.write_all(image_file).unwrap();
 }
 
-pub async fn extract_links(link: &str) -> Vec<String> {
-    let response = reqwest::get(link).await.unwrap().text().await.unwrap();
-    let mut urls: Vec<String> = Document::from(response.as_str())
-        .find(Name("a"))
-        .filter_map(|n| n.attr("href"))
-        .map(|item| item.to_string())
-        .collect();
-    let src: Vec<String> = Document::from(response.as_str())
+pub async fn extract_links(response_str: &str, domain_filter: &DomainFilter) -> Vec<String> {
+    if response_str.contains("<html") {
+        return Document::from(response_str)
+            .find(Name("a"))
+            .filter_map(|n| n.attr("href"))
+            .map(|item| item.to_string())
+            .filter_map(|link| is_same_domain(&domain_filter.domain, &link))
+            .collect();
+    }
+    return vec![];
+}
+
+pub async fn extract_resources(
+    resource_str: &str,
+    domain_filter: &DomainFilter,
+    extension_filter: &ExtensionFilter,
+) -> Vec<String> {
+    return Document::from(resource_str)
         .find(Name("img"))
         .filter_map(|n| n.attr("src"))
         .map(|item| item.to_string())
+        .filter_map(|link| is_same_domain(&domain_filter.domain, &link))
+        .filter_map(|link| contains_extension(extension_filter.extensions.clone(), &link))
         .collect();
-    src.iter().for_each(|item| urls.push(item.to_owned()));
-
-    return urls;
 }
 
 fn is_same_domain(domain: &str, link: &str) -> Option<String> {
@@ -105,30 +107,6 @@ fn contains_extension(extensions: Vec<String>, link: &str) -> Option<String> {
         }
     }
     return None;
-}
-
-fn apply_filters(
-    links: Vec<String>,
-    domain_filter: &DomainFilter,
-    extension_filter: Option<&ExtensionFilter>,
-) -> Vec<String> {
-    let mut filtered_links: Vec<String> = links;
-    if domain_filter.is_same_domain {
-        filtered_links = filtered_links
-            .iter()
-            .filter_map(|link| is_same_domain(&domain_filter.domain, link))
-            .collect();
-    }
-    if extension_filter.is_some() {
-        let extension_filter = extension_filter.unwrap();
-        if extension_filter.enabled {
-            filtered_links = filtered_links
-                .iter()
-                .filter_map(|link| contains_extension(extension_filter.extensions.clone(), link))
-                .collect();
-        }
-    }
-    return filtered_links;
 }
 
 pub struct DomainFilter {

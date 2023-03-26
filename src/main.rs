@@ -45,7 +45,7 @@ async fn main() {
             &mut processing,
             &mut processed,
             &mut processed_resources,
-            DomainFilter {
+            &DomainFilter {
                 is_same_domain: true,
                 domain: config.website.to_owned(),
             },

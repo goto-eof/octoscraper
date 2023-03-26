@@ -8,6 +8,7 @@ use std::io::Write;
 use std::path::Path;
 
 use crate::structs::{DomainFilter, ExtensionFilter};
+use crate::validators::{contains_extension, is_same_domain};
 
 pub async fn extract_links_and_process_data(
     link: &str,
@@ -28,11 +29,11 @@ pub async fn extract_links_and_process_data(
     });
 
     let resources_links = extract_resources(&response_str, &domain_filter, &extension_filter).await;
-    for ele in resources_links.iter() {
-        let ele = &link_normalizer(ele);
-        if !processed_resources.contains(ele) {
-            download(ele).await;
-            processed_resources.insert(ele.to_owned());
+    for resource_link in resources_links.iter() {
+        let resource_link = &link_normalizer(resource_link);
+        if !processed_resources.contains(resource_link) {
+            download(resource_link).await;
+            processed_resources.insert(resource_link.to_owned());
         }
     }
 }
@@ -93,20 +94,4 @@ pub async fn extract_resources(
         .filter_map(|link| is_same_domain(&domain_filter.domain, &link))
         .filter_map(|link| contains_extension(extension_filter.extensions.clone(), &link))
         .collect();
-}
-
-fn is_same_domain(domain: &str, link: &str) -> Option<String> {
-    return if link.contains(domain) {
-        Some(link.to_string())
-    } else {
-        None
-    };
-}
-fn contains_extension(extensions: Vec<String>, link: &str) -> Option<String> {
-    for extension in extensions {
-        if link.ends_with(&extension) {
-            return Some(link.to_string());
-        }
-    }
-    return None;
 }

@@ -6,6 +6,7 @@ use std::collections::HashSet;
 mod configuration;
 mod page_processor;
 mod structs;
+mod validators;
 
 #[tokio::main]
 async fn main() {

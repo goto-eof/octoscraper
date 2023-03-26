@@ -7,11 +7,13 @@ use std::fs::{self, File};
 use std::io::Write;
 use std::path::Path;
 
+use crate::configuration::Config;
 use crate::structs::{DomainFilter, ExtensionFilter};
 use crate::validators::{contains_extension, is_same_domain};
 
 pub async fn extract_links_and_process_data(
     link: &str,
+    config: &Config,
     processing: &mut HashSet<String>,
     processed: &mut HashSet<String>,
     processed_resources: &mut HashSet<String>,
@@ -32,7 +34,7 @@ pub async fn extract_links_and_process_data(
     for resource_link in resources_links.iter() {
         let resource_link = &link_normalizer(resource_link);
         if !processed_resources.contains(resource_link) {
-            download(resource_link).await;
+            download(resource_link, &config).await;
             processed_resources.insert(resource_link.to_owned());
         }
     }
@@ -46,7 +48,7 @@ pub fn link_normalizer(link: &str) -> String {
     return link;
 }
 
-async fn download(link: &str) {
+async fn download(link: &str, config: &Config) {
     println!("downloading...: {}", link);
     let mut rng = rand::thread_rng();
     let die = Uniform::from(1..100000);
@@ -62,10 +64,11 @@ async fn download(link: &str) {
         .unwrap_or(bkname.as_ref());
     let image_file = image_file.bytes().await.unwrap();
     let image_file = &image_file.to_vec();
-    if !Path::new("./images").is_dir() {
-        fs::create_dir("./images").unwrap();
+    let resources_directory = format!("./{}", config.resources_directory);
+    if !Path::new(&resources_directory).is_dir() {
+        fs::create_dir(&resources_directory).unwrap();
     }
-    let fname = format!("./images/{}", fname);
+    let fname = format!("./{}/{}", &resources_directory, fname);
     let mut file = File::create(fname).unwrap();
     file.write_all(image_file).unwrap();
 }

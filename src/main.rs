@@ -25,7 +25,7 @@ async fn main() {
     );
     println!("====================================================================");
 
-    let config = Config::from_config_file("configuration/configuration.json").unwrap();
+    let config: Config = Config::from_config_file("configuration/configuration.json").unwrap();
     let mut website = config.website.clone();
     if !website.starts_with("http://") {
         website = format!("http://{}", website);
@@ -41,6 +41,7 @@ async fn main() {
         processing.remove(link.as_str());
         extract_links_and_process_data(
             link,
+            &config,
             &mut processing,
             &mut processed,
             &mut processed_resources,

@@ -1,4 +1,5 @@
 {
   "website": "dodu.it",
-  "extensions": [".jpg", ".jpeg", ".png", ".bmp"]
+  "extensions": [".jpg", ".jpeg", ".png", ".bmp"],
+  "resources_directory": "resources"
 }

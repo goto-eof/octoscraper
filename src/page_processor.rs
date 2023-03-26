@@ -7,6 +7,8 @@ use std::fs::{self, File};
 use std::io::Write;
 use std::path::Path;
 
+use crate::structs::{DomainFilter, ExtensionFilter};
+
 pub async fn extract_links_and_process_data(
     link: &str,
     processing: &mut HashSet<String>,
@@ -107,13 +109,4 @@ fn contains_extension(extensions: Vec<String>, link: &str) -> Option<String> {
         }
     }
     return None;
-}
-
-pub struct DomainFilter {
-    pub is_same_domain: bool,
-    pub domain: String,
-}
-pub struct ExtensionFilter {
-    pub enabled: bool,
-    pub extensions: Vec<String>,
 }

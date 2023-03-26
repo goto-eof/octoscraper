@@ -1,13 +1,11 @@
+use crate::structs::{DomainFilter, ExtensionFilter};
+use crate::{configuration::Config, page_processor::extract_links_and_process_data};
 use config_file::FromConfigFile;
-
-use crate::{
-    configuration::Config,
-    page_processor::{extract_links_and_process_data, DomainFilter, ExtensionFilter},
-};
 use std::collections::HashSet;
 
 mod configuration;
 mod page_processor;
+mod structs;
 
 #[tokio::main]
 async fn main() {

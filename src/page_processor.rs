@@ -42,7 +42,7 @@ pub async fn extract_links_and_process_data(
 
 pub fn link_normalizer(link: &str) -> String {
     let mut link = link.to_owned();
-    if !link.starts_with("http:") {
+    if !link.starts_with("http:") && !link.starts_with("https:") {
         link = format!("http:{}", link);
     }
     return link;
@@ -83,7 +83,7 @@ pub async fn extract_links(response_str: &str, domain_filter: &DomainFilter) -> 
             .find(Name("a"))
             .filter_map(|n| n.attr("href"))
             .map(|item| item.to_string())
-            .filter_map(|link| is_same_domain(&domain_filter.domain, &link))
+            .filter_map(|link| is_same_domain(&domain_filter, domain_filter.is_same_domain, &link))
             .collect();
     }
     return vec![];
@@ -98,7 +98,13 @@ pub async fn extract_resources(
         .find(Name("img"))
         .filter_map(|n| n.attr("src"))
         .map(|item| item.to_string())
-        .filter_map(|link| is_same_domain(&domain_filter.domain, &link))
+        .filter_map(|link| {
+            is_same_domain(
+                &domain_filter,
+                extension_filter.is_resource_same_domain,
+                &link,
+            )
+        })
         .filter_map(|link| contains_extension(extension_filter.extensions.clone(), &link))
         .collect();
 }

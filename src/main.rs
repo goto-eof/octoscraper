@@ -52,12 +52,13 @@ async fn main() {
             &mut processed,
             &mut processed_resources,
             &DomainFilter {
-                is_same_domain: true,
+                is_same_domain: config.processing_same_domain,
                 domain: config.website.to_owned(),
             },
             &mut ExtensionFilter {
                 enabled: true,
                 extensions: config.extensions.clone(),
+                is_resource_same_domain: false,
             },
         )
         .await;

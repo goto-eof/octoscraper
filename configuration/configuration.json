@@ -1,5 +1,7 @@
 {
-  "website": "dodu.it",
+  "website": "wallpaper.mob.org",
+  "processing_same_domain": true,
   "extensions": [".jpg", ".jpeg", ".png", ".bmp"],
-  "resources_directory": "resources"
+  "resources_directory": "resources",
+  "is_resource_same_domain": false
 }

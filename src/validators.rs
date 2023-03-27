@@ -1,9 +1,18 @@
-pub fn is_same_domain(domain: &str, link: &str) -> Option<String> {
-    return if link.contains(domain) {
-        Some(link.to_string())
-    } else {
-        None
-    };
+use crate::structs::{DomainFilter, ExtensionFilter};
+
+pub fn is_same_domain(
+    domain_filter: &DomainFilter,
+    is_same_domain: bool,
+    link: &str,
+) -> Option<String> {
+    if is_same_domain {
+        if link.contains(&domain_filter.domain) {
+            return Some(link.to_string());
+        } else {
+            return None;
+        };
+    }
+    return Some(link.to_string());
 }
 pub fn contains_extension(extensions: Vec<String>, link: &str) -> Option<String> {
     for extension in extensions {

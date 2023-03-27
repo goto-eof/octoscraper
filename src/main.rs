@@ -43,7 +43,7 @@ async fn main() {
     while processing.len() > 0 {
         let link = processing.clone();
         let link = link.iter().next().unwrap();
-        println!("processing: {}", link);
+        println!("\nprocessing: {}", link);
         processing.remove(link.as_str());
         extract_links_and_process_data(
             link,

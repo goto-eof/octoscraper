@@ -1,2 +1,2 @@
-pub mod services;
-pub mod structures;
+pub mod service;
+pub mod structure;

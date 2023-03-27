@@ -1,10 +1,10 @@
-use crate::structures::{self, config_struct::Config, extension_filter_struct::ExtensionFilter};
+use crate::structure::{self, config_struct::Config, extension_filter_struct::ExtensionFilter};
 use select::document::Document;
 use select::predicate::Name;
 use std::collections::HashSet;
 use std::fs;
 use std::path::Path;
-use structures::domain_filter_struct::DomainFilter;
+use structure::domain_filter_struct::DomainFilter;
 
 use super::{
     resource_downloader_service::download,

@@ -1,14 +1,15 @@
 use config_file::FromConfigFile;
 use std::collections::HashSet;
 
-mod services;
-mod structures;
-use crate::services::page_processor_service::{
+use crate::service::page_processor_service::{
     extract_links_and_process_data, initialize_download_directory,
 };
-use crate::structures::config_struct::Config;
-use crate::structures::domain_filter_struct::DomainFilter;
-use crate::structures::extension_filter_struct::ExtensionFilter;
+use crate::structure::config_struct::Config;
+use crate::structure::domain_filter_struct::DomainFilter;
+use crate::structure::extension_filter_struct::ExtensionFilter;
+
+mod service;
+mod structure;
 
 #[tokio::main]
 async fn main() {

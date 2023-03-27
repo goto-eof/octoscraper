@@ -93,8 +93,8 @@ fn update_progress_bar(current_position: u64, total_size: u64) {
             empty_space = format!("{} ", empty_space);
         }
     }
-    stdout().flush().unwrap();
     print!("\r                                                        ");
+    stdout().flush().unwrap();
     print!(
         "\r    [{}{}] -> {}",
         status_bar,

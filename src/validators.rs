@@ -1,4 +1,4 @@
-use crate::structs::{DomainFilter, ExtensionFilter};
+use crate::structs::DomainFilter;
 
 pub fn is_same_domain(
     domain_filter: &DomainFilter,

@@ -1,13 +1,14 @@
-use crate::page_processor::initialize_download_directory;
-use crate::structs::{DomainFilter, ExtensionFilter};
-use crate::{page_processor::extract_links_and_process_data, structs::Config};
 use config_file::FromConfigFile;
 use std::collections::HashSet;
 
-mod page_processor;
-mod resource_downloader;
-mod structs;
-mod validators;
+mod services;
+mod structures;
+use crate::services::page_processor_service::{
+    extract_links_and_process_data, initialize_download_directory,
+};
+use crate::structures::config_struct::Config;
+use crate::structures::domain_filter_struct::DomainFilter;
+use crate::structures::extension_filter_struct::ExtensionFilter;
 
 #[tokio::main]
 async fn main() {

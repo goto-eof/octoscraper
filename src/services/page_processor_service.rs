@@ -1,13 +1,15 @@
+use crate::structures::{self, config_struct::Config, extension_filter_struct::ExtensionFilter};
 use select::document::Document;
 use select::predicate::Name;
 use std::collections::HashSet;
 use std::fs;
 use std::path::Path;
+use structures::domain_filter_struct::DomainFilter;
 
-use crate::resource_downloader::download;
-use crate::structs::Config;
-use crate::structs::{DomainFilter, ExtensionFilter};
-use crate::validators::{contains_extension, is_same_domain};
+use super::{
+    resource_downloader_service::download,
+    validation_service::{contains_extension, is_same_domain},
+};
 
 pub async fn extract_links_and_process_data(
     link: &str,

@@ -7,7 +7,9 @@ use std::{
 
 use rand::{distributions::Uniform, prelude::Distribution};
 
-use crate::structs::Config;
+use structures::config_struct::Config;
+
+use crate::structures;
 
 pub async fn download(link: &str, config: &Config) -> bool {
     println!("\n    downloading [{}]:", link);

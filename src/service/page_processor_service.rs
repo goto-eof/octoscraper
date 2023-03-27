@@ -69,9 +69,14 @@ pub async fn extract_links(response_str: &str, domain_filter: &DomainFilter) -> 
             .filter_map(|n| n.attr("href"))
             .map(|item| item.to_string())
             .filter_map(|link| is_same_domain(&domain_filter, domain_filter.is_same_domain, &link))
+            .map(|link| normalize_link(&link))
             .collect();
     }
     return vec![];
+}
+
+pub fn normalize_link(link: &str) -> String{
+    return link.replace(" ", "%20");
 }
 
 pub async fn extract_resources(

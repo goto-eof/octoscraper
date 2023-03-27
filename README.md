@@ -13,6 +13,8 @@ Compile and run application:
 cargo run
 ```
 
+Look at the branch https://github.com/goto-eof/octoscraper/tree/brutality-mode-multi-thread for multithread mode.
+
 ```
     ___     _        __                                
     /___\___| |_ ___ / _\ ___ _ __ __ _ _ __   ___ _ __ 

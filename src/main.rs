@@ -25,7 +25,7 @@ async fn main() {
     plese update the configuration.json file"#,
     );
     println!("====================================================================");
-
+    env_logger::init();
     let config: Config = Config::from_config_file("configuration/configuration.json").unwrap();
     let mut website = config.website.clone();
     if !website.starts_with("http://") {

@@ -3,5 +3,7 @@
   "processing_same_domain": true,
   "extensions": [".jpg", ".jpeg", ".png", ".bmp"],
   "resources_directory": "resources",
-  "is_resource_same_domain": false
+  "is_resource_same_domain": false,
+  "sleep_time": 3000,
+  "resource_download_timeout": 30000
 }

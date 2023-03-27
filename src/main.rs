@@ -1,11 +1,11 @@
 use crate::page_processor::initialize_download_directory;
 use crate::structs::{DomainFilter, ExtensionFilter};
-use crate::{configuration::Config, page_processor::extract_links_and_process_data};
+use crate::{page_processor::extract_links_and_process_data, structs::Config};
 use config_file::FromConfigFile;
 use std::collections::HashSet;
 
-mod configuration;
 mod page_processor;
+mod resource_downloader;
 mod structs;
 mod validators;
 

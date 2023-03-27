@@ -49,7 +49,7 @@ pub fn link_normalizer(link: &str) -> String {
 }
 
 async fn download(link: &str, config: &Config) {
-    println!("downloading...: {}", link);
+    println!("    downloading [{}]:", link);
     let mut rng = rand::thread_rng();
     let die = Uniform::from(1..100000);
     let rndd = die.sample(&mut rng);
@@ -65,12 +65,16 @@ async fn download(link: &str, config: &Config) {
     let image_file = image_file.bytes().await.unwrap();
     let image_file = &image_file.to_vec();
     let resources_directory = format!("./{}", config.resources_directory);
-    if !Path::new(&resources_directory).is_dir() {
-        fs::create_dir(&resources_directory).unwrap();
-    }
     let fname = format!("./{}/{}", &resources_directory, fname);
     let mut file = File::create(fname).unwrap();
     file.write_all(image_file).unwrap();
+}
+
+pub fn initialize_download_directory(config: &Config) -> () {
+    let resources_directory = format!("./{}", config.resources_directory);
+    if !Path::new(&resources_directory).is_dir() {
+        fs::create_dir(&resources_directory).unwrap();
+    }
 }
 
 pub async fn extract_links(response_str: &str, domain_filter: &DomainFilter) -> Vec<String> {

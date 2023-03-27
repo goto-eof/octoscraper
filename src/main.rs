@@ -1,3 +1,4 @@
+use crate::page_processor::initialize_download_directory;
 use crate::structs::{DomainFilter, ExtensionFilter};
 use crate::{configuration::Config, page_processor::extract_links_and_process_data};
 use config_file::FromConfigFile;
@@ -34,6 +35,11 @@ async fn main() {
     let mut processed: HashSet<String> = HashSet::new();
     let mut processed_resources: HashSet<String> = HashSet::new();
     processing.insert(website.to_string());
+    println!(
+        "initializing download directory [./{}]...",
+        config.resources_directory
+    );
+    initialize_download_directory(&config);
     while processing.len() > 0 {
         let link = processing.clone();
         let link = link.iter().next().unwrap();

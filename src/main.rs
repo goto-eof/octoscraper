@@ -13,6 +13,7 @@ mod validators;
 async fn main() {
     println!("====================================================================");
     println!("Welcome to");
+    const VERSION: Option<&str> = option_env!("CARGO_PKG_VERSION");
     println!(
         r#"
     ___     _        __                                
@@ -20,9 +21,10 @@ async fn main() {
    //  // __| __/ _ \\ \ / __| '__/ _` | '_ \ / _ \ '__|
   / \_// (__| || (_) |\ \ (__| | | (_| | |_) |  __/ |   
   \___/ \___|\__\___/\__/\___|_|  \__,_| .__/ \___|_|   
-                                       |_|     
+                                       |_|                v. {}
                                                 
-    plese update the configuration.json file"#,
+    please update the configuration.json file"#,
+        VERSION.unwrap()
     );
     println!("====================================================================");
     env_logger::init();

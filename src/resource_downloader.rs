@@ -2,8 +2,7 @@ use std::{
     cmp::min,
     fs::File,
     io::{stdout, Write},
-    thread::{self},
-    time,
+    thread, time,
 };
 
 use rand::{distributions::Uniform, prelude::Distribution};
@@ -57,7 +56,7 @@ pub async fn download(link: &str, config: &Config) -> bool {
                 let chunk = item.unwrap();
                 if file.write_all(&chunk).is_ok() {
                     downloaded = min(downloaded + (chunk.len() as u64), total_size);
-                    update_progress_bar(downloaded, total_size, &fname);
+                    update_progress_bar(downloaded, total_size);
                 } else {
                     return false;
                 }
@@ -74,7 +73,7 @@ pub async fn download(link: &str, config: &Config) -> bool {
     }
 }
 
-fn update_progress_bar(percentage: u64, total_size: u64, fname: &str) {
+fn update_progress_bar(percentage: u64, total_size: u64) {
     let one_perc = total_size / 100;
     let current_perc = percentage / one_perc;
     let mut i = 0;

@@ -6,6 +6,8 @@
   \___/ \___|\__\___/\__/\___|_|  \__,_| .__/ \___|_|   
                                        |_|              
 ```    
+![image](https://user-images.githubusercontent.com/6343630/228027303-d18de371-e39a-43b3-a8f9-acd2dbc78d53.png)
+
 
 OctoScraper is a web scraper implemented in Rust that allows to download web resources. Currenlty it clones images from websites.
 

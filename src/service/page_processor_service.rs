@@ -7,7 +7,7 @@ use std::path::Path;
 use structure::domain_filter_struct::DomainFilter;
 
 use super::{
-    resource_downloader_service::download,
+    download_service::download,
     validation_service::{contains_extension, is_same_domain},
 };
 

@@ -1,7 +1,7 @@
 {
   "website": "wallpaper.mob.org",
   "processing_same_domain": true,
-  "extensions": [".jpg", ".jpeg", ".png", ".bmp"],
+  "extensions": [".jpg", ".jpeg", ".png", ".JPG", ".JPEG", ".PNG"],
   "resources_directory": "resources",
   "is_resource_same_domain": false,
   "sleep_time": 0,

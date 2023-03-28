@@ -1,6 +1,5 @@
-use structure::domain_filter_struct::DomainFilter;
-
 use crate::structure;
+use structure::domain_filter_struct::DomainFilter;
 
 pub fn is_same_domain(
     domain_filter: &DomainFilter,

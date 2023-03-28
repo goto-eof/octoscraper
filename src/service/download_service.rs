@@ -1,16 +1,9 @@
-use std::{
-    cmp::min,
-    fs::File,
-    io::{stdout, Write},
-    thread, time,
-};
-
+use crate::{service::printer_service::update_progress_bar, structure};
 use rand::{distributions::Uniform, prelude::Distribution};
-
+use std::{cmp::min, fs::File, io::Write, thread, time};
 use structure::config_struct::Config;
 
-use crate::structure;
-
+// TODO double check return statement, so that also refactor this method
 pub async fn download(link: &str, config: &Config) -> bool {
     println!("\n    downloading [{}]:", link);
     let mut rng = rand::thread_rng();
@@ -73,35 +66,4 @@ pub async fn download(link: &str, config: &Config) -> bool {
         println!("    error while downloading image {}", link);
         return false;
     }
-}
-
-// accordion style
-fn update_progress_bar(current_position: u64, total_size: u64) {
-    let current_perc = current_position / (total_size / 100);
-    let mut i = 0;
-    let mut status_bar = "".to_string();
-    while i <= current_perc {
-        i = i + 1;
-        if i % 5 == 0 {
-            status_bar = format!("{}#", status_bar);
-        }
-    }
-
-    i = current_perc;
-    let mut empty_space = "".to_string();
-    while i <= 100 - current_perc {
-        i = i + 1;
-        if i % 5 == 0 {
-            empty_space = format!("{} ", empty_space);
-        }
-    }
-    print!("\r                                                        ");
-    stdout().flush().unwrap();
-    print!(
-        "\r    [{}{}] -> {}",
-        status_bar,
-        empty_space,
-        format!("{}%", current_perc)
-    );
-    stdout().flush().unwrap();
 }

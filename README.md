@@ -23,3 +23,6 @@ Take a look to [this project](https://github.com/goto-eof/rust-multithread-sampl
   \___/ \___|\__\___/\__/\___|_|  \__,_| .__/ \___|_|   
                                        |_|              
 ```    
+
+
+Tested on Linux and MacOS.

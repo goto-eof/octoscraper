@@ -1,14 +1,11 @@
-use crate::structure::{self, config_struct::Config, extension_filter_struct::ExtensionFilter};
-use std::collections::HashSet;
-use std::fs;
-use std::path::Path;
-use structure::domain_filter_struct::DomainFilter;
-
 use super::{
     download_service::download,
     link_normalizer_service::link_normalizer_add_http,
     resource_extractor_service::{extract_links, extract_resources},
 };
+use crate::structure::{self, config_struct::Config, extension_filter_struct::ExtensionFilter};
+use std::collections::HashSet;
+use structure::domain_filter_struct::DomainFilter;
 
 pub async fn extract_links_and_process_data(
     link: &str,
@@ -43,12 +40,5 @@ pub async fn extract_links_and_process_data(
                 }
             }
         }
-    }
-}
-
-pub fn initialize_download_directory(config: &Config) -> () {
-    let resources_directory = format!("./{}", config.resources_directory);
-    if !Path::new(&resources_directory).is_dir() {
-        fs::create_dir(&resources_directory).unwrap();
     }
 }

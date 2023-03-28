@@ -1,9 +1,8 @@
 use config_file::FromConfigFile;
 use std::collections::HashSet;
 
-use crate::service::page_processor_service::{
-    extract_links_and_process_data, initialize_download_directory,
-};
+use crate::service::file_service::initialize_download_directory;
+use crate::service::page_processor_service::extract_links_and_process_data;
 use crate::structure::config_struct::Config;
 use crate::structure::domain_filter_struct::DomainFilter;
 use crate::structure::extension_filter_struct::ExtensionFilter;

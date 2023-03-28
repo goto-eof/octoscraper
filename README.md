@@ -14,7 +14,7 @@ Compile and run application:
 cargo run
 ```
 
-### Future
+### Future release
 Take a look at [this project](https://github.com/goto-eof/rust-multithread-sample-tokio) that will be included in the release 0.2.0 of OctoScraper in order to improve application performance (multithreading). 
 
 ```

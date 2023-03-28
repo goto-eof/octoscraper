@@ -26,18 +26,24 @@ pub async fn extract_links_and_process_data(
         }
     });
 
-    let resources_links = extract_resources(&response_str, &domain_filter, &extension_filter).await;
+    let resources_links: Vec<String> =
+        extract_resources(&response_str, &domain_filter, &extension_filter)
+            .await
+            .iter()
+            .map(|link| link_normalizer_add_http(link))
+            .collect();
+
+    let mut handlers = vec![];
     for resource_link in resources_links.iter() {
-        let resource_link = &link_normalizer_add_http(resource_link);
-        if !processed_resources.contains(resource_link) {
-            loop {
-                let result = download(resource_link, &config).await;
-                if result {
-                    processed_resources.insert(resource_link.to_owned());
-                    break;
-                } else {
-                    println!("retrying to download resource ({})...", resource_link);
-                }
+        handlers.push(download(resource_link, &config).await);
+    }
+
+    for handler in handlers {
+        let handler_result = handler.unwrap().await;
+        if handler_result.is_ok() {
+            let handler_result = handler_result.unwrap();
+            if handler_result.1 {
+                processed_resources.insert(handler_result.0.to_owned());
             }
         }
     }

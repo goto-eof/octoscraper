@@ -1,4 +1,4 @@
-use crate::{service::printer_service::update_progress_bar, structure};
+use crate::structure;
 use rand::{distributions::Uniform, prelude::Distribution};
 use std::{
     cmp::min,
@@ -12,7 +12,6 @@ use tokio::{spawn, task::JoinHandle};
 
 // TODO double check return statement, so that also refactor this method
 pub async fn download(link: &str, config: &Config) -> Option<JoinHandle<(String, bool)>> {
-    println!("\n    downloading [{}]:", link);
     let mut rng = rand::thread_rng();
     let die = Uniform::from(1..100000);
     let rndd = die.sample(&mut rng);
@@ -57,7 +56,6 @@ pub async fn download(link: &str, config: &Config) -> Option<JoinHandle<(String,
                     let chunk = item.unwrap();
                     if file.write_all(&chunk).is_ok() {
                         downloaded = min(downloaded + (chunk.len() as u64), total_size);
-                        update_progress_bar(downloaded, total_size);
                     } else {
                         return (link.to_owned(), false);
                     }

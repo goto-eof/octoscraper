@@ -8,4 +8,6 @@ pub struct Config {
     pub resources_directory: String,
     pub sleep_time: u64,
     pub resource_download_timeout: u64,
+    pub insistent_mode: bool,
+    pub download_limit: i32,
 }

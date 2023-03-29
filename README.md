@@ -42,3 +42,5 @@ where
 
 
 Tested on Linux and MacOS.
+
+if any problems arise, feel free to [contact me](https://andre-i.dev/#contactme).

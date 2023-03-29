@@ -8,7 +8,7 @@
   "resources_directory": "resources",
   "is_resource_same_domain": false,
   "sleep_time": 0,
-  "resource_download_timeout": 30000,
+  "resource_download_timeout": 90000,
 
   "_comment1": "retries on failed downloads",
   "insistent_mode": true,

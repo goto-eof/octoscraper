@@ -11,7 +11,6 @@ use crossterm::{
     cursor::{self},
     QueueableCommand,
 };
-use reqwest::Url;
 use std::{collections::HashSet, io::stdout};
 use structure::domain_filter_struct::DomainFilter;
 

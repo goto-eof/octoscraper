@@ -4,7 +4,7 @@
 OctoScraper is a web multithread web scraper tool implemented in Rust. By default it clones images from websites (but it is configurable).
 
 ### Run it
-Allow reqwest crate to work propertly:
+Allow reqwest crate to work properly:
 ```
 sudo apt install libssl-dev
 ```

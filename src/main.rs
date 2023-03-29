@@ -1,5 +1,6 @@
 use config_file::FromConfigFile;
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
+use std::env;
 
 use crate::service::file_service::initialize_download_directory;
 use crate::service::page_processor_service::extract_links_and_process_data;
@@ -30,7 +31,10 @@ async fn main() {
     );
     println!("====================================================================");
     env_logger::init();
-    let config: Config = Config::from_config_file("configuration/configuration.json").unwrap();
+    let mut config: Config = Config::from_config_file("configuration/configuration.json").unwrap();
+
+    update_config_with_argument_values(&mut config);
+
     let mut website = config.website.clone();
     if !website.starts_with("http://") {
         website = format!("http://{}", website);
@@ -67,5 +71,76 @@ async fn main() {
         )
         .await;
         processed.insert(link.to_string());
+    }
+}
+
+/**
+ *cargo run -- -w dodu.it -e png,PNG -d DIRECTORY_NAME -s 100 -t 90000 -i true -l 3
+ */
+fn update_config_with_argument_values(config: &mut Config) {
+    let args: Vec<String> = env::args().collect();
+    if (args.len() - 1) % 2 == 1 {
+        println!("Invalid number of arguments!");
+        panic!("Exiting, because you provided an invalid number of arguments.")
+    }
+    let mut commands: HashMap<String, String> = HashMap::new();
+    for i in 0..(args.len()) {
+        if i % 2 == 1 {
+            commands.insert(
+                args.get(i).unwrap().to_string(),
+                args.get(i + 1).unwrap().to_string(),
+            );
+        }
+    }
+    const ARGUMENT_WEBSITE: &str = "-w";
+    const ARGUMENT_EXTENSIONS: &str = "-e";
+    const ARGUMENT_RESOURCE_DIRECTORY: &str = "-d";
+    const ARGUMENT_SLEEP_TIME: &str = "-s";
+    const ARGUMENT_RESOURCE_DOWNLOAD_TIMEOUT: &str = "-t";
+    const ARGUMENT_INSISTENT_MODE: &str = "-i";
+    const ARGUMENT_DOWNLOAD_LIMIT: &str = "-l";
+
+    if commands.get(ARGUMENT_WEBSITE).is_some() {
+        config.website = commands.get(ARGUMENT_WEBSITE).unwrap().to_string();
+    }
+    if commands.get(ARGUMENT_EXTENSIONS).is_some() {
+        config.extensions = commands
+            .get(ARGUMENT_EXTENSIONS)
+            .unwrap()
+            .split(",")
+            .map(|str| str.to_owned())
+            .collect::<Vec<String>>();
+    }
+    if commands.get(ARGUMENT_RESOURCE_DIRECTORY).is_some() {
+        config.resources_directory = commands
+            .get(ARGUMENT_RESOURCE_DIRECTORY)
+            .unwrap()
+            .to_owned();
+    }
+    if commands.get(ARGUMENT_SLEEP_TIME).is_some() {
+        config.sleep_time = commands.get(ARGUMENT_SLEEP_TIME).unwrap().parse().unwrap();
+    }
+
+    if commands.get(ARGUMENT_RESOURCE_DOWNLOAD_TIMEOUT).is_some() {
+        config.resource_download_timeout = commands
+            .get(ARGUMENT_RESOURCE_DOWNLOAD_TIMEOUT)
+            .unwrap()
+            .parse()
+            .unwrap();
+    }
+
+    if commands.get(ARGUMENT_INSISTENT_MODE).is_some() {
+        config.insistent_mode = commands
+            .get(ARGUMENT_INSISTENT_MODE)
+            .unwrap()
+            .parse()
+            .unwrap();
+    }
+    if commands.get(ARGUMENT_DOWNLOAD_LIMIT).is_some() {
+        config.download_limit = commands
+            .get(ARGUMENT_DOWNLOAD_LIMIT)
+            .unwrap()
+            .parse()
+            .unwrap();
     }
 }

@@ -75,6 +75,14 @@ async fn main() {
 }
 
 fn update_config_with_argument_values(config: &mut Config) {
+    const ARGUMENT_WEBSITE: &str = "-w";
+    const ARGUMENT_EXTENSIONS: &str = "-e";
+    const ARGUMENT_RESOURCE_DIRECTORY: &str = "-d";
+    const ARGUMENT_SLEEP_TIME: &str = "-s";
+    const ARGUMENT_RESOURCE_DOWNLOAD_TIMEOUT: &str = "-t";
+    const ARGUMENT_INSISTENT_MODE: &str = "-i";
+    const ARGUMENT_DOWNLOAD_LIMIT: &str = "-l";
+
     let args: Vec<String> = env::args().collect();
     if (args.len() - 1) % 2 == 1 {
         println!("Invalid number of arguments!");
@@ -89,13 +97,6 @@ fn update_config_with_argument_values(config: &mut Config) {
             );
         }
     }
-    const ARGUMENT_WEBSITE: &str = "-w";
-    const ARGUMENT_EXTENSIONS: &str = "-e";
-    const ARGUMENT_RESOURCE_DIRECTORY: &str = "-d";
-    const ARGUMENT_SLEEP_TIME: &str = "-s";
-    const ARGUMENT_RESOURCE_DOWNLOAD_TIMEOUT: &str = "-t";
-    const ARGUMENT_INSISTENT_MODE: &str = "-i";
-    const ARGUMENT_DOWNLOAD_LIMIT: &str = "-l";
 
     if commands.get(ARGUMENT_WEBSITE).is_some() {
         config.website = commands.get(ARGUMENT_WEBSITE).unwrap().to_string();

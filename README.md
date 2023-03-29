@@ -27,7 +27,7 @@ where
  | -d       |directory where files will be saved.               | Images|
  | -s       |sleep time in millis before making the request.    | 1000|
  | -t       |download timeout.                                  | 90000|
- | -i       |insistent mode (it retries until download succed). | true|
+ | -i       |insistent mode (it retries until download succeed). | true|
  | -l       |download limit (by default it makes as much requests as possibile). | 3|
 
 

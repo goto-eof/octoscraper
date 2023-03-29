@@ -1,9 +1,18 @@
 {
   "website": "wallpaper.mob.org",
   "processing_same_domain": true,
-  "extensions": [".jpg", ".jpeg", ".png", ".bmp"],
+
+  "_comment0": "add extensions in both cases: upper case and lower case",
+  "extensions": [".jpg", ".jpeg", ".png", ".JPG", ".JPEG", ".PNG"],
+
   "resources_directory": "resources",
   "is_resource_same_domain": false,
   "sleep_time": 0,
-  "resource_download_timeout": 30000
+  "resource_download_timeout": 30000,
+
+  "_comment1": "retries on failed downloads",
+  "insistent_mode": true,
+
+  "_comment2": "allows to reduce the number of download threads",
+  "download_limit": 999
 }

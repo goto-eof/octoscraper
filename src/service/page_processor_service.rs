@@ -91,7 +91,7 @@ async fn download_all(
             if handler_result.is_ok() {
                 let handler_result = handler_result.unwrap();
                 if handler_result.1 {
-                    processed_resources.insert(extract_fname(&handler_result.0));
+                    processed_resources.insert(extract_fname(&handler_result.0, None));
                     println!("{} downloaded successfully", handler_result.0);
                 }
             }
@@ -101,6 +101,6 @@ async fn download_all(
     return resources_links
         .iter()
         .map(|link| link.to_owned())
-        .filter(|link| !processed_resources.contains(extract_fname(link).as_str()))
+        .filter(|link| !processed_resources.contains(extract_fname(link, None).as_str()))
         .collect();
 }

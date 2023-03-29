@@ -1,5 +1,4 @@
 use crate::structure;
-use rand::{distributions::Uniform, prelude::Distribution};
 use std::{
     cmp::min,
     fs::File,
@@ -10,44 +9,23 @@ use std::{
 use structure::config_struct::Config;
 use tokio::{spawn, task::JoinHandle};
 
-// TODO double check return statement, so that also refactor this method
+use super::{file_service::generate_file_name, link_service::extract_fname};
+
 pub async fn download(link: &str, config: &Config) -> Option<JoinHandle<(String, bool)>> {
-    let mut rng = rand::thread_rng();
-    let die = Uniform::from(1..100000);
-    let rndd = die.sample(&mut rng);
-    let bkname = format!("random-{}.png", rndd);
-    let millis = time::Duration::from_millis(config.sleep_time);
-    log::debug!("    sleeping {:?}....", millis);
-    thread::sleep(millis);
-    log::debug!("    retrieving image...");
-    let client = reqwest::Client::builder()
-        .user_agent("<<--[ OctoScraper ]-->>")
-        .timeout(time::Duration::from_millis(
-            config.resource_download_timeout,
-        ))
-        .build()
-        .unwrap();
-    let image_file = client.get(link).send().await;
+    sleep(config);
+    let image_file = retrieve_resource(config, link).await;
     if image_file.is_ok() {
         let mut image_file = image_file.unwrap();
-        let total_size = image_file.content_length();
-        if total_size.is_none() {
-            return None;
+        let total_size_opt = image_file.content_length();
+        let mut total_size = 0;
+        if total_size_opt.is_some() {
+            total_size = total_size_opt.unwrap();
         }
-        let total_size = total_size.unwrap();
-        log::debug!("    image retrieved");
-        let url = image_file.url().clone();
-        let fname = url
-            .path_segments()
-            .and_then(|segments| segments.last())
-            .and_then(|name| if name.is_empty() { None } else { Some(name) })
-            .unwrap_or(bkname.as_ref());
+        let alternative_file_name = generate_file_name();
+        let file_name = extract_fname(link, Some(alternative_file_name));
         let resources_directory = format!("./{}", config.resources_directory);
-        let fname = format!("{}/{}", &resources_directory, fname);
-        log::debug!("    creating empty file...");
-        let mut file = File::create(&fname).unwrap();
-        log::debug!("    created file");
-        log::debug!("    writing image on file...");
+        let full_path = format!("{}/{}", &resources_directory, file_name);
+        let mut file = File::create(&full_path).unwrap();
         let mut downloaded: u64 = 0;
         let link = link.to_owned();
         let handler: JoinHandle<(String, bool)> = spawn(async move {
@@ -67,7 +45,29 @@ pub async fn download(link: &str, config: &Config) -> Option<JoinHandle<(String,
         });
         return Some(handler);
     } else {
-        println!("    error while downloading image {}", link);
+        println!("error while downloading image {}", link);
         return None;
+    }
+}
+
+async fn retrieve_resource(
+    config: &Config,
+    link: &str,
+) -> Result<reqwest::Response, reqwest::Error> {
+    let client = reqwest::Client::builder()
+        .user_agent("<<--[ OctoScraper ]-->>")
+        .timeout(time::Duration::from_millis(
+            config.resource_download_timeout,
+        ))
+        .build()
+        .unwrap();
+    let image_file = client.get(link).send().await;
+    image_file
+}
+
+fn sleep(config: &Config) {
+    if config.sleep_time > 0 {
+        let millis = time::Duration::from_millis(config.sleep_time);
+        thread::sleep(millis);
     }
 }

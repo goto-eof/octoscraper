@@ -12,12 +12,17 @@ pub fn normalize_link_replace_spaces(link: &str) -> String {
     return link.replace(" ", "%20");
 }
 
-pub fn extract_fname(link: &str) -> String {
+pub fn extract_fname(link: &str, alternative_file_name: Option<String>) -> String {
+    let alternative_name = if alternative_file_name.is_some() {
+        alternative_file_name.unwrap()
+    } else {
+        "no_filename".to_string()
+    };
     return Url::parse(link)
         .unwrap()
         .path_segments()
         .and_then(|segments| segments.last())
         .and_then(|name| if name.is_empty() { None } else { Some(name) })
-        .unwrap_or("no_filename")
+        .unwrap_or(&alternative_name)
         .to_string();
 }

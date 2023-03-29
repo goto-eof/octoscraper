@@ -1,9 +1,12 @@
 use super::{
     download_service::download,
-    link_normalizer_service::link_normalizer_add_http,
+    link_service::link_normalizer_add_http,
     resource_extractor_service::{extract_links, extract_resources},
 };
-use crate::structure::{self, config_struct::Config, extension_filter_struct::ExtensionFilter};
+use crate::{
+    service::link_service::extract_fname,
+    structure::{self, config_struct::Config, extension_filter_struct::ExtensionFilter},
+};
 use crossterm::{
     cursor::{self},
     QueueableCommand,
@@ -101,14 +104,4 @@ async fn download_all(
         .map(|link| link.to_owned())
         .filter(|link| !processed_resources.contains(extract_fname(link).as_str()))
         .collect();
-}
-
-fn extract_fname(link: &str) -> String {
-    return Url::parse(link)
-        .unwrap()
-        .path_segments()
-        .and_then(|segments| segments.last())
-        .and_then(|name| if name.is_empty() { None } else { Some(name) })
-        .unwrap_or("no_filename")
-        .to_string();
 }

@@ -1,5 +1,5 @@
 use super::{
-    link_normalizer_service::normalize_link_replace_spaces,
+    link_service::normalize_link_replace_spaces,
     validation_service::{contains_extension, is_same_domain},
 };
 use crate::structure::{

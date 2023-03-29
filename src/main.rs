@@ -74,9 +74,6 @@ async fn main() {
     }
 }
 
-/**
- *cargo run -- -w dodu.it -e png,PNG -d DIRECTORY_NAME -s 100 -t 90000 -i true -l 3
- */
 fn update_config_with_argument_values(config: &mut Config) {
     let args: Vec<String> = env::args().collect();
     if (args.len() - 1) % 2 == 1 {

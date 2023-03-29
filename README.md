@@ -1,4 +1,4 @@
-![image](https://user-images.githubusercontent.com/6343630/228673532-1777e0bf-eb28-4381-8ae8-093a1688b524.png)
+![image](https://user-images.githubusercontent.com/6343630/228685803-55a1726d-2a83-469c-bbae-4a3a21e10ac6.png)
 
 ### Description
 OctoScraper is a web multithread web scraper tool implemented in Rust. Currenlty it clones images from websites (but it is configurable).

@@ -16,7 +16,7 @@ cargo run
 
 or run application with your configuration:
 ```
-cargo run -- -w dodu.it -e png,PNG -d DIRECTORY_NAME -s 100 -t 90000 -i true -l 3
+cargo run -- -w dodu.it -e .png,.PNG -d DIRECTORY_NAME -s 100 -t 90000 -i true -l 3
 ```
 where 
 

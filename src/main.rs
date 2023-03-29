@@ -6,6 +6,7 @@ use crate::service::page_processor_service::extract_links_and_process_data;
 use crate::structure::config_struct::Config;
 use crate::structure::domain_filter_struct::DomainFilter;
 use crate::structure::extension_filter_struct::ExtensionFilter;
+use crate::structure::processed_struct::Processed;
 
 mod service;
 mod structure;
@@ -36,7 +37,7 @@ async fn main() {
     }
     let mut processing: HashSet<String> = HashSet::new();
     let mut processed: HashSet<String> = HashSet::new();
-    let mut processed_resources: HashSet<String> = HashSet::new();
+    let mut processed_resources: Processed = Processed::new();
     processing.insert(website.to_string());
     println!(
         "initializing download directory [./{}]...",

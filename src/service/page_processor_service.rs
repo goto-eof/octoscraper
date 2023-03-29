@@ -3,9 +3,9 @@ use super::{
     link_service::link_normalizer_add_http,
     resource_extractor_service::{extract_links, extract_resources},
 };
-use crate::{
-    service::link_service::extract_fname,
-    structure::{self, config_struct::Config, extension_filter_struct::ExtensionFilter},
+use crate::structure::{
+    self, config_struct::Config, extension_filter_struct::ExtensionFilter,
+    processed_struct::Processed,
 };
 use crossterm::{
     cursor::{self},
@@ -19,7 +19,7 @@ pub async fn extract_links_and_process_data(
     config: &Config,
     processing: &mut HashSet<String>,
     processed: &mut HashSet<String>,
-    processed_resources: &mut HashSet<String>,
+    processed_resources: &mut Processed,
     domain_filter: &DomainFilter,
     extension_filter: &mut ExtensionFilter,
 ) {
@@ -72,7 +72,7 @@ pub async fn extract_links_and_process_data(
 async fn download_all(
     resources_links: Vec<String>,
     config: &Config,
-    processed_resources: &mut HashSet<String>,
+    processed_resources: &mut Processed,
     limit: i32,
 ) -> Vec<String> {
     let mut handlers = vec![];
@@ -91,7 +91,7 @@ async fn download_all(
             if handler_result.is_ok() {
                 let handler_result = handler_result.unwrap();
                 if handler_result.1 {
-                    processed_resources.insert(extract_fname(&handler_result.0, None));
+                    processed_resources.push(&handler_result.0);
                     println!("{} downloaded successfully", handler_result.0);
                 }
             }
@@ -101,6 +101,6 @@ async fn download_all(
     return resources_links
         .iter()
         .map(|link| link.to_owned())
-        .filter(|link| !processed_resources.contains(extract_fname(link, None).as_str()))
+        .filter(|link| !processed_resources.was_already_processed(&link))
         .collect();
 }

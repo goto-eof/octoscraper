@@ -17,5 +17,8 @@
   "download_limit": 999,
 
   "_comment3": "user agent,  the default value is OctoScraper",
-  "user_agent": ""
+  "user_agent": "",
+
+  "_comment4": "hash check to avoid dupplicate downloads",
+  "hash_check": true
 }

@@ -3,15 +3,16 @@ use std::{
     cmp::min,
     fs::File,
     io::Write,
+    path::Path,
     thread::{self},
     time,
 };
 use structure::config_struct::Config;
 use tokio::{spawn, task::JoinHandle};
 
-use super::{file_service::generate_file_name, link_service::extract_fname};
+use super::file_service::generate_file_name;
 
-pub async fn download(link: &str, config: &Config) -> Option<JoinHandle<(String, bool)>> {
+pub async fn download(link: &str, config: &Config) -> Option<JoinHandle<(String, bool, String)>> {
     sleep(config);
     let image_file = retrieve_resource(config, link).await;
     if image_file.is_ok() {
@@ -21,27 +22,34 @@ pub async fn download(link: &str, config: &Config) -> Option<JoinHandle<(String,
         if total_size_opt.is_some() {
             total_size = total_size_opt.unwrap();
         }
-        let alternative_file_name = generate_file_name();
-        let file_name = extract_fname(link, Some(alternative_file_name));
+        // let alternative_file_name = generate_file_name(None);
+        // let original_file_name = extract_fname(link, Some(alternative_file_name));
+
         let resources_directory = format!("./{}", config.resources_directory);
-        let full_path = format!("{}/{}", &resources_directory, file_name);
+        let mut file_name = generate_file_name(None);
+        let mut full_path = format!("{}/{}", &resources_directory, file_name);
+        while Path::exists(Path::new(&full_path)) {
+            file_name = generate_file_name(None);
+            full_path = format!("{}/{}", &resources_directory, file_name);
+        }
+
         let mut file = File::create(&full_path).unwrap();
         let mut downloaded: u64 = 0;
         let link = link.to_owned();
-        let handler: JoinHandle<(String, bool)> = spawn(async move {
+        let handler: JoinHandle<(String, bool, String)> = spawn(async move {
             while let Ok(item) = image_file.chunk().await {
                 if item.is_some() {
                     let chunk = item.unwrap();
                     if file.write_all(&chunk).is_ok() {
                         downloaded = min(downloaded + (chunk.len() as u64), total_size);
                     } else {
-                        return (link.to_owned(), false);
+                        return (link.to_owned(), false, full_path);
                     }
                 } else {
-                    return (link.to_owned(), true);
+                    return (link.to_owned(), true, full_path);
                 }
             }
-            return (link.to_owned(), true);
+            return (link.to_owned(), true, full_path);
         });
         return Some(handler);
     } else {

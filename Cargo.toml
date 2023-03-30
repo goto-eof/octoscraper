@@ -17,3 +17,5 @@ serde = { version = "1.0.158", features = ["derive"] }
 log = "0.4.17"
 env_logger="0.10.0"
 crossterm = "0.26.1"
+sha2 = "0.10"
+hex="0.4.3"

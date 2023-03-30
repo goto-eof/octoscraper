@@ -1,4 +1,4 @@
-use std::{fs, path::Path};
+use std::{ffi::OsStr, fs, path::Path};
 
 use rand::{distributions::Uniform, prelude::Distribution};
 
@@ -11,10 +11,34 @@ pub fn initialize_download_directory(config: &Config) -> () {
     }
 }
 
-pub fn generate_file_name() -> String {
+pub fn generate_file_name(extension_opt: Option<String>) -> String {
     let mut rng = rand::thread_rng();
-    let die = Uniform::from(1..100000);
+    let die = Uniform::from(1..10000000);
     let rndd = die.sample(&mut rng);
-    let bkname = format!("random-{}.png", rndd);
+    let mut extension = "os".to_owned();
+    if extension_opt.is_some() {
+        extension = extension_opt.unwrap();
+    }
+    let bkname = format!("random-{}.{}", rndd, extension);
     bkname
+}
+
+pub fn extract_extension(path: &str) -> String {
+    Path::new(path)
+        .extension()
+        .and_then(OsStr::to_str)
+        .unwrap()
+        .to_owned()
+}
+
+pub fn file_rename(config: &Config, path: &str, file_name: &str) {
+    fs::rename(
+        path,
+        format!("{}/{}", &config.resources_directory, file_name),
+    )
+    .unwrap();
+}
+
+pub fn file_delete(path: &str) {
+    fs::remove_file(path).unwrap();
 }

@@ -12,7 +12,7 @@ pub fn normalize_link_replace_spaces(link: &str) -> String {
     return link.replace(" ", "%20");
 }
 
-pub fn extract_fname(link: &str, alternative_file_name: Option<String>) -> String {
+pub fn extract_fname_from_link(link: &str, alternative_file_name: Option<String>) -> String {
     let alternative_name = if alternative_file_name.is_some() {
         alternative_file_name.unwrap()
     } else {

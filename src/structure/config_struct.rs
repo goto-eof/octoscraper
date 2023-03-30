@@ -11,4 +11,5 @@ pub struct Config {
     pub insistent_mode: bool,
     pub download_limit: i32,
     pub user_agent: String,
+    pub hash_check: bool,
 }

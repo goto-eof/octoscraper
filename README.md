@@ -29,7 +29,7 @@ cargo run -- -w dodu.it -e .png,.PNG -d DIRECTORY_NAME -s 100 -t 90000 -i true -
 ```
 where 
 
- | argument | meaning                                                            | example                  |
+ | argument | meaning                                                            | value example                  |
  -----------|--------------------------------------------------------------------|--------------------------|
  | -h       |Help                                                                |
  | -w       |website - without http and www prefix                               |  dodu.it|

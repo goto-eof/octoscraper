@@ -3,7 +3,7 @@ use std::collections::HashSet;
 use reqwest::Url;
 
 pub struct Processed {
-    pub processed_resources: HashSet<String>,
+    processed_resources: HashSet<String>,
 }
 
 impl Processed {
@@ -29,12 +29,13 @@ impl Processed {
         } else {
             "no_filename".to_string()
         };
-        return Url::parse(link)
+        let fname = Url::parse(link)
             .unwrap()
             .path_segments()
             .and_then(|segments| segments.last())
             .and_then(|name| if name.is_empty() { None } else { Some(name) })
             .unwrap_or(&alternative_name)
             .to_string();
+        return fname;
     }
 }

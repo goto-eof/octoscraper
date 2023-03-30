@@ -1,5 +1,5 @@
 {
-  "website": "wallpaper.mob.org",
+  "website": "",
   "processing_same_domain": true,
 
   "_comment0": "add extensions in both cases: upper case and lower case",
@@ -14,5 +14,8 @@
   "insistent_mode": true,
 
   "_comment2": "allows to reduce the number of download threads",
-  "download_limit": 999
+  "download_limit": 999,
+
+  "_comment3": "user agent,  the default value is OctoScraper",
+  "user_agent": ""
 }

@@ -55,7 +55,7 @@ async fn retrieve_resource(
     link: &str,
 ) -> Result<reqwest::Response, reqwest::Error> {
     let client = reqwest::Client::builder()
-        .user_agent("<<--[ OctoScraper ]-->>")
+        .user_agent(calculate_user_agent(config))
         .timeout(time::Duration::from_millis(
             config.resource_download_timeout,
         ))
@@ -63,6 +63,17 @@ async fn retrieve_resource(
         .unwrap();
     let image_file = client.get(link).send().await;
     image_file
+}
+
+fn calculate_user_agent(config: &Config) -> String {
+    if config.user_agent.is_empty() {
+        return format!(
+            "OctoScraper v. {}",
+            option_env!("CARGO_PKG_VERSION").unwrap()
+        )
+        .to_owned();
+    }
+    return config.user_agent.to_owned();
 }
 
 fn sleep(config: &Config) {

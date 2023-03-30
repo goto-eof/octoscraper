@@ -78,11 +78,13 @@ async fn download_all(
     let mut handlers = vec![];
     let mut i = 1;
     for resource_link in resources_links.iter() {
-        println!("downloading: {}...", resource_link);
-        handlers.push(download(resource_link, &config).await);
-        i = i + 1;
-        if i >= limit {
-            break;
+        if !processed_resources.was_already_processed(&resource_link) {
+            println!("downloading: {}...", resource_link);
+            handlers.push(download(resource_link, &config).await);
+            i = i + 1;
+            if i >= limit {
+                break;
+            }
         }
     }
     for handler in handlers {

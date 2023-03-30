@@ -16,19 +16,22 @@ cargo run
 
 or run application with your configuration:
 ```
-cargo run -- -w dodu.it -e .png,.PNG -d DIRECTORY_NAME -s 100 -t 90000 -i true -l 3
+cargo run -- -w dodu.it -e .png,.PNG -d DIRECTORY_NAME -s 100 -t 90000 -i true -l 3 -a OctoScraper
 ```
 where 
 
  | argument | meaning                                           | example                  |
  -----------|---------------------------------------------------|--------------------------|
- | -w       |website - without http and www prefix             |  dodu.it|
- | -e       |list of extensions separated by comma             | .png,.PNG,.jpg,.JPG,.jpeg,.JPEG|
- | -d       |directory where files will be saved               | Images|
- | -s       |sleep time in millis before making the request    | 1000|
- | -t       |download timeout                                  | 90000|
+ | -h       |Help                                               |
+ | -w       |website - without http and www prefix              |  dodu.it|
+ | -e       |list of extensions separated by comma              | .png,.PNG,.jpg,.JPG,.jpeg,.JPEG|
+ | -d       |directory where files will be saved                | Images|
+ | -s       |sleep time in millis before making the request     | 1000|
+ | -t       |download timeout                                   | 90000|
  | -i       |insistent mode (it retries until download succeed) | true|
  | -l       |download limit (by default it makes as much requests as possibile) | 3|
+ | -a       |user agent                                         | OctoScraper|
+
 
 
 ```

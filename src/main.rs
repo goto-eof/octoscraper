@@ -24,17 +24,19 @@ async fn main() {
    //  // __| __/ _ \\ \ / __| '__/ _` | '_ \ / _ \ '__|
   / \_// (__| || (_) |\ \ (__| | | (_| | |_) |  __/ |   
   \___/ \___|\__\___/\__/\___|_|  \__,_| .__/ \___|_|   
-                                       |_|                v. {}
-                                                
-    please update the configuration.json file"#,
+                                       |_|                [ v. {} ]
+   -h for help                                             
+  "#,
         VERSION.unwrap()
     );
     println!("====================================================================");
+
     env_logger::init();
     let mut config: Config = Config::from_config_file("configuration/configuration.json").unwrap();
 
-    update_config_with_argument_values(&mut config);
-
+    if update_config_with_argument_values(&mut config) == Flow::EXIT {
+        return;
+    }
     let mut website = config.website.clone();
     if !website.starts_with("http://") {
         website = format!("http://{}", website);
@@ -74,7 +76,8 @@ async fn main() {
     }
 }
 
-fn update_config_with_argument_values(config: &mut Config) {
+fn update_config_with_argument_values(config: &mut Config) -> Flow {
+    const ARGUMENT_HELP: &str = "-h";
     const ARGUMENT_WEBSITE: &str = "-w";
     const ARGUMENT_EXTENSIONS: &str = "-e";
     const ARGUMENT_RESOURCE_DIRECTORY: &str = "-d";
@@ -82,8 +85,20 @@ fn update_config_with_argument_values(config: &mut Config) {
     const ARGUMENT_RESOURCE_DOWNLOAD_TIMEOUT: &str = "-t";
     const ARGUMENT_INSISTENT_MODE: &str = "-i";
     const ARGUMENT_DOWNLOAD_LIMIT: &str = "-l";
+    const ARGUMENT_USER_AGENT: &str = "-a";
 
     let args: Vec<String> = env::args().collect();
+    if args.len() == 1 {
+        print_help();
+        println!("No arguments were passed. Exiting...");
+        return Flow::EXIT;
+    }
+
+    if args.get(1).unwrap().eq(ARGUMENT_HELP) {
+        print_help();
+        return Flow::EXIT;
+    }
+
     if (args.len() - 1) % 2 == 1 {
         println!("Invalid number of arguments!");
         panic!("Exiting, because you provided an invalid number of arguments.")
@@ -100,7 +115,11 @@ fn update_config_with_argument_values(config: &mut Config) {
 
     if commands.get(ARGUMENT_WEBSITE).is_some() {
         config.website = commands.get(ARGUMENT_WEBSITE).unwrap().to_string();
+    } else {
+        println!("No website target specified. Exiting...");
+        return Flow::EXIT;
     }
+
     if commands.get(ARGUMENT_EXTENSIONS).is_some() {
         config.extensions = commands
             .get(ARGUMENT_EXTENSIONS)
@@ -109,12 +128,14 @@ fn update_config_with_argument_values(config: &mut Config) {
             .map(|str| str.to_owned())
             .collect::<Vec<String>>();
     }
+
     if commands.get(ARGUMENT_RESOURCE_DIRECTORY).is_some() {
         config.resources_directory = commands
             .get(ARGUMENT_RESOURCE_DIRECTORY)
             .unwrap()
             .to_owned();
     }
+
     if commands.get(ARGUMENT_SLEEP_TIME).is_some() {
         config.sleep_time = commands.get(ARGUMENT_SLEEP_TIME).unwrap().parse().unwrap();
     }
@@ -134,6 +155,7 @@ fn update_config_with_argument_values(config: &mut Config) {
             .parse()
             .unwrap();
     }
+
     if commands.get(ARGUMENT_DOWNLOAD_LIMIT).is_some() {
         config.download_limit = commands
             .get(ARGUMENT_DOWNLOAD_LIMIT)
@@ -141,4 +163,31 @@ fn update_config_with_argument_values(config: &mut Config) {
             .parse()
             .unwrap();
     }
+
+    if commands.get(ARGUMENT_USER_AGENT).is_some() {
+        config.user_agent = commands.get(ARGUMENT_USER_AGENT).unwrap().to_owned();
+    }
+
+    return Flow::CONTINUE;
+}
+
+fn print_help() {
+    println!("                               Help");
+    println!("====================================================================");
+    println!("-w	website - without http and www prefix");
+    println!("-e	list of extensions separated by comma");
+    println!("-d	directory where files will be saved");
+    println!("-s	sleep time in millis before making the request");
+    println!("-t	download timeout");
+    println!("-i	insistent mode (it retries until download succeed)");
+    println!("-l	download limit (by default it makes as much requests as possibile)");
+    println!("-a	user agent");
+    println!("-h    for this help message");
+    println!("====================================================================");
+}
+
+#[derive(PartialEq)]
+enum Flow {
+    CONTINUE,
+    EXIT,
 }

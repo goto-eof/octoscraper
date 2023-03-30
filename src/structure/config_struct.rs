@@ -10,4 +10,5 @@ pub struct Config {
     pub resource_download_timeout: u64,
     pub insistent_mode: bool,
     pub download_limit: i32,
+    pub user_agent: String,
 }

@@ -1,3 +1,4 @@
+use super::file_service::generate_file_name;
 use crate::structure;
 use std::{
     cmp::min,
@@ -9,8 +10,6 @@ use std::{
 };
 use structure::config_struct::Config;
 use tokio::{spawn, task::JoinHandle};
-
-use super::file_service::generate_file_name;
 
 pub async fn download(link: &str, config: &Config) -> Option<JoinHandle<(String, bool, String)>> {
     sleep(config);

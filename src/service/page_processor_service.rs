@@ -1,8 +1,8 @@
 use super::{
     download_service::download,
     link_service::link_normalizer_add_http,
-    link_strategy_service::{retrieve_strategy, ExtractorType},
     resource_extractor_service::extract_links,
+    strategy_extractor::strategy_extractor_service::{retrieve_strategy, ExtractorType},
 };
 use crate::{
     service::{

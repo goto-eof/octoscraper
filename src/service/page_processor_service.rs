@@ -1,7 +1,8 @@
 use super::{
     download_service::download,
     link_service::link_normalizer_add_http,
-    resource_extractor_service::{extract_links, extract_resources},
+    link_strategy_service::{retrieve_strategy, ExtractorType},
+    resource_extractor_service::extract_links,
 };
 use crate::{
     service::{
@@ -40,12 +41,16 @@ pub async fn extract_links_and_process_data(
         }
     });
 
-    let mut resources_links: Vec<String> =
-        extract_resources(&response_str, &domain_filter, &extension_filter)
-            .await
+    let extractor_strategy: Vec<ExtractorType> = retrieve_strategy();
+    let mut resources_links: Vec<String> = Vec::new();
+
+    extractor_strategy.iter().for_each(|extractor| {
+        extractor
+            .extract(config, &response_str, domain_filter, extension_filter)
             .iter()
             .map(|link| link_normalizer_add_http(link))
-            .collect();
+            .for_each(|link| resources_links.push(link))
+    });
 
     let mut stdout = stdout();
     stdout.queue(cursor::Hide).unwrap();

@@ -5,27 +5,8 @@ use super::{
 use crate::structure::{
     domain_filter_struct::DomainFilter, extension_filter_struct::ExtensionFilter,
 };
+use crate::Config;
 use select::{document::Document, predicate::Name};
-
-pub async fn extract_resources(
-    resource_str: &str,
-    domain_filter: &DomainFilter,
-    extension_filter: &ExtensionFilter,
-) -> Vec<String> {
-    return Document::from(resource_str)
-        .find(Name("img"))
-        .filter_map(|n| n.attr("src"))
-        .map(|item| item.to_string())
-        .filter_map(|link| {
-            is_same_domain(
-                &domain_filter,
-                extension_filter.is_resource_same_domain,
-                &link,
-            )
-        })
-        .filter_map(|link| contains_extension(extension_filter.extensions.clone(), &link))
-        .collect();
-}
 
 pub async fn extract_links(response_str: &str, domain_filter: &DomainFilter) -> Vec<String> {
     if response_str.contains("<html") {
@@ -38,4 +19,59 @@ pub async fn extract_links(response_str: &str, domain_filter: &DomainFilter) -> 
             .collect();
     }
     return vec![];
+}
+
+pub trait ResourceExtractor {
+    fn extract(
+        &self,
+        config: &Config,
+        resource_str: &str,
+        domain_filter: &DomainFilter,
+        extension_filter: &ExtensionFilter,
+    ) -> Vec<String>;
+}
+
+pub struct ImageExtractor {}
+
+impl ResourceExtractor for ImageExtractor {
+    fn extract(
+        &self,
+        config: &Config,
+        resource_str: &str,
+        domain_filter: &DomainFilter,
+        extension_filter: &ExtensionFilter,
+    ) -> Vec<String> {
+        return Document::from(resource_str)
+            .find(Name("img"))
+            .filter_map(|n| n.attr("src"))
+            .map(|item| item.to_string())
+            .filter_map(|link| {
+                is_same_domain(
+                    &domain_filter,
+                    extension_filter.is_resource_same_domain,
+                    &link,
+                )
+            })
+            .filter_map(|link| contains_extension(extension_filter.extensions.clone(), &link))
+            .collect();
+    }
+}
+
+pub struct VideoExtractor {}
+
+impl ResourceExtractor for VideoExtractor {
+    fn extract(
+        &self,
+        config: &Config,
+        resource_str: &str,
+        domain_filter: &DomainFilter,
+        extension_filter: &ExtensionFilter,
+    ) -> Vec<String> {
+        return vec![];
+    }
+}
+
+pub enum ResourceExtractorEnum {
+    VideoExtractor(VideoExtractor),
+    ImageExtractor(ImageExtractor),
 }

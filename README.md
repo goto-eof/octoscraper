@@ -1,14 +1,20 @@
-![image](https://user-images.githubusercontent.com/6343630/228685803-55a1726d-2a83-469c-bbae-4a3a21e10ac6.png)
-
+```
+    ___     _        __                                
+    /___\___| |_ ___ / _\ ___ _ __ __ _ _ __   ___ _ __ 
+   //  // __| __/ _ \\ \ / __| '__/ _` | '_ \ / _ \ '__|
+  / \_// (__| || (_) |\ \ (__| | | (_| | |_) |  __/ |   
+  \___/ \___|\__\___/\__/\___|_|  \__,_| .__/ \___|_|   
+                                       |_|              
+```    
 ### Description
 OctoScraper is a multithread web scraper tool implemented in Rust. It clones images from websites.
 
 ### Run it
+
 Allow reqwest crate to work properly:
 ```
 sudo apt install libssl-dev
 ```
-
 Run application with your configuration:
 ```
 cargo run -- -w dodu.it -e .png,.PNG -d DIRECTORY_NAME -s 100 -t 90000 -i true -l 3 -a OctoScraper
@@ -28,15 +34,11 @@ where
  | -a       |user agent                                         | OctoScraper|
 
 
+###Screenshot
+![image](https://user-images.githubusercontent.com/6343630/228825507-d5978904-7cfd-4238-af8d-242a6b120ada.png)
 
-```
-    ___     _        __                                
-    /___\___| |_ ___ / _\ ___ _ __ __ _ _ __   ___ _ __ 
-   //  // __| __/ _ \\ \ / __| '__/ _` | '_ \ / _ \ '__|
-  / \_// (__| || (_) |\ \ (__| | | (_| | |_) |  __/ |   
-  \___/ \___|\__\___/\__/\___|_|  \__,_| .__/ \___|_|   
-                                       |_|              
-```    
+
+
 
 
 Tested on Linux and MacOS.

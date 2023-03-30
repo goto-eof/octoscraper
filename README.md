@@ -17,7 +17,7 @@ Download the executable from [here](https://github.com/goto-eof/octoscraper/rele
 
 
 
-### For developers: run it
+### For developers
 
 Allow reqwest crate to work properly:
 ```

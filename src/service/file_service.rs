@@ -1,4 +1,4 @@
-use std::{ffi::OsStr, fs, path::Path};
+use std::{fs, path::Path};
 
 use rand::{distributions::Uniform, prelude::Distribution};
 
@@ -21,14 +21,6 @@ pub fn generate_file_name(extension_opt: Option<String>) -> String {
     }
     let bkname = format!("random-{}.{}", rndd, extension);
     bkname
-}
-
-pub fn extract_extension(path: &str) -> String {
-    Path::new(path)
-        .extension()
-        .and_then(OsStr::to_str)
-        .unwrap()
-        .to_owned()
 }
 
 pub fn file_rename(config: &Config, path: &str, file_name: &str) {

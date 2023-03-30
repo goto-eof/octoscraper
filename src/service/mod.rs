@@ -1,3 +1,4 @@
+pub mod default_settings;
 pub mod download_service;
 pub mod file_service;
 pub mod link_service;

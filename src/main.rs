@@ -1,4 +1,4 @@
-use config_file::FromConfigFile;
+use service::default_settings::load_default_settings;
 use std::collections::{HashMap, HashSet};
 use std::env;
 
@@ -25,7 +25,7 @@ async fn main() {
    //  // __| __/ _ \\ \ / __| '__/ _` | '_ \ / _ \ '__|
   / \_// (__| || (_) |\ \ (__| | | (_| | |_) |  __/ |   
   \___/ \___|\__\___/\__/\___|_|  \__,_| .__/ \___|_|   
-                                       |_|                [ v. {} ]
+                                       |_|                (v. {})
    -h for help                                             
   "#,
         VERSION.unwrap()
@@ -33,7 +33,7 @@ async fn main() {
     println!("====================================================================");
 
     env_logger::init();
-    let mut config: Config = Config::from_config_file("configuration/configuration.json").unwrap();
+    let mut config: Config = load_default_settings();
 
     if update_config_with_argument_values(&mut config) == Flow::EXIT {
         return;

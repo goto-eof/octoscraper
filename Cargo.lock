@@ -649,8 +649,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "octo-scraper"
-version = "0.3.2"
+name = "octoscraper"
+version = "0.3.3"
 dependencies = [
  "config-file",
  "crossterm",

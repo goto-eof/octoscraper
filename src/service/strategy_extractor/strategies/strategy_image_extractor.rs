@@ -1,6 +1,8 @@
-use super::strategy_resource_extractor::ResourceExtractor;
 use crate::{
-    service::validation_service::{contains_extension, is_same_domain},
+    service::{
+        strategy_extractor::strategy_resource_extractor::ResourceExtractor,
+        validation_service::{contains_extension, is_same_domain},
+    },
     structure::{
         config_struct::Config, domain_filter_struct::DomainFilter,
         extension_filter_struct::ExtensionFilter,

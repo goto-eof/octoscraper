@@ -1,6 +1,9 @@
 use super::{
-    strategy_audio_extractor::AudioExtractor, strategy_image_extractor::ImageExtractor,
-    strategy_resource_extractor::ResourceExtractor, strategy_video_extractor::VideoExtractor,
+    strategies::{
+        strategy_audio_extractor::AudioExtractor, strategy_image_extractor::ImageExtractor,
+        strategy_video_extractor::VideoExtractor,
+    },
+    strategy_resource_extractor::ResourceExtractor,
 };
 
 pub type ExtractorType = Box<dyn ResourceExtractor>;

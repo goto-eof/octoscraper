@@ -1,7 +1,9 @@
-use super::strategy_resource_extractor::ResourceExtractor;
-use crate::structure::{
-    config_struct::Config, domain_filter_struct::DomainFilter,
-    extension_filter_struct::ExtensionFilter,
+use crate::{
+    service::strategy_extractor::strategy_resource_extractor::ResourceExtractor,
+    structure::{
+        config_struct::Config, domain_filter_struct::DomainFilter,
+        extension_filter_struct::ExtensionFilter,
+    },
 };
 
 pub struct AudioExtractor {}

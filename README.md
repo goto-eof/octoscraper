@@ -33,7 +33,7 @@ where
  -----------|--------------------------------------------------------------------|--------------------------|
  | -h       |Help                                                                |
  | -w       |website - without http and www prefix                               |  dodu.it|
- | -e       |list of extensions separated by comma                               | .png,.PNG,.jpg,.JPG,.jpeg,.JPEG|
+ | -e       |list of extensions separated by comma (only image extentions allowed)                               | .png,.PNG,.jpg,.JPG,.jpeg,.JPEG|
  | -d       |directory where files will be saved                                 | Images|
  | -s       |sleep time in millis before making the request                      | 1000|
  | -t       |download timeout                                                    | 90000|

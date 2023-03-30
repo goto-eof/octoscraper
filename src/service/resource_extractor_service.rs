@@ -1,8 +1,5 @@
 use super::{link_service::normalize_link_replace_spaces, validation_service::is_same_domain};
-use crate::structure::{
-    domain_filter_struct::DomainFilter, extension_filter_struct::ExtensionFilter,
-};
-use crate::Config;
+use crate::structure::domain_filter_struct::DomainFilter;
 use select::{document::Document, predicate::Name};
 
 pub async fn extract_links(response_str: &str, domain_filter: &DomainFilter) -> Vec<String> {

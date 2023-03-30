@@ -22,20 +22,21 @@ impl ResourceExtractor for VideoExtractor {
         domain_filter: &DomainFilter,
         extension_filter: &ExtensionFilter,
     ) -> Vec<String> {
-        return Document::from(resource_str)
-            .find(Name("source"))
-            .filter_map(|n| n.attr("src"))
-            .map(|item| item.to_string())
-            .filter_map(|link| {
-                is_same_domain(
-                    &domain_filter,
-                    extension_filter.is_resource_same_domain,
-                    &link,
-                )
-            })
-            .filter_map(|link| {
-                contains_extension(vec![".mp4".to_string(), ".ogg".to_string()], &link)
-            })
-            .collect();
+        // return Document::from(resource_str)
+        //     .find(Name("source"))
+        //     .filter_map(|n| n.attr("src"))
+        //     .map(|item| item.to_string())
+        //     .filter_map(|link| {
+        //         is_same_domain(
+        //             &domain_filter,
+        //             extension_filter.is_resource_same_domain,
+        //             &link,
+        //         )
+        //     })
+        //     .filter_map(|link| {
+        //         contains_extension(vec![".mp4".to_string(), ".ogg".to_string()], &link)
+        //     })
+        //     .collect();
+        return vec![];
     }
 }

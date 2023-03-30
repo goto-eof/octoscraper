@@ -1,10 +1,11 @@
 on:
   release:
     types: [created]
-    
+permissions:
+  contents: read
+  packages: write    
 jobs:
   release:
-    permissions: write-all
     name: release ${{ matrix.target }}
     runs-on: ubuntu-latest
     strategy:

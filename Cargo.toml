@@ -1,5 +1,5 @@
 [package]
-name = "OctoScraper"
+name = "octo-scraper"
 description = "A web scraper tool"
 license = "MIT"
 version = "0.3.2"

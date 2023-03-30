@@ -22,8 +22,6 @@ pub async fn download(link: &str, config: &Config) -> Option<JoinHandle<(String,
         if total_size_opt.is_some() {
             total_size = total_size_opt.unwrap();
         }
-        // let alternative_file_name = generate_file_name(None);
-        // let original_file_name = extract_fname(link, Some(alternative_file_name));
 
         let resources_directory = format!("./{}", config.resources_directory);
         let mut file_name = generate_file_name(None);

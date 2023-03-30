@@ -3,24 +3,6 @@
 version = 3
 
 [[package]]
-name = "OctoScraper"
-version = "0.3.2"
-dependencies = [
- "config-file",
- "crossterm",
- "env_logger",
- "hex",
- "log",
- "num_cpus",
- "rand",
- "reqwest",
- "select",
- "serde",
- "sha2",
- "tokio",
-]
-
-[[package]]
 name = "aho-corasick"
 version = "0.7.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -664,6 +646,24 @@ checksum = "0fac9e2da13b5eb447a6ce3d392f23a29d8694bff781bf03a16cd9ac8697593b"
 dependencies = [
  "hermit-abi 0.2.6",
  "libc",
+]
+
+[[package]]
+name = "octo-scraper"
+version = "0.3.2"
+dependencies = [
+ "config-file",
+ "crossterm",
+ "env_logger",
+ "hex",
+ "log",
+ "num_cpus",
+ "rand",
+ "reqwest",
+ "select",
+ "serde",
+ "sha2",
+ "tokio",
 ]
 
 [[package]]

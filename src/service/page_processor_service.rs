@@ -109,23 +109,26 @@ async fn download_all(
             let handler_result = handler.unwrap().await;
             if handler_result.is_ok() {
                 let handler_result = handler_result.unwrap();
-                if handler_result.1 {
-                    processed_resources.push(&handler_result.0);
-                    if processed_resources_hash.was_already_processed(&handler_result.2) {
-                        file_delete(&handler_result.2);
-                        println!("Huston! We have already another file with the same hash. This file will be discarded. Details: {}", handler_result.0)
+                let handler_link = handler_result.0;
+                let is_success = handler_result.1;
+                let handler_file = handler_result.2;
+                if is_success {
+                    processed_resources.push(&handler_link);
+                    if processed_resources_hash.was_already_processed(&handler_file) {
+                        file_delete(&handler_file);
+                        println!("Huston! We have already another file with the same hash. This file will be discarded. Details: {}", handler_link)
                     } else {
-                        processed_resources_hash.push(&handler_result.2);
+                        processed_resources_hash.push(&handler_file);
                         file_rename(
                             config,
-                            &handler_result.2,
-                            &extract_fname_from_link(&handler_result.0, None),
+                            &handler_file,
+                            &extract_fname_from_link(&handler_link, None),
                         );
-                        println!("downloaded SUCCESSFULLY: {}", handler_result.0);
+                        println!("downloaded SUCCESSFULLY: {}", handler_link);
                     }
                 } else {
-                    file_delete(&handler_result.2);
-                    println!("download failed: {}", handler_result.0);
+                    file_delete(&handler_file);
+                    println!("download failed: {}", handler_link);
                 }
             }
         }

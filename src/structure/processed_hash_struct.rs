@@ -34,7 +34,7 @@ impl ProcessedHash {
     fn calculate_hash(path: &str) -> String {
         let mut file = fs::File::open(&path).unwrap();
         let mut hasher = Sha256::new();
-        let n = io::copy(&mut file, &mut hasher).unwrap();
+        io::copy(&mut file, &mut hasher).unwrap();
         let hash = hasher.finalize();
         let result = hex::encode(hash);
         return result;

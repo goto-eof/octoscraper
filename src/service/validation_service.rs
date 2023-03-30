@@ -15,6 +15,7 @@ pub fn is_same_domain(
     }
     return Some(link.to_string());
 }
+
 pub fn contains_extension(extensions: Vec<String>, link: &str) -> Option<String> {
     for extension in extensions {
         if link.ends_with(&extension) {

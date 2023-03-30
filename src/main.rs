@@ -190,7 +190,7 @@ fn print_help() {
     println!("-i	insistent mode (it retries until download succeed)");
     println!("-l	download limit (by default it makes as much requests as possibile)");
     println!("-a	user agent");
-    println!("-c	enables downloaded file hash check for avoiding duplicate downloads");
+    println!("-c	hash check: avoid duplicate downloads");
     println!("-h    for this help message");
     println!("====================================================================");
 }

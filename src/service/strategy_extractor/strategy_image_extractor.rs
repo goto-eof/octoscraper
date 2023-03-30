@@ -1,5 +1,4 @@
-use select::{document::Document, predicate::Name};
-
+use super::strategy_resource_extractor::ResourceExtractor;
 use crate::{
     service::validation_service::{contains_extension, is_same_domain},
     structure::{
@@ -7,8 +6,7 @@ use crate::{
         extension_filter_struct::ExtensionFilter,
     },
 };
-
-use super::strategy_resource_extractor::ResourceExtractor;
+use select::{document::Document, predicate::Name};
 
 pub struct ImageExtractor {}
 

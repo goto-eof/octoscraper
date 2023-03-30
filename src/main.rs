@@ -89,6 +89,7 @@ fn update_config_with_argument_values(config: &mut Config) -> Flow {
     const ARGUMENT_INSISTENT_MODE: &str = "-i";
     const ARGUMENT_DOWNLOAD_LIMIT: &str = "-l";
     const ARGUMENT_USER_AGENT: &str = "-a";
+    const ARGUMENT_HASH_CHECK: &str = "-c";
 
     let args: Vec<String> = env::args().collect();
     if args.len() == 1 {
@@ -171,6 +172,10 @@ fn update_config_with_argument_values(config: &mut Config) -> Flow {
         config.user_agent = commands.get(ARGUMENT_USER_AGENT).unwrap().to_owned();
     }
 
+    if commands.get(ARGUMENT_HASH_CHECK).is_some() {
+        config.hash_check = commands.get(ARGUMENT_HASH_CHECK).unwrap().parse().unwrap();
+    }
+
     return Flow::CONTINUE;
 }
 
@@ -185,6 +190,7 @@ fn print_help() {
     println!("-i	insistent mode (it retries until download succeed)");
     println!("-l	download limit (by default it makes as much requests as possibile)");
     println!("-a	user agent");
+    println!("-c	enables downloaded file hash check for avoiding duplicate downloads");
     println!("-h    for this help message");
     println!("====================================================================");
 }

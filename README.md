@@ -44,7 +44,7 @@ where
 
 
 ### Screenshot
-![image](https://user-images.githubusercontent.com/6343630/228825507-d5978904-7cfd-4238-af8d-242a6b120ada.png)
+![image](https://user-images.githubusercontent.com/6343630/228950041-c8621873-7757-4c68-953b-7a0fbe4b9389.png)
 
 
 

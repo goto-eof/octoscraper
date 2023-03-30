@@ -2,7 +2,7 @@ on:
   release:
     types: [created]
 permissions:
-  contents: read
+  contents: write
   packages: write    
 jobs:
   release:

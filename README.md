@@ -9,12 +9,7 @@ Allow reqwest crate to work properly:
 sudo apt install libssl-dev
 ```
 
-Compile and run application with default configuration (for testing purposes):
-```
-cargo run
-```
-
-or run application with your configuration:
+Run application with your configuration:
 ```
 cargo run -- -w dodu.it -e .png,.PNG -d DIRECTORY_NAME -s 100 -t 90000 -i true -l 3 -a OctoScraper
 ```

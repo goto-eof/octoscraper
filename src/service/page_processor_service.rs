@@ -19,15 +19,7 @@ use crossterm::{
 };
 use std::{collections::HashSet, io::stdout};
 use structure::domain_filter_struct::DomainFilter;
-/**
- * è necessario consentire all'utente la possibilità di preservare i nomi originali. Quindi:
- * la lista dei file scaricati è costituita dagli md5(file)
- * 1-scarico file con nome random
- * 2-alla fine del download calcolo il suo md5(file)
- * 3-salvo nella lista dei processati
- * 4-rinnomino il file con il suo nome originale, se vi è un altro file con lo stesso nome aggiungo un numero finale
- * (stessa radice del nome, contenuti diversi)
- */
+
 pub async fn extract_links_and_process_data(
     link: &str,
     config: &Config,

@@ -1,6 +1,14 @@
+use reqwest::Url;
+
+use super::link_service::base_url;
+
 pub fn is_same_domain_ext(enabled: bool, domain: &str, link: &str) -> Option<String> {
     if enabled {
-        if link.contains(domain) {
+        let domain_base = Url::parse(domain).unwrap();
+        let link_base = Url::parse(link).unwrap();
+        let base_domain = base_url(domain_base).unwrap();
+        let base_link = base_url(link_base).unwrap();
+        if base_domain.eq(&base_link) {
             return Some(link.to_string());
         } else {
             return None;

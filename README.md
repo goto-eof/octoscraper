@@ -50,6 +50,7 @@ where
 
 - video scraping
 - audio scraping
+- link normalizer
 
 
 ### Screenshot

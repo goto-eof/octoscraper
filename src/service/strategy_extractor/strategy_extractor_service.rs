@@ -1,3 +1,5 @@
+use crate::structure::config_struct::Config;
+
 use super::{
     strategies::{
         strategy_audio_extractor::AudioExtractor, strategy_image_extractor::ImageExtractor,
@@ -7,10 +9,25 @@ use super::{
 };
 
 pub type ExtractorType = Box<dyn ResourceExtractor>;
-pub fn retrieve_strategy() -> Vec<ExtractorType> {
+pub fn retrieve_strategy(config: &Config) -> Vec<ExtractorType> {
     let mut extractors: Vec<ExtractorType> = Vec::new();
-    extractors.push(Box::new(VideoExtractor {}));
-    extractors.push(Box::new(ImageExtractor {}));
-    extractors.push(Box::new(AudioExtractor {}));
+    extractors.push(Box::new(VideoExtractor {
+        enabled: config._is_video_extractor_enabled,
+        extensions: config._video_extractor_extensions.to_owned(),
+        is_same_domain_enabled: config.processing_same_domain,
+        domain: config.website.clone(),
+    }));
+    extractors.push(Box::new(ImageExtractor {
+        enabled: config._is_image_extractor_enabled,
+        extensions: config._image_extractor_extensions.to_owned(),
+        is_same_domain_enabled: config.processing_same_domain,
+        domain: config.website.clone(),
+    }));
+    extractors.push(Box::new(AudioExtractor {
+        enabled: config._is_audio_extractor_enabled,
+        extensions: config._audio_extractor_extensions.to_owned(),
+        is_same_domain_enabled: config.processing_same_domain,
+        domain: config.website.clone(),
+    }));
     return extractors;
 }

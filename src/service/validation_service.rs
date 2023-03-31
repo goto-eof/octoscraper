@@ -1,13 +1,6 @@
-use crate::structure;
-use structure::domain_filter_struct::DomainFilter;
-
-pub fn is_same_domain(
-    domain_filter: &DomainFilter,
-    is_same_domain: bool,
-    link: &str,
-) -> Option<String> {
-    if is_same_domain {
-        if link.contains(&domain_filter.domain) {
+pub fn is_same_domain_ext(enabled: bool, domain: &str, link: &str) -> Option<String> {
+    if enabled {
+        if link.contains(domain) {
             return Some(link.to_string());
         } else {
             return None;

@@ -10,8 +10,7 @@ use crate::{
         link_service::extract_fname_from_link,
     },
     structure::{
-        self, config_struct::Config, extension_filter_struct::ExtensionFilter,
-        processed_hash_struct::ProcessedHash, processed_struct::Processed,
+        config_struct::Config, processed_hash_struct::ProcessedHash, processed_struct::Processed,
     },
 };
 use crossterm::{
@@ -19,7 +18,6 @@ use crossterm::{
     QueueableCommand,
 };
 use std::{collections::HashSet, io::stdout};
-use structure::domain_filter_struct::DomainFilter;
 
 pub async fn extract_links_and_process_data(
     link: &str,
@@ -28,12 +26,10 @@ pub async fn extract_links_and_process_data(
     processed: &mut HashSet<String>,
     processed_resources: &mut Processed,
     processed_resources_hash: &mut ProcessedHash,
-    domain_filter: &DomainFilter,
-    extension_filter: &mut ExtensionFilter,
 ) {
     let response_str = reqwest::get(link).await.unwrap().text().await.unwrap();
 
-    let extracted_links = extract_links(&response_str, &domain_filter).await;
+    let extracted_links = extract_links(config, &response_str).await;
     extracted_links.iter().for_each(|item| {
         let item = &link_normalizer_add_http(item);
         if !processed.contains(item.as_str()) {
@@ -41,12 +37,12 @@ pub async fn extract_links_and_process_data(
         }
     });
 
-    let extractor_strategy: Vec<ExtractorType> = retrieve_strategy();
+    let extractor_strategy: Vec<ExtractorType> = retrieve_strategy(config);
     let mut resources_links: Vec<String> = Vec::new();
 
     extractor_strategy.iter().for_each(|extractor| {
         extractor
-            .extract(config, &response_str, domain_filter, extension_filter)
+            .extract(&response_str)
             .iter()
             .map(|link| link_normalizer_add_http(link))
             .for_each(|link| resources_links.push(link))

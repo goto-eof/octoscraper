@@ -1,5 +1,6 @@
 use crate::structure::config_struct::Config;
 use rand::{distributions::Uniform, prelude::Distribution};
+use std::ffi::OsStr;
 use std::{fs, path::Path};
 
 pub fn initialize_download_directory(config: &Config) -> () {
@@ -22,13 +23,34 @@ pub fn generate_file_name(extension_opt: Option<String>) -> String {
 }
 
 pub fn file_rename(config: &Config, path: &str, file_name: &str) {
-    fs::rename(
-        path,
-        format!("{}/{}", &config.resources_directory, file_name),
-    )
-    .unwrap();
+    let mut new_file_name = format!("{}/{}", &config.resources_directory, file_name);
+    let mut i = 1;
+    while std::path::Path::new(&new_file_name).exists() {
+        let tmp_fname = format!("{}-{}", extract_filename_prefix(file_name), i);
+        let tmp_ext = extract_extension(file_name);
+        new_file_name = format!("{}/{}.{}", &config.resources_directory, tmp_fname, tmp_ext);
+        i = i + 1;
+    }
+    fs::rename(path, new_file_name).unwrap();
 }
 
 pub fn file_delete(path: &str) {
     fs::remove_file(path).unwrap();
+}
+
+pub fn extract_extension(filename: &str) -> String {
+    return Path::new(filename)
+        .extension()
+        .and_then(OsStr::to_str)
+        .unwrap()
+        .to_string();
+}
+
+pub fn extract_filename_prefix(filename: &str) -> String {
+    Path::new(filename)
+        .file_stem()
+        .unwrap()
+        .to_str()
+        .unwrap()
+        .to_owned()
 }

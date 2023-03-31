@@ -5,8 +5,6 @@ use std::env;
 use crate::service::file_service::initialize_download_directory;
 use crate::service::page_processor_service::extract_links_and_process_data;
 use crate::structure::config_struct::Config;
-use crate::structure::domain_filter_struct::DomainFilter;
-use crate::structure::extension_filter_struct::ExtensionFilter;
 use crate::structure::processed_hash_struct::ProcessedHash;
 use crate::structure::processed_struct::Processed;
 
@@ -64,15 +62,6 @@ async fn main() {
             &mut processed,
             &mut processed_resources,
             &mut processed_resources_hash,
-            &DomainFilter {
-                is_same_domain: config.processing_same_domain,
-                domain: config.website.to_owned(),
-            },
-            &mut ExtensionFilter {
-                enabled: true,
-                extensions: config.extensions.clone(),
-                is_resource_same_domain: false,
-            },
         )
         .await;
         processed.insert(link.to_string());
@@ -82,7 +71,12 @@ async fn main() {
 fn update_config_with_argument_values(config: &mut Config) -> Flow {
     const ARGUMENT_HELP: &str = "-h";
     const ARGUMENT_WEBSITE: &str = "-w";
-    const ARGUMENT_EXTENSIONS: &str = "-e";
+    const ARGUMENT_EXTENSIONS_IMAGE: &str = "-ei";
+    const ARGUMENT_EXTENSIONS_VIDEO: &str = "-ev";
+    const ARGUMENT_EXTENSIONS_AUDIO: &str = "-ea";
+    const ARGUMENT_ENABLE_IMAGE_EXTRACTOR: &str = "-oi";
+    const ARGUMENT_ENABLE_VIDEO_EXTRACTOR: &str = "-ov";
+    const ARGUMENT_ENABLE_AUDIO_EXTRACTOR: &str = "-oa";
     const ARGUMENT_RESOURCE_DIRECTORY: &str = "-d";
     const ARGUMENT_SLEEP_TIME: &str = "-s";
     const ARGUMENT_RESOURCE_DOWNLOAD_TIMEOUT: &str = "-t";
@@ -124,13 +118,55 @@ fn update_config_with_argument_values(config: &mut Config) -> Flow {
         return Flow::EXIT;
     }
 
-    if commands.get(ARGUMENT_EXTENSIONS).is_some() {
-        config.extensions = commands
-            .get(ARGUMENT_EXTENSIONS)
+    if commands.get(ARGUMENT_ENABLE_IMAGE_EXTRACTOR).is_some() {
+        config._is_image_extractor_enabled = commands
+            .get(ARGUMENT_ENABLE_IMAGE_EXTRACTOR)
             .unwrap()
-            .split(",")
-            .map(|str| str.to_owned())
-            .collect::<Vec<String>>();
+            .parse()
+            .unwrap();
+
+        if commands.get(ARGUMENT_EXTENSIONS_IMAGE).is_some() {
+            config._image_extractor_extensions = commands
+                .get(ARGUMENT_EXTENSIONS_IMAGE)
+                .unwrap()
+                .split(",")
+                .map(|str| str.to_owned())
+                .collect::<Vec<String>>();
+        }
+    }
+
+    if commands.get(ARGUMENT_ENABLE_VIDEO_EXTRACTOR).is_some() {
+        config._is_video_extractor_enabled = commands
+            .get(ARGUMENT_ENABLE_VIDEO_EXTRACTOR)
+            .unwrap()
+            .parse()
+            .unwrap();
+
+        if commands.get(ARGUMENT_EXTENSIONS_VIDEO).is_some() {
+            config._video_extractor_extensions = commands
+                .get(ARGUMENT_EXTENSIONS_VIDEO)
+                .unwrap()
+                .split(",")
+                .map(|str| str.to_owned())
+                .collect::<Vec<String>>();
+        }
+    }
+
+    if commands.get(ARGUMENT_ENABLE_AUDIO_EXTRACTOR).is_some() {
+        config._is_audio_extractor_enabled = commands
+            .get(ARGUMENT_ENABLE_AUDIO_EXTRACTOR)
+            .unwrap()
+            .parse()
+            .unwrap();
+
+        if commands.get(ARGUMENT_EXTENSIONS_AUDIO).is_some() {
+            config._audio_extractor_extensions = commands
+                .get(ARGUMENT_EXTENSIONS_AUDIO)
+                .unwrap()
+                .split(",")
+                .map(|str| str.to_owned())
+                .collect::<Vec<String>>();
+        }
     }
 
     if commands.get(ARGUMENT_RESOURCE_DIRECTORY).is_some() {
@@ -183,7 +219,12 @@ fn print_help() {
     println!("                               Help");
     println!("====================================================================");
     println!("-w	website - without http and www prefix");
-    println!("-e	list of extensions separated by comma");
+    println!("-oi   enable image extractor");
+    println!("-ov   enable video extractor");
+    println!("-oa   enable audio extractor");
+    println!("-ei	list of image extensions separated by comma");
+    println!("-ev	list of video extensions separated by comma");
+    println!("-ea	list of audio extensions separated by comma");
     println!("-d	directory where files will be saved");
     println!("-s	sleep time in millis before making the request");
     println!("-t	download timeout");

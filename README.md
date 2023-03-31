@@ -7,7 +7,7 @@
                                            |_|              
 ```    
 ### Description
-OctoScraper is a multithread web scraper tool implemented in Rust. Currenlty it clones only images and audio files from websites. There are some know issues about link normalization so that in some cases, for now, it could not work properly.
+OctoScraper is a multithread web scraper tool implemented in Rust. Currenlty it clones only images and audio files from websites. There are some known issues about link normalization so that in some cases, for now, it could not work properly.
 
 ### Execute it
 Download the executable from [here](https://github.com/goto-eof/octoscraper/releases) and run it.
@@ -30,7 +30,7 @@ where
  | argument | meaning                                                            | value example                  |
  -----------|--------------------------------------------------------------------|--------------------------|
  | -h       |Help                                                                |
- | -w       |website - without http and www prefix                               |  dodu.it|
+ | -w       |website - without http and www prefix                               |  dodu.it or audiomidimania.com or wallpaper.mob.org|
  | -sd      |same domain                                                         |  true|
  |   -oi    | enable image extractor                                            | true |
  |   -ov    |(WIP)  enable video extractor                                            | true |
@@ -49,9 +49,9 @@ where
 
 ### Work in progress
 
-- video scraping
+- link normalization
 - audio scraping
-- link normalizer
+- video scraping
 
 
 ### Screenshot

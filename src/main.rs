@@ -30,7 +30,6 @@ async fn main() {
     );
     println!("====================================================================");
 
-    env_logger::init();
     let mut config: Config = load_default_settings();
 
     if update_config_with_argument_values(&mut config) == Flow::EXIT {

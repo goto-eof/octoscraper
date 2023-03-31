@@ -1,10 +1,11 @@
 use select::{document::Document, predicate::Name};
 
 use crate::service::{
-    extractor::resource_extractor::ResourceExtractor,
     link_service::{normalize_link_replace_spaces, normalize_src},
     validation_service::is_same_domain_ext,
 };
+
+use super::resource_extractor::ResourceExtractor;
 
 pub struct AudioExtractor {
     pub enabled: bool,

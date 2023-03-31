@@ -2,8 +2,9 @@ use super::{
     download_service::download,
     extractor::{
         extractor_service::{retrieve_strategy, ExtractorType},
-        extractors::link_extractor_service::LinkExtractor,
-        resource_extractor::ResourceExtractor,
+        extractors::{
+            link_extractor_service::LinkExtractor, resource_extractor::ResourceExtractor,
+        },
     },
     link_service::link_normalizer_add_http,
 };

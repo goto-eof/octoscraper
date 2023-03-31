@@ -1,8 +1,7 @@
-use crate::service::{
-    extractor::resource_extractor::ResourceExtractor,
-    validation_service::{contains_extension, is_same_domain_ext},
-};
+use crate::service::validation_service::{contains_extension, is_same_domain_ext};
 use select::{document::Document, predicate::Name};
+
+use super::resource_extractor::ResourceExtractor;
 
 pub struct ImageExtractor {
     pub enabled: bool,

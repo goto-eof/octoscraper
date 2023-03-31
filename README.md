@@ -15,8 +15,6 @@ Download the executable from [here](https://github.com/goto-eof/octoscraper/rele
 ./octoscraper -w dodu.it -e .png,.PNG -d DIRECTORY_NAME -s 100 -t 90000 -i true -l 3 -a OctoScraper
 ```
 
-
-
 ### For developers
 
 Allow reqwest crate to work properly:
@@ -47,6 +45,11 @@ where
  | -l       |download limit (by default it makes as much requests as possibile)  | 3|
  | -a       |user agent                                                          | OctoScraper|
  | -c       |enables downloaded file hash check for avoiding duplicate downloads | true|
+
+### Work in progress
+
+- video download
+- audio download
 
 
 ### Screenshot

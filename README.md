@@ -4,7 +4,7 @@
        //  // __| __/ _ \\ \ / __| '__/ _` | '_ \ / _ \ '__|
       / \_// (__| || (_) |\ \ (__| | | (_| | |_) |  __/ |   
       \___/ \___|\__\___/\__/\___|_|  \__,_| .__/ \___|_|   
-                                       |_|              
+                                           |_|              
 ```    
 ### Description
 OctoScraper is a multithread web scraper tool implemented in Rust. Currenlty it clones only images and audio files from websites.

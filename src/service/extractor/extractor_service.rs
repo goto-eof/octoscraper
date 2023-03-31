@@ -6,7 +6,7 @@ use super::extractors::{
 };
 
 pub type ExtractorType = Box<dyn ResourceExtractor>;
-pub fn retrieve_strategy(config: &Config) -> Vec<ExtractorType> {
+pub fn retrieve_extractors(config: &Config) -> Vec<ExtractorType> {
     let mut extractors: Vec<ExtractorType> = Vec::new();
     extractors.push(Box::new(VideoExtractor {
         enabled: config._is_video_extractor_enabled,

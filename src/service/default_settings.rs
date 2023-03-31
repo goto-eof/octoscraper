@@ -4,6 +4,7 @@ pub fn load_default_settings() -> Config {
     return Config {
         website: "".to_owned(),
         processing_same_domain: true,
+        process_only_root: false,
         resources_directory: "resources".to_string(),
         sleep_time: 0,
         resource_download_timeout: 90000,

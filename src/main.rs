@@ -27,6 +27,7 @@ const ARGUMENT_DOWNLOAD_LIMIT: &str = "-l";
 const ARGUMENT_USER_AGENT: &str = "-a";
 const ARGUMENT_HASH_CHECK: &str = "-c";
 const ARGUMENT_SAME_DOMAIN: &str = "-sd";
+const ARGUMENT_PROCESS_ONLY_ROOT: &str = "-r";
 
 #[tokio::main]
 async fn main() {
@@ -217,6 +218,14 @@ fn update_config_with_argument_values(config: &mut Config) -> Flow {
         config.hash_check = commands.get(ARGUMENT_HASH_CHECK).unwrap().parse().unwrap();
     }
 
+    if commands.get(ARGUMENT_PROCESS_ONLY_ROOT).is_some() {
+        config.process_only_root = commands
+            .get(ARGUMENT_PROCESS_ONLY_ROOT)
+            .unwrap()
+            .parse()
+            .unwrap();
+    }
+
     if !config._is_audio_extractor_enabled
         && !config._is_image_extractor_enabled
         && !config._is_video_extractor_enabled
@@ -279,6 +288,7 @@ fn print_help() {
         ARGUMENT_HASH_CHECK
     );
     println!("{}    same domain", ARGUMENT_SAME_DOMAIN);
+    println!("{} process only the root link", ARGUMENT_PROCESS_ONLY_ROOT);
     println!("{}    for this help message", ARGUMENT_HELP);
     println!("====================================================================");
 }

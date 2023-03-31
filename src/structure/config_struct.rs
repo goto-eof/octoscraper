@@ -11,6 +11,7 @@ pub struct Config {
     pub download_limit: i32,
     pub user_agent: String,
     pub hash_check: bool,
+    pub process_only_root: bool,
 
     pub _is_image_extractor_enabled: bool,
     pub _image_extractor_extensions: Vec<String>,

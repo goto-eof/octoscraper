@@ -45,6 +45,7 @@ where
  | -l       |download limit (by default it makes as much requests as possibile)  | 3|
  | -a       |user agent                                                          | OctoScraper|
  | -c       |enables downloaded file hash check for avoiding duplicate downloads | true|
+ |-r        | process only the root link                                         | false|
 
 ### Work in progress
 

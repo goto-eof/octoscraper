@@ -1,7 +1,7 @@
 use super::{
     download_service::download,
     extractor::{
-        extractor_service::{retrieve_strategy, ExtractorType},
+        extractor_service::{retrieve_extractors, ExtractorType},
         extractors::{
             link_extractor_service::LinkExtractor, resource_extractor::ResourceExtractor,
         },
@@ -28,24 +28,26 @@ pub async fn extract_links_and_process_data(
     processed_resources_hash: &mut ProcessedHash,
 ) {
     let response_str = reqwest::get(link).await.unwrap().text().await.unwrap();
-    let link_extractor = LinkExtractor {
-        domain: config.website.clone(),
-        enabled: true,
-        is_same_domain_enabled: config.processing_same_domain,
-    };
 
-    let extracted_links = link_extractor.extract(&response_str);
-    extracted_links.iter().for_each(|item| {
-        let item = &link_normalizer_add_http(item);
-        if !processed.contains(item.as_str()) {
-            processing.insert(item.to_string());
-        }
-    });
+    if !config.process_only_root {
+        let link_extractor = LinkExtractor {
+            domain: config.website.clone(),
+            enabled: true,
+            is_same_domain_enabled: config.processing_same_domain,
+        };
+        let extracted_links = link_extractor.extract(&response_str);
+        extracted_links.iter().for_each(|item| {
+            let item = &link_normalizer_add_http(item);
+            if !processed.contains(item.as_str()) {
+                processing.insert(item.to_string());
+            }
+        });
+    }
 
-    let extractor_strategy: Vec<ExtractorType> = retrieve_strategy(config);
+    let extractors: Vec<ExtractorType> = retrieve_extractors(config);
     let mut resources_links: Vec<String> = Vec::new();
 
-    extractor_strategy.iter().for_each(|extractor| {
+    extractors.iter().for_each(|extractor| {
         extractor
             .extract(&response_str)
             .iter()

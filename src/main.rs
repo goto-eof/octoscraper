@@ -232,7 +232,6 @@ fn print_help() {
     println!("                               Help");
     println!("====================================================================");
     println!("{}	website - without http and www prefix", ARGUMENT_WEBSITE);
-    println!("-s	same domain");
     println!(
         "{}   enable image extractor",
         ARGUMENT_ENABLE_IMAGE_EXTRACTOR

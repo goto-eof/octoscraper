@@ -48,8 +48,8 @@ where
 
 ### Work in progress
 
-- video download
-- audio download
+- video scraping
+- audio scraping
 
 
 ### Screenshot

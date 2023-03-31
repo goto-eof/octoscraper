@@ -1,7 +1,7 @@
 use select::{document::Document, predicate::Name};
 
 use crate::service::{
-    link_service::{normalize_link_replace_spaces, normalize_src},
+    link_service::{add_base_url_if_not_present, normalize_link_replace_spaces},
     validation_service::is_same_domain_ext,
 };
 
@@ -46,7 +46,7 @@ impl AudioExtractor {
                 }
                 return false;
             })
-            .map(|link| normalize_src(&link, &self.domain))
+            .map(|link| add_base_url_if_not_present(&link, &self.domain))
             .filter_map(|link| normalize_link_replace_spaces(&link))
             .filter_map(|link| is_same_domain_ext(self.is_same_domain_enabled, &self.domain, &link))
             .collect();

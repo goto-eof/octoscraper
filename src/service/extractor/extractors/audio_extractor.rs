@@ -28,7 +28,7 @@ impl ResourceExtractor for AudioExtractor {
                 .for_each(|elem| links.push(elem.to_string()));
         }
 
-        return vec![];
+        return links;
     }
 }
 

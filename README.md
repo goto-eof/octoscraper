@@ -49,9 +49,9 @@ where
 
 ### Work in progress
 
+- link normalization
 - video scraping
 - audio scraping
-- link normalization
 
 
 ### Screenshot

@@ -12,7 +12,7 @@ pub fn load_default_settings() -> Config {
         user_agent: "".to_string(),
         hash_check: true,
 
-        _is_image_extractor_enabled: true,
+        _is_image_extractor_enabled: false,
         _image_extractor_extensions: vec![
             ".jpg".to_string(),
             ".jpeg".to_string(),

@@ -3,7 +3,7 @@ use select::{document::Document, predicate::Name};
 use crate::service::{
     extractor::resource_extractor::ResourceExtractor,
     link_service::{normalize_link_replace_spaces, normalize_src},
-    validation_service::{contains_extension, is_same_domain_ext},
+    validation_service::is_same_domain_ext,
 };
 
 pub struct AudioExtractor {

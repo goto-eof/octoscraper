@@ -218,6 +218,14 @@ fn update_config_with_argument_values(config: &mut Config) -> Flow {
         config.hash_check = commands.get(ARGUMENT_HASH_CHECK).unwrap().parse().unwrap();
     }
 
+    if !config._is_audio_extractor_enabled
+        && !config._is_image_extractor_enabled
+        && !config._is_video_extractor_enabled
+    {
+        println!("No job selected. Please select at least one job: image extraction, video extraction, audio extraction");
+        return Flow::EXIT;
+    }
+
     return Flow::CONTINUE;
 }
 

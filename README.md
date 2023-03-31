@@ -56,7 +56,10 @@ Download midi and mp3 files, same domain, only from the page passed as parameter
 ```
 cargo run -- -w http://ininternet.org/midi_file.htm -oa true -sd true -r true
 ```
-
+Download image files, no same domain
+```
+cargo run -- -w https://wallpaper.mob.org/ -oi true -sd false
+```
 ### Work in progress
 
 - link normalization

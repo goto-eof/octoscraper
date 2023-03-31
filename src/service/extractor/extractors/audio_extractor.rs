@@ -48,7 +48,6 @@ impl AudioExtractor {
             })
             .map(|link| normalize_src(&link, &self.domain))
             .filter(|link| {
-                println!("post-processed: {}", link);
                 return true;
             })
             .filter_map(|link| normalize_link_replace_spaces(&link))

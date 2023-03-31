@@ -42,9 +42,7 @@ pub fn extract_fname_from_link(link: &str, alternative_file_name: Option<String>
 // <a href="http://ininternet.org/download/midi_files/aladdin.mid">
 pub fn normalize_src(link: &str, domain: &str) -> String {
     println!("{}", domain);
-    let url = Url::parse(domain).unwrap();
-    let base_url = base_url(url).unwrap().as_str().to_owned();
-    println!("base: {}", base_url);
+    let base_url = get_domain_base_url_string(domain);
     let mut link = link.to_string();
     if !link.starts_with(&base_url)
         && !link.starts_with(&base_url)
@@ -67,4 +65,10 @@ pub fn base_url(mut url: Url) -> Option<Url> {
     }
     url.set_query(None);
     Some(url)
+}
+
+pub fn get_domain_base_url_string(domain: &str) -> String {
+    let url = Url::parse(domain).unwrap();
+    let base_url = base_url(url).unwrap().as_str().to_owned();
+    base_url
 }

@@ -33,7 +33,6 @@ where
  -----------|--------------------------------------------------------------------|--------------------------|
  | -h       |Help                                                                |
  | -w       |website - without http and www prefix                               |  dodu.it|
- |
  |   -oi    | enable image extractor                                            | true |
  |   -ov    | enable video extractor                                            | true |
  |   -oa    | enable audio extractor                                            | true |

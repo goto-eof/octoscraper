@@ -81,9 +81,11 @@ async fn main() {
             &mut processed_resources_hash,
         )
         .await;
+        let exit_status = result.0;
+        let exit_message = result.1;
         processed.insert(link.to_string());
-        if !result.0 {
-            println!("ERROR: {}", result.1);
+        if !exit_status {
+            println!("ERROR: {}", exit_message);
         }
     }
 }

@@ -72,7 +72,7 @@ async fn main() {
         let link = link.iter().next().unwrap();
         println!("\nprocessing: {}", link);
         processing.remove(link.as_str());
-        extract_links_and_process_data(
+        let result = extract_links_and_process_data(
             link,
             &config,
             &mut processing,
@@ -82,6 +82,9 @@ async fn main() {
         )
         .await;
         processed.insert(link.to_string());
+        if !result.0 {
+            println!("ERROR: {}", result.1);
+        }
     }
 }
 

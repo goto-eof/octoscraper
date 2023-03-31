@@ -26,60 +26,66 @@ pub async fn extract_links_and_process_data(
     processed: &mut HashSet<String>,
     processed_resources: &mut Processed,
     processed_resources_hash: &mut ProcessedHash,
-) {
-    let response_str = reqwest::get(link).await.unwrap().text().await.unwrap();
+) -> (bool, String) {
+    let response_str = reqwest::get(link).await;
+    if response_str.is_ok() {
+        let response_str = response_str.unwrap().text().await.unwrap();
 
-    if !config.process_only_root {
-        let link_extractor = LinkExtractor {
-            domain: config.website.clone(),
-            enabled: true,
-            is_same_domain_enabled: config.processing_same_domain,
-        };
-        let extracted_links = link_extractor.extract(&response_str);
-        extracted_links.iter().for_each(|item| {
-            let item = &link_normalizer_add_http(item);
-            if !processed.contains(item.as_str()) {
-                processing.insert(item.to_string());
-            }
+        if !config.process_only_root {
+            let link_extractor = LinkExtractor {
+                domain: config.website.clone(),
+                enabled: true,
+                is_same_domain_enabled: config.processing_same_domain,
+            };
+            let extracted_links = link_extractor.extract(&response_str);
+            extracted_links.iter().for_each(|item| {
+                let item = &link_normalizer_add_http(item);
+                if !processed.contains(item.as_str()) {
+                    processing.insert(item.to_string());
+                }
+            });
+        }
+
+        let extractors: Vec<ExtractorType> = retrieve_extractors(config);
+        let mut resources_links: Vec<String> = Vec::new();
+
+        extractors.iter().for_each(|extractor| {
+            extractor
+                .extract(&response_str)
+                .iter()
+                .map(|link| link_normalizer_add_http(link))
+                .for_each(|link| resources_links.push(link))
         });
-    }
 
-    let extractors: Vec<ExtractorType> = retrieve_extractors(config);
-    let mut resources_links: Vec<String> = Vec::new();
+        loop {
+            resources_links = download_all(
+                resources_links,
+                config,
+                processed_resources,
+                processed_resources_hash,
+                config.download_limit,
+            )
+            .await;
 
-    extractors.iter().for_each(|extractor| {
-        extractor
-            .extract(&response_str)
-            .iter()
-            .map(|link| link_normalizer_add_http(link))
-            .for_each(|link| resources_links.push(link))
-    });
-
-    loop {
-        resources_links = download_all(
-            resources_links,
-            config,
-            processed_resources,
-            processed_resources_hash,
-            config.download_limit,
-        )
-        .await;
-
-        if config.insistent_mode {
-            if resources_links.is_empty() {
-                break;
+            if config.insistent_mode {
+                if resources_links.is_empty() {
+                    break;
+                } else {
+                    println!("Not all resources were downloaded correclty or there is a download limitation. Trying to download all remaining resources....\n\n");
+                }
             } else {
-                println!("Not all resources were downloaded correclty or there is a download limitation. Trying to download all remaining resources....\n\n");
-            }
-        } else {
-            if resources_links.is_empty() {
-                break;
-            } else {
-                println!(
+                if resources_links.is_empty() {
+                    break;
+                } else {
+                    println!(
                     "Not all resources were downloaded correctly. Retrying to download them...."
                 )
+                }
             }
         }
+        return (true, format!("{} processed successfully", link));
+    } else {
+        return (false, format!("Error processing link: {}", link));
     }
 }
 

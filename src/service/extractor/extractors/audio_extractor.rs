@@ -39,7 +39,6 @@ impl AudioExtractor {
             .filter_map(|n| n.attr("href"))
             .map(|item| item.to_string())
             .filter(|link| {
-                println!("link: {}", link);
                 for extension in self.extensions.iter() {
                     if link.ends_with(extension) {
                         return true;

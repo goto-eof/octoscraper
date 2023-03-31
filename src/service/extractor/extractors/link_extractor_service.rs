@@ -22,6 +22,12 @@ impl ResourceExtractor for LinkExtractor {
                     .find(Name("a"))
                     .filter_map(|n| n.attr("href"))
                     .map(|item| item.to_string())
+                    .map(|link| {
+                        if !link.starts_with("http:") && !link.starts_with("https:") {
+                            return format!("http:{}", link);
+                        }
+                        return link;
+                    })
                     .map(|link| normalize_src(&link, &self.domain))
                     .filter_map(|link| {
                         is_same_domain_ext(self.is_same_domain_enabled, &self.domain, &link)

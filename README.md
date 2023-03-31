@@ -47,6 +47,16 @@ where
  | -c       |enables downloaded file hash check for avoiding duplicate downloads | true|
  |-r        | process only the root link (process only one page)                                         | false|
 
+### Examples
+Download midi and mp3 files, no same domain, scan all website
+```
+cargo run -- -w http://audiomidimania.com  -oa true -sd false -r false
+```
+Download midi and mp3 files, same domain, only from the page passed as parameter 
+```
+cargo run -- -w http://ininternet.org/midi_file.htm -oa true -sd true -r true
+```
+
 ### Work in progress
 
 - link normalization

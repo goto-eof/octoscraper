@@ -54,9 +54,6 @@ async fn main() {
         return;
     }
     let mut website = config.website.clone();
-    if !website.starts_with("http://") {
-        website = format!("http://{}", website);
-    }
     let mut processing: HashSet<String> = HashSet::new();
     let mut processed: HashSet<String> = HashSet::new();
     let mut processed_resources: Processed = Processed::new();

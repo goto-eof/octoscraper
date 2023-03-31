@@ -9,7 +9,10 @@ pub fn link_normalizer_add_http(link: &str) -> String {
 }
 
 pub fn normalize_link_replace_spaces(link: &str) -> String {
-    return link.replace(" ", "%20");
+    return url_normalizer::normalize(Url::parse(link).unwrap())
+        .unwrap()
+        .as_str()
+        .to_owned();
 }
 
 pub fn extract_fname_from_link(link: &str, alternative_file_name: Option<String>) -> String {

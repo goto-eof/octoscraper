@@ -582,6 +582,7 @@ dependencies = [
  "serde",
  "sha2",
  "tokio",
+ "url-normalizer",
 ]
 
 [[package]]
@@ -1199,6 +1200,15 @@ dependencies = [
  "form_urlencoded",
  "idna",
  "percent-encoding",
+]
+
+[[package]]
+name = "url-normalizer"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "480c7102774c91518abc2a28eef5c6badc2fb0bdebb98d56ff606530da7ef000"
+dependencies = [
+ "url",
 ]
 
 [[package]]

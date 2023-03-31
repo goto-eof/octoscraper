@@ -20,8 +20,7 @@ impl ResourceExtractor for VideoExtractor {
         let mut links: Vec<String> = Vec::new();
 
         if self.enabled {
-            let strategy_a = self.strategy_a(resource_str);
-            strategy_a
+            self.strategy_a(resource_str)
                 .iter()
                 .for_each(|elem| links.push(elem.to_string()));
         }

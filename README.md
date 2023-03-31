@@ -30,7 +30,7 @@ where
  | argument | meaning                                                            | value example                  |
  -----------|--------------------------------------------------------------------|--------------------------|
  | -h       |Help                                                                |
- | -w       |website - without http and www prefix                               |  dodu.it|
+ | -w       |website - without http and www prefix                               |  dodu.it or audiomidimania.com or wallpaper.mob.org|
  | -sd      |same domain                                                         |  true|
  |   -oi    | enable image extractor                                            | true |
  |   -ov    |(WIP)  enable video extractor                                            | true |

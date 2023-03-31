@@ -20,32 +20,38 @@ impl ResourceExtractor for AudioExtractor {
     }
 
     fn extract(&self, resource_str: &str) -> Vec<String> {
+        let mut links: Vec<String> = Vec::new();
+
         if self.enabled {
-            let mut audio1: Vec<String> = Vec::new();
-
-            let audio2: Vec<String> = Document::from(resource_str)
-                .find(Name("a"))
-                .filter_map(|n| n.attr("href"))
-                .map(|item| item.to_string())
-                .filter(|link| {
-                    println!("link: {}", link);
-                    for extension in self.extensions.iter() {
-                        if link.ends_with(extension) {
-                            return true;
-                        }
-                    }
-                    return false;
-                })
-                .map(|link| normalize_link_replace_spaces(&link))
-                .map(|link| normalize_src(&link, &self.domain))
-                .filter_map(|link| {
-                    is_same_domain_ext(self.is_same_domain_enabled, &self.domain, &link)
-                })
-                .collect();
-
-            audio2.iter().for_each(|elem| audio1.push(elem.to_string()));
-            return audio1;
+            let strategy_a = self.startegy_a(resource_str);
+            strategy_a
+                .iter()
+                .for_each(|elem| links.push(elem.to_string()));
         }
+
         return vec![];
+    }
+}
+
+impl AudioExtractor {
+    fn startegy_a(&self, resource_str: &str) -> Vec<String> {
+        let audio2: Vec<String> = Document::from(resource_str)
+            .find(Name("a"))
+            .filter_map(|n| n.attr("href"))
+            .map(|item| item.to_string())
+            .filter(|link| {
+                println!("link: {}", link);
+                for extension in self.extensions.iter() {
+                    if link.ends_with(extension) {
+                        return true;
+                    }
+                }
+                return false;
+            })
+            .map(|link| normalize_link_replace_spaces(&link))
+            .map(|link| normalize_src(&link, &self.domain))
+            .filter_map(|link| is_same_domain_ext(self.is_same_domain_enabled, &self.domain, &link))
+            .collect();
+        audio2
     }
 }

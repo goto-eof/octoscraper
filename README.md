@@ -50,8 +50,8 @@ where
 ### Work in progress
 
 - link normalization
-- video scraping
 - audio scraping
+- video scraping
 
 
 ### Screenshot

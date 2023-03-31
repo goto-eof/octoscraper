@@ -11,6 +11,23 @@ use crate::structure::processed_struct::Processed;
 mod service;
 mod structure;
 
+const ARGUMENT_HELP: &str = "-h";
+const ARGUMENT_WEBSITE: &str = "-w";
+const ARGUMENT_EXTENSIONS_IMAGE: &str = "-ei";
+const ARGUMENT_EXTENSIONS_VIDEO: &str = "-ev";
+const ARGUMENT_EXTENSIONS_AUDIO: &str = "-ea";
+const ARGUMENT_ENABLE_IMAGE_EXTRACTOR: &str = "-oi";
+const ARGUMENT_ENABLE_VIDEO_EXTRACTOR: &str = "-ov";
+const ARGUMENT_ENABLE_AUDIO_EXTRACTOR: &str = "-oa";
+const ARGUMENT_RESOURCE_DIRECTORY: &str = "-d";
+const ARGUMENT_SLEEP_TIME: &str = "-s";
+const ARGUMENT_RESOURCE_DOWNLOAD_TIMEOUT: &str = "-t";
+const ARGUMENT_INSISTENT_MODE: &str = "-i";
+const ARGUMENT_DOWNLOAD_LIMIT: &str = "-l";
+const ARGUMENT_USER_AGENT: &str = "-a";
+const ARGUMENT_HASH_CHECK: &str = "-c";
+const ARGUMENT_SAME_DOMAIN: &str = "-sd";
+
 #[tokio::main]
 async fn main() {
     println!("====================================================================");
@@ -68,23 +85,6 @@ async fn main() {
 }
 
 fn update_config_with_argument_values(config: &mut Config) -> Flow {
-    const ARGUMENT_HELP: &str = "-h";
-    const ARGUMENT_WEBSITE: &str = "-w";
-    const ARGUMENT_EXTENSIONS_IMAGE: &str = "-ei";
-    const ARGUMENT_EXTENSIONS_VIDEO: &str = "-ev";
-    const ARGUMENT_EXTENSIONS_AUDIO: &str = "-ea";
-    const ARGUMENT_ENABLE_IMAGE_EXTRACTOR: &str = "-oi";
-    const ARGUMENT_ENABLE_VIDEO_EXTRACTOR: &str = "-ov";
-    const ARGUMENT_ENABLE_AUDIO_EXTRACTOR: &str = "-oa";
-    const ARGUMENT_RESOURCE_DIRECTORY: &str = "-d";
-    const ARGUMENT_SLEEP_TIME: &str = "-s";
-    const ARGUMENT_RESOURCE_DOWNLOAD_TIMEOUT: &str = "-t";
-    const ARGUMENT_INSISTENT_MODE: &str = "-i";
-    const ARGUMENT_DOWNLOAD_LIMIT: &str = "-l";
-    const ARGUMENT_USER_AGENT: &str = "-a";
-    const ARGUMENT_HASH_CHECK: &str = "-c";
-    const ARGUMENT_SAME_DOMAIN: &str = "-sd";
-
     let args: Vec<String> = env::args().collect();
     if args.len() == 1 {
         print_help();
@@ -231,22 +231,56 @@ fn update_config_with_argument_values(config: &mut Config) -> Flow {
 fn print_help() {
     println!("                               Help");
     println!("====================================================================");
-    println!("-w	website - without http and www prefix");
+    println!("{}	website - without http and www prefix", ARGUMENT_WEBSITE);
     println!("-s	same domain");
-    println!("-oi   enable image extractor");
-    println!("-ov   enable video extractor");
-    println!("-oa   enable audio extractor");
-    println!("-ei	list of image extensions separated by comma");
-    println!("-ev	list of video extensions separated by comma");
-    println!("-ea	list of audio extensions separated by comma");
-    println!("-d	directory where files will be saved");
-    println!("-s	sleep time in millis before making the request");
-    println!("-t	download timeout");
-    println!("-i	insistent mode (it retries until download succeed)");
-    println!("-l	download limit (by default it makes as much requests as possibile)");
-    println!("-a	user agent");
-    println!("-c	hash check: avoid duplicate downloads");
-    println!("-h    for this help message");
+    println!(
+        "{}   enable image extractor",
+        ARGUMENT_ENABLE_IMAGE_EXTRACTOR
+    );
+    println!(
+        "{}   enable video extractor",
+        ARGUMENT_ENABLE_VIDEO_EXTRACTOR
+    );
+    println!(
+        "{}   enable audio extractor",
+        ARGUMENT_ENABLE_AUDIO_EXTRACTOR
+    );
+    println!(
+        "{}	list of image extensions separated by comma",
+        ARGUMENT_EXTENSIONS_IMAGE
+    );
+    println!(
+        "{}	list of video extensions separated by comma",
+        ARGUMENT_EXTENSIONS_VIDEO
+    );
+    println!(
+        "{}	list of audio extensions separated by comma",
+        ARGUMENT_EXTENSIONS_AUDIO
+    );
+    println!(
+        "{}	directory where files will be saved",
+        ARGUMENT_RESOURCE_DIRECTORY
+    );
+    println!(
+        "{}	sleep time in millis before making the request",
+        ARGUMENT_SLEEP_TIME
+    );
+    println!("{}	download timeout", ARGUMENT_RESOURCE_DOWNLOAD_TIMEOUT);
+    println!(
+        "{}	insistent mode (it retries until download succeed)",
+        ARGUMENT_INSISTENT_MODE
+    );
+    println!(
+        "{}	download limit (by default it makes as much requests as possibile)",
+        ARGUMENT_DOWNLOAD_LIMIT
+    );
+    println!("{}	user agent", ARGUMENT_USER_AGENT);
+    println!(
+        "{}	hash check: avoid duplicate downloads",
+        ARGUMENT_HASH_CHECK
+    );
+    println!("{}    same domain", ARGUMENT_SAME_DOMAIN);
+    println!("{}    for this help message", ARGUMENT_HELP);
     println!("====================================================================");
 }
 

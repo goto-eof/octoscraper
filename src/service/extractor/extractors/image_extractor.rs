@@ -1,5 +1,5 @@
 use crate::service::{
-    strategy_extractor::strategy_resource_extractor::ResourceExtractor,
+    extractor::resource_extractor::ResourceExtractor,
     validation_service::{contains_extension, is_same_domain_ext},
 };
 use select::{document::Document, predicate::Name};

@@ -26,3 +26,17 @@ pub fn extract_fname_from_link(link: &str, alternative_file_name: Option<String>
         .unwrap_or(&alternative_name)
         .to_string();
 }
+
+pub fn normalize_src(link: &str, domain: &str) -> String {
+    let mut link = link.to_string();
+    if !link.starts_with(&format!("http://{}", domain))
+        && !link.starts_with(&format!("https://{}", domain))
+        && !link.contains("http://")
+        && !link.contains("https://")
+    {
+        link = format!("{}/{}", format!("http://{}", domain), link);
+    } else if !link.starts_with("http:") && !link.starts_with("https:") {
+        link = format!("{}{}", format!("http:{}", domain), link);
+    }
+    return link.to_owned();
+}

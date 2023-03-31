@@ -84,6 +84,7 @@ fn update_config_with_argument_values(config: &mut Config) -> Flow {
     const ARGUMENT_DOWNLOAD_LIMIT: &str = "-l";
     const ARGUMENT_USER_AGENT: &str = "-a";
     const ARGUMENT_HASH_CHECK: &str = "-c";
+    const ARGUMENT_SAME_DOMAIN: &str = "-sd";
 
     let args: Vec<String> = env::args().collect();
     if args.len() == 1 {
@@ -116,6 +117,11 @@ fn update_config_with_argument_values(config: &mut Config) -> Flow {
     } else {
         println!("No website target specified. Exiting...");
         return Flow::EXIT;
+    }
+
+    if commands.get(ARGUMENT_SAME_DOMAIN).is_some() {
+        config.processing_same_domain =
+            commands.get(ARGUMENT_SAME_DOMAIN).unwrap().parse().unwrap();
     }
 
     if commands.get(ARGUMENT_ENABLE_IMAGE_EXTRACTOR).is_some() {
@@ -219,6 +225,7 @@ fn print_help() {
     println!("                               Help");
     println!("====================================================================");
     println!("-w	website - without http and www prefix");
+    println!("-s	same domain");
     println!("-oi   enable image extractor");
     println!("-ov   enable video extractor");
     println!("-oa   enable audio extractor");

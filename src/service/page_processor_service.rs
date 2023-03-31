@@ -1,8 +1,11 @@
 use super::{
     download_service::download,
+    extractor::{
+        extractor_service::{retrieve_strategy, ExtractorType},
+        extractors::link_extractor_service::LinkExtractor,
+        resource_extractor::ResourceExtractor,
+    },
     link_service::link_normalizer_add_http,
-    resource_extractor_service::extract_links,
-    strategy_extractor::strategy_extractor_service::{retrieve_strategy, ExtractorType},
 };
 use crate::{
     service::{
@@ -13,11 +16,7 @@ use crate::{
         config_struct::Config, processed_hash_struct::ProcessedHash, processed_struct::Processed,
     },
 };
-use crossterm::{
-    cursor::{self},
-    QueueableCommand,
-};
-use std::{collections::HashSet, io::stdout};
+use std::collections::HashSet;
 
 pub async fn extract_links_and_process_data(
     link: &str,
@@ -28,8 +27,13 @@ pub async fn extract_links_and_process_data(
     processed_resources_hash: &mut ProcessedHash,
 ) {
     let response_str = reqwest::get(link).await.unwrap().text().await.unwrap();
+    let link_extractor = LinkExtractor {
+        domain: config.website.clone(),
+        enabled: true,
+        is_same_domain_enabled: config.processing_same_domain,
+    };
 
-    let extracted_links = extract_links(config, &response_str).await;
+    let extracted_links = link_extractor.extract(&response_str);
     extracted_links.iter().for_each(|item| {
         let item = &link_normalizer_add_http(item);
         if !processed.contains(item.as_str()) {
@@ -48,8 +52,6 @@ pub async fn extract_links_and_process_data(
             .for_each(|link| resources_links.push(link))
     });
 
-    let mut stdout = stdout();
-    stdout.queue(cursor::Hide).unwrap();
     loop {
         resources_links = download_all(
             resources_links,

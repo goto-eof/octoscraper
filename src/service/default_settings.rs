@@ -33,6 +33,11 @@ pub fn load_default_settings() -> Config {
             ".OGG".to_string(),
         ],
         _is_audio_extractor_enabled: false,
-        _audio_extractor_extensions: vec![".mp3".to_string(), ".MP3".to_string()],
+        _audio_extractor_extensions: vec![
+            ".mp3".to_string(),
+            ".MP3".to_string(),
+            ".mid".to_string(),
+            ".MID".to_string(),
+        ],
     };
 }

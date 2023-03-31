@@ -1,11 +1,11 @@
 use crate::structure::config_struct::Config;
 
 use super::{
-    strategies::{
-        strategy_audio_extractor::AudioExtractor, strategy_image_extractor::ImageExtractor,
-        strategy_video_extractor::VideoExtractor,
+    extractors::{
+        audio_extractor::AudioExtractor, image_extractor::ImageExtractor,
+        video_extractor::VideoExtractor,
     },
-    strategy_resource_extractor::ResourceExtractor,
+    resource_extractor::ResourceExtractor,
 };
 
 pub type ExtractorType = Box<dyn ResourceExtractor>;

@@ -1,15 +1,6 @@
 use reqwest::Url;
 
-pub fn link_normalizer_add_http(link: &str) -> String {
-    let mut link = link.to_owned();
-    if !link.starts_with("http:") && !link.starts_with("https:") {
-        link = format!("http:{}", link);
-    }
-    return link;
-}
-
 pub fn normalize_link_replace_spaces(link: &str) -> Option<String> {
-    // println!("normalizing: {}", link);
     let parsed_url = Url::parse(link);
     if parsed_url.is_ok() {
         return Some(
@@ -43,6 +34,7 @@ pub fn extract_fname_from_link(link: &str, alternative_file_name: Option<String>
 pub fn add_base_url_if_not_present(link: &str, domain: &str) -> String {
     let base_url = get_domain_base_url_string(domain);
     let mut link = link.to_string();
+
     if !link.starts_with(&base_url)
         && !link.starts_with(&base_url)
         && !link.contains("http://")
@@ -73,8 +65,73 @@ pub fn get_domain_base_url_string(domain: &str) -> String {
 }
 
 pub fn add_http_if_not_present(link: String) -> String {
-    if !link.starts_with("http:") && !link.starts_with("https:") {
+    if !link.starts_with("//") && !link.starts_with("http://") && !link.starts_with("https://") {
+        return format!("http://{}", link);
+    }
+    if link.starts_with("//") && !link.starts_with("http:") && !link.starts_with("https:") {
         return format!("http:{}", link);
     }
     return link;
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn add_http_slash_if_not_present_test() {
+        let result = add_http_if_not_present("ciao.com".to_owned());
+        assert_eq!(result, "http://ciao.com");
+    }
+
+    #[test]
+    fn add_http_if_not_present_test() {
+        let result = add_http_if_not_present("//ciao.com".to_owned());
+        assert_eq!(result, "http://ciao.com");
+    }
+
+    #[test]
+    fn add_base_url_if_not_present_test() {
+        let link = "http://www.dodu.it";
+        let domain = "http://www.dodu.it";
+        let result = add_base_url_if_not_present(link, domain);
+        assert_eq!("http://www.dodu.it", result);
+    }
+
+    #[test]
+    fn add_base_url_if_not_present_test2() {
+        let link = "resource/something.png";
+        let domain = "http://www.dodu.it";
+        let result = add_base_url_if_not_present(link, domain);
+        assert_eq!("http://www.dodu.it/resource/something.png", result);
+    }
+
+    #[test]
+    fn normalize_link_replace_spaces_test() {
+        let link = "http://dodu.it/this is a test";
+        let result = normalize_link_replace_spaces(link).unwrap();
+        assert_eq!("http://dodu.it/this%20is%20a%20test", result);
+    }
+
+    #[test]
+    #[should_panic]
+    fn normalize_link_replace_spaces_test2() {
+        let link = "dodu.it/this is a test";
+        let result = normalize_link_replace_spaces(link).unwrap();
+        assert_eq!("dodu.it/this%20is%20a%20test", result);
+    }
+
+    #[test]
+    fn extract_fname_from_link_test() {
+        let link = "http://www.dodu.it/file.png";
+        let result = extract_fname_from_link(link, None);
+        assert_eq!("file.png", result);
+    }
+
+    #[test]
+    fn extract_fname_from_link_test2() {
+        let link = "http://www.dodu.it/file";
+        let result = extract_fname_from_link(link, None);
+        assert_eq!("file", result);
+    }
 }

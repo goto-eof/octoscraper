@@ -60,6 +60,11 @@ Download image files, no same domain
 ```
 cargo run -- -w https://wallpaper.mob.org/ -oi true -sd false
 ```
+### Tests
+```
+cargo test
+```
+
 ### Work in progress
 
 - link normalization

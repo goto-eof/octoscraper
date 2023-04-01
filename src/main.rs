@@ -1,5 +1,5 @@
 use config_file::FromConfigFile;
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeMap, HashMap, HashSet};
 use std::env;
 use util::settings_util::load_default_settings;
 
@@ -308,85 +308,139 @@ fn update_config_with_argument_values(config: &mut Config) -> Flow {
     return Flow::CONTINUE;
 }
 
+fn check_and_insert(map: &mut BTreeMap<String, String>, key: &str, value: &str) {
+    if map.contains_key(key) {
+        panic!("FATAL ERROR: command '{}' already mapper.", key);
+    }
+    map.insert(key.to_owned(), value.to_owned());
+}
+
 fn print_help() {
+    let mut help_map: BTreeMap<String, String> = BTreeMap::new();
+
+    check_and_insert(
+        &mut help_map,
+        ARGUMENT_WEBSITE,
+        "website - without http and www prefix",
+    );
+
+    check_and_insert(
+        &mut help_map,
+        ARGUMENT_ENABLE_IMAGE_EXTRACTOR,
+        "enable image extractor",
+    );
+
+    check_and_insert(
+        &mut help_map,
+        ARGUMENT_ENABLE_VIDEO_EXTRACTOR,
+        "enable video extractor",
+    );
+
+    check_and_insert(
+        &mut help_map,
+        ARGUMENT_ENABLE_AUDIO_EXTRACTOR,
+        "enable audio extractor",
+    );
+
+    check_and_insert(
+        &mut help_map,
+        ARGUMENT_ENABLE_OTHER_FILE_EXTRACTOR,
+        "enable other file extractor",
+    );
+
+    check_and_insert(
+        &mut help_map,
+        ARGUMENT_EXTENSIONS_IMAGE,
+        "list of image extensions separated by comma",
+    );
+
+    check_and_insert(
+        &mut help_map,
+        ARGUMENT_EXTENSIONS_VIDEO,
+        "list of video extensions separated by comma",
+    );
+
+    check_and_insert(
+        &mut help_map,
+        ARGUMENT_EXTENSIONS_AUDIO,
+        "list of video extensions separated by comma",
+    );
+
+    check_and_insert(
+        &mut help_map,
+        ARGUMENT_EXTENSIONS_OTHER_FILE,
+        "list of other file extensions separated by comma",
+    );
+
+    check_and_insert(
+        &mut help_map,
+        ARGUMENT_MINIMUM_SIZE_IMAGE,
+        "minimum image size (in bytes)",
+    );
+
+    check_and_insert(
+        &mut help_map,
+        ARGUMENT_MINIMUM_SIZE_AUDIO,
+        "minimum audio size (in bytes)",
+    );
+    check_and_insert(
+        &mut help_map,
+        ARGUMENT_MINIMUM_SIZE_VIDEO,
+        "minimum video size (in bytes)",
+    );
+
+    check_and_insert(
+        &mut help_map,
+        ARGUMENT_MINIMUM_SIZE_OTHER_FILE,
+        "minimum other file size (in bytes)",
+    );
+    check_and_insert(
+        &mut help_map,
+        ARGUMENT_RESOURCE_DIRECTORY,
+        "directory where files will be saved",
+    );
+    check_and_insert(
+        &mut help_map,
+        ARGUMENT_SLEEP_TIME,
+        "sleep time in millis before making the request",
+    );
+    check_and_insert(
+        &mut help_map,
+        ARGUMENT_RESOURCE_DOWNLOAD_TIMEOUT,
+        "download timeout",
+    );
+
+    check_and_insert(
+        &mut help_map,
+        ARGUMENT_INSISTENT_MODE,
+        "insistent mode (it retries until download succeed)",
+    );
+    check_and_insert(
+        &mut help_map,
+        ARGUMENT_DOWNLOAD_LIMIT,
+        "download limit (by default it makes as much requests as possibile)",
+    );
+    check_and_insert(&mut help_map, ARGUMENT_USER_AGENT, "user agent");
+    check_and_insert(
+        &mut help_map,
+        ARGUMENT_HASH_CHECK,
+        "hash check: avoid duplicate downloads",
+    );
+
+    check_and_insert(&mut help_map, ARGUMENT_SAME_DOMAIN, "same domain");
+    check_and_insert(
+        &mut help_map,
+        ARGUMENT_PROCESS_ONLY_ROOT,
+        "process only the root link",
+    );
+    check_and_insert(&mut help_map, ARGUMENT_HELP, "for this help message");
+
     println!("                               Help");
     println!("====================================================================");
-    println!("{}	website - without http and www prefix", ARGUMENT_WEBSITE);
-    println!(
-        "{}   enable image extractor",
-        ARGUMENT_ENABLE_IMAGE_EXTRACTOR
-    );
-    println!(
-        "{}   enable video extractor",
-        ARGUMENT_ENABLE_VIDEO_EXTRACTOR
-    );
-    println!(
-        "{}   enable audio extractor",
-        ARGUMENT_ENABLE_AUDIO_EXTRACTOR
-    );
-    println!(
-        "{}   enable other file extractor",
-        ARGUMENT_ENABLE_OTHER_FILE_EXTRACTOR
-    );
-    println!(
-        "{}	list of image extensions separated by comma",
-        ARGUMENT_EXTENSIONS_IMAGE
-    );
-    println!(
-        "{}	list of video extensions separated by comma",
-        ARGUMENT_EXTENSIONS_VIDEO
-    );
-    println!(
-        "{}	list of audio extensions separated by comma",
-        ARGUMENT_EXTENSIONS_AUDIO
-    );
-    println!(
-        "{}	list of other file extensions separated by comma",
-        ARGUMENT_EXTENSIONS_OTHER_FILE
-    );
-
-    println!(
-        "{} minimum image size (in bytes)",
-        ARGUMENT_MINIMUM_SIZE_IMAGE
-    );
-    println!(
-        "{} minimum audio size (in bytes)",
-        ARGUMENT_MINIMUM_SIZE_AUDIO
-    );
-    println!(
-        "{} minimum video size (in bytes)",
-        ARGUMENT_MINIMUM_SIZE_VIDEO
-    );
-    println!(
-        "{} minimum other file size (in bytes)",
-        ARGUMENT_MINIMUM_SIZE_OTHER_FILE
-    );
-
-    println!(
-        "{}	directory where files will be saved",
-        ARGUMENT_RESOURCE_DIRECTORY
-    );
-    println!(
-        "{}	sleep time in millis before making the request",
-        ARGUMENT_SLEEP_TIME
-    );
-    println!("{}	download timeout", ARGUMENT_RESOURCE_DOWNLOAD_TIMEOUT);
-    println!(
-        "{}	insistent mode (it retries until download succeed)",
-        ARGUMENT_INSISTENT_MODE
-    );
-    println!(
-        "{}	download limit (by default it makes as much requests as possibile)",
-        ARGUMENT_DOWNLOAD_LIMIT
-    );
-    println!("{}	user agent", ARGUMENT_USER_AGENT);
-    println!(
-        "{}	hash check: avoid duplicate downloads",
-        ARGUMENT_HASH_CHECK
-    );
-    println!("{}    same domain", ARGUMENT_SAME_DOMAIN);
-    println!("{} process only the root link", ARGUMENT_PROCESS_ONLY_ROOT);
-    println!("{}    for this help message", ARGUMENT_HELP);
+    println!();
+    help_map
+        .keys()
+        .for_each(|key| println!("{} {}", key, help_map.get(key).unwrap()));
     println!("====================================================================");
 }
 

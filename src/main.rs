@@ -309,15 +309,20 @@ fn update_config_with_argument_values(config: &mut Config) -> Flow {
     return Flow::CONTINUE;
 }
 
-fn check_and_insert(map: &mut BTreeMap<String, String>, key: &str, value: &str) {
-    if map.contains_key(key) {
+fn check_and_insert(map: &mut Vec<(String, String)>, key: &str, value: &str) {
+    let duplicates: Vec<(String, String)> = map
+        .iter()
+        .filter(|(vec_key, vec_value)| vec_key.eq(key))
+        .map(|item| item.to_owned())
+        .collect();
+    if duplicates.len() != 0 {
         panic!("FATAL ERROR: command '{}' already mapper.", key);
     }
-    map.insert(key.to_owned(), value.to_owned());
+    map.push((key.to_owned(), value.to_owned()));
 }
 
 fn print_help() {
-    let mut help_map: BTreeMap<String, String> = BTreeMap::new();
+    let mut help_map: Vec<(String, String)> = Vec::new();
 
     check_and_insert(
         &mut help_map,
@@ -364,7 +369,7 @@ fn print_help() {
     check_and_insert(
         &mut help_map,
         ARGUMENT_EXTENSIONS_AUDIO,
-        "list of video extensions separated by comma",
+        "list of audio extensions separated by comma",
     );
 
     check_and_insert(
@@ -440,8 +445,8 @@ fn print_help() {
     println!("====================================================================");
     println!();
     help_map
-        .keys()
-        .for_each(|key| println!("{} {}", key, help_map.get(key).unwrap()));
+        .iter()
+        .for_each(|(key, value)| println!("{} {}", key, value));
     println!("====================================================================");
 }
 

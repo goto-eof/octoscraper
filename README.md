@@ -15,16 +15,24 @@ Download the executable from [here](https://github.com/goto-eof/octoscraper/rele
 ./octoscraper -w dodu.it -e .png,.PNG -d DIRECTORY_NAME -s 100 -t 90000 -i true -l 3 -a OctoScraper
 ```
 
-### For developers
+### Examples
+Download midi and mp3 files, no same domain, scan all website
+```
+./octoscraper -w http://audiomidimania.com  -oa true -sd false -r false
+```
+Download midi and mp3 files, same domain, only from the page passed as parameter 
+```
+./octoscraper -w http://ininternet.org/midi_file.htm -oa true -sd true -r true
+```
+Download image files, no same domain
+```
+./octoscraper -w https://wallpaper.mob.org/ -oi true -sd false
+```
+Download video
+```
+./octoscraper -w http://www.w3schools.com/html/html5_video.asp -ov true
+```
 
-Allow reqwest crate to work properly:
-```
-sudo apt install libssl-dev
-```
-Run application with your configuration:
-```
-cargo run -- -w dodu.it -e .png,.PNG -d DIRECTORY_NAME -s 100 -t 90000 -i true -l 3 -a OctoScraper
-```
 where 
 
  | argument | meaning                                                            | value example                  |
@@ -49,24 +57,17 @@ where
  | -c       |enables downloaded file hash check for avoiding duplicate downloads | true|
  |-r        | process only the root link (process only one page)                                         | false|
 
-### Examples
-Download midi and mp3 files, no same domain, scan all website
-```
-cargo run -- -w http://audiomidimania.com  -oa true -sd false -r false
-```
-Download midi and mp3 files, same domain, only from the page passed as parameter 
-```
-cargo run -- -w http://ininternet.org/midi_file.htm -oa true -sd true -r true
-```
-Download image files, no same domain
-```
-cargo run -- -w https://wallpaper.mob.org/ -oi true -sd false
-```
-Download video
-```
-cargo run -- -w http://www.w3schools.com/html/html5_video.asp -ov true
-```
 
+### For developers
+
+Allow reqwest crate to work properly:
+```
+sudo apt install libssl-dev
+```
+Run application with your configuration:
+```
+cargo run -- -w dodu.it -e .png,.PNG -d DIRECTORY_NAME -s 100 -t 90000 -i true -l 3 -a OctoScraper
+```
 
 ### Tests
 ```

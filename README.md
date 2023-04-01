@@ -70,7 +70,7 @@ sudo apt install libssl-dev
 ```
 Run application with your configuration:
 ```
-cargo run -- -w dodu.it -e .png,.PNG -d DIRECTORY_NAME -s 100 -t 90000 -i true -l 3 -a OctoScraper
+cargo run -- -w http://dodu.it -e .png,.PNG -d DIRECTORY_NAME -s 100 -t 90000 -i true -l 3 -a OctoScraper
 ```
 
 ### Tests

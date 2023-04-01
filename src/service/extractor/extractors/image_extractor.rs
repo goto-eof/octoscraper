@@ -11,6 +11,7 @@ pub struct ImageExtractor {
     pub extensions: Vec<String>,
     pub is_same_domain_enabled: bool,
     pub domain: String,
+    pub processing_page_link: String,
 }
 
 impl ResourceExtractor for ImageExtractor {
@@ -41,6 +42,7 @@ impl ImageExtractor {
             self.extensions.clone(),
             &self.domain,
             self.is_same_domain_enabled,
+            self.processing_page_link.to_owned(),
         );
     }
 
@@ -49,7 +51,9 @@ impl ImageExtractor {
             .find(Name("img"))
             .filter_map(|n| n.attr("src"))
             .map(|item| item.to_string())
-            .map(|link| add_base_url_if_not_present(&link, &self.domain))
+            .map(|link| {
+                add_base_url_if_not_present(&link, &self.domain, &self.processing_page_link)
+            })
             .filter_map(|link| {
                 is_same_domain_ext(self.is_same_domain_enabled, self.domain.as_str(), &link)
             })

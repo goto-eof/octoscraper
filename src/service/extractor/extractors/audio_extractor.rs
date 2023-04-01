@@ -13,6 +13,7 @@ pub struct AudioExtractor {
     pub extensions: Vec<String>,
     pub is_same_domain_enabled: bool,
     pub domain: String,
+    pub processing_page_link: String,
 }
 
 impl ResourceExtractor for AudioExtractor {
@@ -43,6 +44,7 @@ impl AudioExtractor {
             self.extensions.clone(),
             &self.domain,
             self.is_same_domain_enabled,
+            self.processing_page_link.to_owned(),
         );
     }
 
@@ -60,7 +62,9 @@ impl AudioExtractor {
                 }
                 return false;
             })
-            .map(|link| add_base_url_if_not_present(&link, &self.domain))
+            .map(|link| {
+                add_base_url_if_not_present(&link, &self.domain, &self.processing_page_link)
+            })
             .filter_map(|link| normalize_link_replace_spaces(&link))
             .filter_map(|link| is_same_domain_ext(self.is_same_domain_enabled, &self.domain, &link))
             .collect();
@@ -79,6 +83,7 @@ mod tests {
             enabled: true,
             extensions: vec![".ogg".to_owned(), ".mp3".to_owned(), ".mid".to_owned()],
             is_same_domain_enabled: false,
+            processing_page_link: "http://dodu.it/test/index.html".to_owned(),
         };
         let resource_str = r#"
                     <audio controls>
@@ -89,7 +94,7 @@ mod tests {
         "#;
         let result = audio_extractor.extract(resource_str);
         assert_eq!(2, result.len());
-        assert_eq!("http://dodu.it/horse.ogg", result.get(0).unwrap());
-        assert_eq!("http://dodu.it/horse.mp3", result.get(1).unwrap());
+        assert_eq!("http://dodu.it/test/horse.ogg", result.get(0).unwrap());
+        assert_eq!("http://dodu.it/test/horse.mp3", result.get(1).unwrap());
     }
 }

@@ -37,24 +37,25 @@ pub async fn extract_links_and_process_data(
                 domain: config.website.clone(),
                 enabled: true,
                 is_same_domain_enabled: config.processing_same_domain,
+                processing_page_link: link.to_owned(),
             };
             let extracted_links = link_extractor.extract(&response_str);
             extracted_links.iter().for_each(|item| {
-                let item = &add_base_url_if_not_present(&item.to_string(), &config.website);
+                let item = &add_base_url_if_not_present(&item.to_string(), &config.website, link);
                 if !processed.contains(item.as_str()) {
                     processing.insert(item.to_string());
                 }
             });
         }
 
-        let extractors: Vec<ExtractorType> = retrieve_extractors(config);
+        let extractors: Vec<ExtractorType> = retrieve_extractors(config, link);
         let mut resources_links: Vec<String> = Vec::new();
 
         extractors.iter().for_each(|extractor| {
             extractor
                 .extract(&response_str)
                 .iter()
-                .map(|link| add_base_url_if_not_present(&link.to_string(), &config.website))
+                .map(|link| add_base_url_if_not_present(&link.to_string(), &config.website, link))
                 .for_each(|link| resources_links.push(link))
         });
 
@@ -87,7 +88,10 @@ pub async fn extract_links_and_process_data(
         }
         return (true, format!("{} processed successfully", link));
     } else {
-        return (false, format!("Error processing link: {}", link));
+        return (
+            false,
+            format!("Error processing link: {}\n{:?}", link, response_str.err()),
+        );
     }
 }
 

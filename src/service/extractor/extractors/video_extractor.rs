@@ -15,6 +15,7 @@ pub struct VideoExtractor {
     pub extensions: Vec<String>,
     pub is_same_domain_enabled: bool,
     pub domain: String,
+    pub processing_page_link: String,
 }
 
 impl ResourceExtractor for VideoExtractor {
@@ -45,6 +46,7 @@ impl VideoExtractor {
             self.extensions.clone(),
             &self.domain,
             self.is_same_domain_enabled,
+            self.processing_page_link.to_owned(),
         );
     }
 
@@ -55,7 +57,9 @@ impl VideoExtractor {
             .filter_map(|n| n.attr("src"))
             .map(|item| item.to_string())
             .filter_map(|link| has_extension(&link, self.extensions.clone()))
-            .map(|link| add_base_url_if_not_present(&link, &self.domain))
+            .map(|link| {
+                add_base_url_if_not_present(&link, &self.domain, &self.processing_page_link)
+            })
             .filter_map(|link| normalize_link_replace_spaces(&link))
             .filter_map(|link| is_same_domain_ext(self.is_same_domain_enabled, &self.domain, &link))
             .collect();
@@ -73,6 +77,7 @@ mod tests {
             enabled: true,
             extensions: vec![".mp4".to_owned(), ".ogg".to_owned(), "mpg".to_owned()],
             is_same_domain_enabled: false,
+            processing_page_link: "http://dodu.it/test/index.html".to_string(),
         };
         let resource_str = r#"
                 <video width="320" height="240" controls>
@@ -82,8 +87,8 @@ mod tests {
                 </video>
         "#;
         let result = audio_extractor.extract(resource_str);
-        assert_eq!("http://dodu.it/movie.mp4", result.get(0).unwrap());
         assert_eq!(2, result.len());
-        assert_eq!("http://dodu.it/movie.ogg", result.get(1).unwrap());
+        assert_eq!("http://dodu.it/test/movie.mp4", result.get(0).unwrap());
+        assert_eq!("http://dodu.it/test/movie.ogg", result.get(1).unwrap());
     }
 }

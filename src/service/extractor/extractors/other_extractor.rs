@@ -5,6 +5,7 @@ pub struct OtherFileExtractor {
     pub extensions: Vec<String>,
     pub is_same_domain_enabled: bool,
     pub domain: String,
+    pub processing_page_link: String,
 }
 
 impl ResourceExtractor for OtherFileExtractor {
@@ -32,6 +33,7 @@ impl OtherFileExtractor {
             self.extensions.clone(),
             &self.domain,
             self.is_same_domain_enabled,
+            self.processing_page_link.to_owned(),
         );
     }
 }

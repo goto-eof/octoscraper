@@ -28,7 +28,7 @@ pub fn extract_fname_from_link(link: &str, alternative_file_name: Option<String>
         .to_string();
 }
 
-pub fn add_base_url_if_not_present(link: &str, domain: &str) -> String {
+pub fn add_base_url_if_not_present(link: &str, domain: &str, processing_page_link: &str) -> String {
     let base_url = get_domain_base_url_string(domain);
     let mut link = link.to_string();
 
@@ -48,7 +48,7 @@ pub fn add_base_url_if_not_present(link: &str, domain: &str) -> String {
             // substring
             link = link[1..link.len()].to_string();
         }
-        link = format!("{}{}", base_url, link);
+        link = format!("{}{}", base_url_path(processing_page_link), link);
     }
     return link.to_owned();
 }
@@ -81,39 +81,48 @@ pub fn has_extension(link: &str, extensions: Vec<String>) -> Option<String> {
     return None;
 }
 
+pub fn base_url_path(link: &str) -> String {
+    let u = Url::parse(link).unwrap();
+    return u.join("./").unwrap().as_str().to_string();
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn add_base_url_if_not_present_test() {
-        let link = "http://www.dodu.it";
+        let link = "http://www.dodu.it/file.png";
         let domain = "http://www.dodu.it";
-        let result = add_base_url_if_not_present(link, domain);
-        assert_eq!("http://www.dodu.it", result);
+        let processing_page_link = "http://www.dodu.it/test/ciao-mondo.jsp";
+        let result = add_base_url_if_not_present(link, domain, processing_page_link);
+        assert_eq!("http://www.dodu.it/file.png", result);
     }
 
     #[test]
     fn add_base_url_if_not_present_test2() {
         let link = "resource/something.png";
         let domain = "http://www.dodu.it";
-        let result = add_base_url_if_not_present(link, domain);
-        assert_eq!("http://www.dodu.it/resource/something.png", result);
+        let processing_page_link = "http://www.dodu.it/test/ciao-mondo.jsp";
+        let result = add_base_url_if_not_present(link, domain, processing_page_link);
+        assert_eq!("http://www.dodu.it/test/resource/something.png", result);
     }
 
     #[test]
     fn add_base_url_if_not_present_test3() {
         let link = "/resource/something.png";
         let domain = "http://www.dodu.it";
-        let result = add_base_url_if_not_present(link, domain);
-        assert_eq!("http://www.dodu.it/resource/something.png", result);
+        let processing_page_link = "http://www.dodu.it/test/ciao-mondo.jsp";
+        let result = add_base_url_if_not_present(link, domain, processing_page_link);
+        assert_eq!("http://www.dodu.it/test/resource/something.png", result);
     }
 
     #[test]
     fn add_base_url_if_not_present_test4() {
         let link = "//dodu.it/resource/something.png";
         let domain = "http://www.dodu.it";
-        let result = add_base_url_if_not_present(link, domain);
+        let processing_page_link = "http://www.dodu.it/test/ciao-mondo.jsp";
+        let result = add_base_url_if_not_present(link, domain, processing_page_link);
         assert_eq!("http://dodu.it/resource/something.png", result);
     }
 

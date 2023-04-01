@@ -11,6 +11,7 @@ pub struct LinkExtractor {
     pub enabled: bool,
     pub is_same_domain_enabled: bool,
     pub domain: String,
+    pub processing_page_link: String,
 }
 
 impl ResourceExtractor for LinkExtractor {
@@ -25,7 +26,9 @@ impl ResourceExtractor for LinkExtractor {
                     .find(Name("a"))
                     .filter_map(|n| n.attr("href"))
                     .map(|item| item.to_string())
-                    .map(|link| add_base_url_if_not_present(&link, &self.domain))
+                    .map(|link| {
+                        add_base_url_if_not_present(&link, &self.domain, &self.processing_page_link)
+                    })
                     .filter_map(|link| {
                         is_same_domain_ext(self.is_same_domain_enabled, &self.domain, &link)
                     })

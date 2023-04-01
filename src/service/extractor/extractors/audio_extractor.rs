@@ -77,7 +77,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn strategy_b_test() {
+    fn strategy_b_test_extract_from_audio_tag() {
         let audio_extractor = AudioExtractor {
             domain: "http://dodu.it".to_owned(),
             enabled: true,

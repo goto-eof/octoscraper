@@ -43,10 +43,16 @@ pub fn add_base_url_if_not_present(link: &str, domain: &str, processing_page_lin
             link = format!("http://{}", link);
             return link.to_owned();
         }
-
-        if link.starts_with("/") {
+        if link.starts_with("./") {
+            // substring
+            link = link[2..link.len()].to_string();
+            link = format!("{}{}", base_url_path(processing_page_link), link);
+            return link;
+        } else if link.starts_with("/") {
             // substring
             link = link[1..link.len()].to_string();
+            link = format!("{}/{}", domain, link);
+            return link;
         }
         link = format!("{}{}", base_url_path(processing_page_link), link);
     }
@@ -91,7 +97,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn add_base_url_if_not_present_test() {
+    fn add_base_url_if_not_present_base_url_test() {
         let link = "http://www.dodu.it/file.png";
         let domain = "http://www.dodu.it";
         let processing_page_link = "http://www.dodu.it/test/ciao-mondo.jsp";
@@ -100,7 +106,7 @@ mod tests {
     }
 
     #[test]
-    fn add_base_url_if_not_present_test2() {
+    fn add_base_url_if_not_present_no_base_url_no_slash_test() {
         let link = "resource/something.png";
         let domain = "http://www.dodu.it";
         let processing_page_link = "http://www.dodu.it/test/ciao-mondo.jsp";
@@ -109,16 +115,16 @@ mod tests {
     }
 
     #[test]
-    fn add_base_url_if_not_present_test3() {
+    fn add_base_url_if_not_present_no_base_url_but_slash_test() {
         let link = "/resource/something.png";
         let domain = "http://www.dodu.it";
         let processing_page_link = "http://www.dodu.it/test/ciao-mondo.jsp";
         let result = add_base_url_if_not_present(link, domain, processing_page_link);
-        assert_eq!("http://www.dodu.it/test/resource/something.png", result);
+        assert_eq!("http://www.dodu.it/resource/something.png", result);
     }
 
     #[test]
-    fn add_base_url_if_not_present_test4() {
+    fn add_base_url_if_not_present_no_base_url_but_double_slash_test() {
         let link = "//dodu.it/resource/something.png";
         let domain = "http://www.dodu.it";
         let processing_page_link = "http://www.dodu.it/test/ciao-mondo.jsp";
@@ -127,7 +133,7 @@ mod tests {
     }
 
     #[test]
-    fn normalize_link_replace_spaces_test() {
+    fn normalize_link_replace_spaces_normalize_spaces_test() {
         let link = "http://dodu.it/this is a test";
         let result = normalize_link_replace_spaces(link).unwrap();
         assert_eq!("http://dodu.it/this%20is%20a%20test", result);
@@ -135,21 +141,21 @@ mod tests {
 
     #[test]
     #[should_panic]
-    fn normalize_link_replace_spaces_test2() {
+    fn normalize_link_replace_spaces_normalize_spaces_no_base_url_test() {
         let link = "dodu.it/this is a test";
         let result = normalize_link_replace_spaces(link).unwrap();
         assert_eq!("dodu.it/this%20is%20a%20test", result);
     }
 
     #[test]
-    fn extract_fname_from_link_test() {
+    fn extract_fname_from_link_file_with_extension_test() {
         let link = "http://www.dodu.it/file.png";
         let result = extract_fname_from_link(link, None);
         assert_eq!("file.png", result);
     }
 
     #[test]
-    fn extract_fname_from_link_test2() {
+    fn extract_fname_from_link_file_without_extension_test() {
         let link = "http://www.dodu.it/file";
         let result = extract_fname_from_link(link, None);
         assert_eq!("file", result);

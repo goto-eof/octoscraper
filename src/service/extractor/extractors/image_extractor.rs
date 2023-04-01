@@ -61,3 +61,139 @@ impl ImageExtractor {
             .collect();
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn strategy_b_tag_and_attribute_upper_case() {
+        let audio_extractor = ImageExtractor {
+            domain: "http://dodu.it".to_owned(),
+            enabled: true,
+            extensions: vec![".png".to_owned()],
+            is_same_domain_enabled: false,
+            processing_page_link: "http://dodu.it/test/index.html".to_owned(),
+        };
+        let resource_str = r#"
+                    <IMG SRC="ciao.png" />
+        "#;
+        let result = audio_extractor.extract(resource_str);
+        assert_eq!(1, result.len());
+        assert_eq!("http://dodu.it/test/ciao.png", result.get(0).unwrap());
+    }
+
+    #[test]
+    fn strategy_b_test_tag_and_attribute_lower_case() {
+        let audio_extractor = ImageExtractor {
+            domain: "http://dodu.it".to_owned(),
+            enabled: true,
+            extensions: vec![".png".to_owned()],
+            is_same_domain_enabled: false,
+            processing_page_link: "http://dodu.it/test/index.html".to_owned(),
+        };
+        let resource_str = r#"
+                    <img src="ciao.png" />
+        "#;
+        let result = audio_extractor.extract(resource_str);
+        assert_eq!(1, result.len());
+        assert_eq!("http://dodu.it/test/ciao.png", result.get(0).unwrap());
+    }
+
+    #[test]
+    fn strategy_b_test_domain_root() {
+        let audio_extractor = ImageExtractor {
+            domain: "http://dodu.it".to_owned(),
+            enabled: true,
+            extensions: vec![".png".to_owned()],
+            is_same_domain_enabled: false,
+            processing_page_link: "http://dodu.it/index.html".to_owned(),
+        };
+        let resource_str = r#"
+                    <IMG SRC="/ciao.png" />
+        "#;
+        let result = audio_extractor.extract(resource_str);
+        assert_eq!(1, result.len());
+        assert_eq!("http://dodu.it/ciao.png", result.get(0).unwrap());
+    }
+
+    #[test]
+    fn strategy_b_link_root_test() {
+        let audio_extractor = ImageExtractor {
+            domain: "http://dodu.it".to_owned(),
+            enabled: true,
+            extensions: vec![".jpg".to_owned()],
+            is_same_domain_enabled: false,
+            processing_page_link: "http://dodu.it/test/index.html".to_owned(),
+        };
+        let resource_str = r#"
+                <h1>/ciao.jpg</h1>
+                <figure class="wp-block-image size-large">
+                    <img src="/ciao.jpg" alt=""/>
+                </figure>
+        "#;
+        let result = audio_extractor.extract(resource_str);
+        assert_eq!(1, result.len());
+        assert_eq!("http://dodu.it/ciao.jpg", result.get(0).unwrap());
+    }
+
+    #[test]
+    fn strategy_b_link_relative_test() {
+        let audio_extractor = ImageExtractor {
+            domain: "http://dodu.it".to_owned(),
+            enabled: true,
+            extensions: vec![".jpg".to_owned()],
+            is_same_domain_enabled: false,
+            processing_page_link: "http://dodu.it/test/index.html".to_owned(),
+        };
+        let resource_str = r#"
+                <h1>/ciao.jpg</h1>
+                <figure class="wp-block-image size-large">
+                    <img src="ciao.jpg" alt=""/>
+                </figure>
+        "#;
+        let result = audio_extractor.extract(resource_str);
+        assert_eq!(1, result.len());
+        assert_eq!("http://dodu.it/test/ciao.jpg", result.get(0).unwrap());
+    }
+
+    #[test]
+    fn strategy_b_link_relative_second_test() {
+        let audio_extractor = ImageExtractor {
+            domain: "http://dodu.it".to_owned(),
+            enabled: true,
+            extensions: vec![".jpg".to_owned()],
+            is_same_domain_enabled: false,
+            processing_page_link: "http://dodu.it/test/index.html".to_owned(),
+        };
+        let resource_str = r#"
+                <h1>/ciao.jpg</h1>
+                <figure class="wp-block-image size-large">
+                    <img src="./ciao.jpg" alt=""/>
+                </figure>
+        "#;
+        let result = audio_extractor.extract(resource_str);
+        assert_eq!(1, result.len());
+        assert_eq!("http://dodu.it/test/ciao.jpg", result.get(0).unwrap());
+    }
+
+    #[test]
+    fn strategy_b_link_absolute_double_slash_test() {
+        let audio_extractor = ImageExtractor {
+            domain: "http://dodu.it".to_owned(),
+            enabled: true,
+            extensions: vec![".jpg".to_owned()],
+            is_same_domain_enabled: false,
+            processing_page_link: "http://dodu.it/test/index.html".to_owned(),
+        };
+        let resource_str = r#"
+                <h1>/ciao.jpg</h1>
+                <figure class="wp-block-image size-large">
+                    <img src="//dodu.it/ciao.jpg" alt=""/>
+                </figure>
+        "#;
+        let result = audio_extractor.extract(resource_str);
+        assert_eq!(1, result.len());
+        assert_eq!("http://dodu.it/ciao.jpg", result.get(0).unwrap());
+    }
+}

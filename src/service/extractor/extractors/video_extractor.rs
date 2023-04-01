@@ -71,7 +71,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn strategy_b_test() {
+    fn strategy_b_test_extract_from_video_tag() {
         let audio_extractor = VideoExtractor {
             domain: "http://dodu.it".to_owned(),
             enabled: true,

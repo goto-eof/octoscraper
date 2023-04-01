@@ -92,6 +92,8 @@ pub fn base_url_path(link: &str) -> String {
     return u.join("./").unwrap().as_str().to_string();
 }
 
+// =========================================================================================================
+
 #[cfg(test)]
 mod tests {
     use super::*;

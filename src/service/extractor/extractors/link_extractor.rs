@@ -63,6 +63,8 @@ pub fn is_document_html_file(document: &Document) -> bool {
     return is_html.len() == 1;
 }
 
+// =========================================================================================================
+
 #[cfg(test)]
 mod tests {
     use super::*;

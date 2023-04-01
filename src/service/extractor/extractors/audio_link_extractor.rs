@@ -108,7 +108,7 @@ mod tests {
     }
 
     #[test]
-    fn strategy_b_test_extract_from_audio_tag_2_liunks() {
+    fn strategy_b_test_extract_from_audio_tag_2_links() {
         let audio_extractor = AudioLinkExtractor {
             domain: "http://dodu.it".to_owned(),
             enabled: true,
@@ -127,5 +127,44 @@ mod tests {
         assert_eq!(2, result.len());
         assert_eq!(true, result.get("http://dodu.it/test/horse.mp3").is_some());
         assert_eq!(true, result.get("http://dodu.it/test/horse.ogg").is_some());
+    }
+
+    #[test]
+    fn strategy_b_test_extract_from_link() {
+        let audio_extractor = AudioLinkExtractor {
+            domain: "http://dodu.it".to_owned(),
+            enabled: true,
+            extensions: vec![".ogg".to_owned(), ".mp3".to_owned(), ".mid".to_owned()],
+            is_same_domain_enabled: false,
+            processing_page_link: "http://dodu.it/test/index.html".to_owned(),
+        };
+        let resource_str = r#"
+                        <a href="horse.mp3">Download</a>
+        "#;
+        let result = audio_extractor.extract(resource_str);
+        assert_eq!(1, result.len());
+        assert_eq!(true, result.get("http://dodu.it/test/horse.mp3").is_some());
+    }
+
+    #[test]
+    fn strategy_b_test_extract_from_audio_tag_and_link() {
+        let audio_extractor = AudioLinkExtractor {
+            domain: "http://dodu.it".to_owned(),
+            enabled: true,
+            extensions: vec![".ogg".to_owned(), ".mp3".to_owned(), ".mid".to_owned()],
+            is_same_domain_enabled: false,
+            processing_page_link: "http://dodu.it/test/index.html".to_owned(),
+        };
+        let resource_str = r#"
+                    <audio controls>
+                        <source src="horse.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                    <a href="horses.mp3">Download</a>
+        "#;
+        let result = audio_extractor.extract(resource_str);
+        assert_eq!(2, result.len());
+        assert_eq!(true, result.get("http://dodu.it/test/horse.mp3").is_some());
+        assert_eq!(true, result.get("http://dodu.it/test/horses.mp3").is_some());
     }
 }

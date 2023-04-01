@@ -216,4 +216,29 @@ mod tests {
         assert_eq!(1, result.len());
         assert_eq!("http://dodu.it/ciao.jpg", result.iter().next().unwrap());
     }
+
+    #[test]
+    fn strategy_b_link_img_and_link_test() {
+        let audio_extractor = ImageLinkExtractor {
+            domain: "http://dodu.it".to_owned(),
+            enabled: true,
+            extensions: vec![".jpg".to_owned()],
+            is_same_domain_enabled: false,
+            processing_page_link: "http://dodu.it/test/index.html".to_owned(),
+        };
+        let resource_str = r#"
+                <h1>/ciao.jpg</h1>
+                <figure class="wp-block-image size-large">
+                    <img src="ciao.jpg" alt=""/>
+                </figure>
+                <a href="ciao-ciao.jpg" target="_blank">Download</a>
+        "#;
+        let result = audio_extractor.extract(resource_str);
+        assert_eq!(2, result.len());
+        assert_eq!(true, result.get("http://dodu.it/test/ciao.jpg").is_some());
+        assert_eq!(
+            true,
+            result.get("http://dodu.it/test/ciao-ciao.jpg").is_some()
+        );
+    }
 }

@@ -140,7 +140,7 @@ async fn download_all(
                     processed_resources.push(&handler_link);
                     if processed_resources_hash.was_already_processed(&handler_file) {
                         file_delete(&handler_file);
-                        println!("Huston! We have already another file with the same hash. This file will be discarded. Details: {}", handler_link)
+                        println!("HFile discarder because we have already another file with the same hash. Details: {}", handler_link)
                     } else if file_len_less_than(&handler_file, acceptable_size) {
                         file_delete(&handler_file);
                         println!(

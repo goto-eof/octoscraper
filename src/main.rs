@@ -52,8 +52,14 @@ async fn main() {
         VERSION.unwrap()
     );
     println!("====================================================================");
-    let application_settings =
-        ApplicationSettings::from_config_file("configuration/configuration.json").unwrap();
+    let application_settings_res =
+        ApplicationSettings::from_config_file("configuration/configuration.json");
+    let mut application_settings = ApplicationSettings {
+        file_extension: "os".to_owned(),
+    };
+    if application_settings_res.is_ok() {
+        application_settings = application_settings_res.ok().unwrap();
+    }
     let mut config: Config = load_default_settings();
 
     if update_config_with_argument_values(&mut config) == Flow::EXIT {

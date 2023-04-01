@@ -78,13 +78,6 @@ cargo run -- -w http://dodu.it -e .png,.PNG -d DIRECTORY_NAME -s 100 -t 90000 -i
 cargo test
 ```
 
-### Work in progress
-
-- link normalization
-- audio scraping
-- video scraping
-
-
 ### Screenshot
 ![image](https://user-images.githubusercontent.com/6343630/229301705-de5ac86a-d44e-4e8b-99eb-99e30bc17296.png)
 

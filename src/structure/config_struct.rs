@@ -14,11 +14,15 @@ pub struct Config {
     pub process_only_root: bool,
 
     pub _is_image_extractor_enabled: bool,
+    pub image_extractor_minimum_size: u64,
     pub _image_extractor_extensions: Vec<String>,
     pub _is_video_extractor_enabled: bool,
+    pub video_extractor_minimum_size: u64,
     pub _video_extractor_extensions: Vec<String>,
     pub _is_audio_extractor_enabled: bool,
+    pub audio_extractor_minimum_size: u64,
     pub _audio_extractor_extensions: Vec<String>,
     pub _is_other_extractor_enabled: bool,
+    pub other_file_extractor_minimum_size: u64,
     pub _other_extractor_extensions: Vec<String>,
 }

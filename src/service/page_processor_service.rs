@@ -13,11 +13,11 @@ use crate::{
         processed_hash_struct::ProcessedHash, processed_struct::Processed,
     },
     util::{
-        file_util::{file_delete, file_rename},
+        file_util::{file_delete, file_len_less_than, file_rename},
         link_util::{add_base_url_if_not_present, extract_fname_from_link},
     },
 };
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 pub async fn extract_links_and_process_data(
     application_settings: &ApplicationSettings,
@@ -31,6 +31,8 @@ pub async fn extract_links_and_process_data(
     let response_str = reqwest::get(link).await;
     if response_str.is_ok() {
         let response_str = response_str.unwrap().text().await.unwrap();
+
+        let mut resource_links_type: HashMap<String, String> = HashMap::new();
 
         if !config.process_only_root {
             let link_extractor = LinkExtractor {
@@ -56,13 +58,17 @@ pub async fn extract_links_and_process_data(
                 .extract(&response_str)
                 .iter()
                 .map(|link| add_base_url_if_not_present(&link.to_string(), &config.website, link))
-                .for_each(|link| resources_links.push(link))
+                .for_each(|link| {
+                    resources_links.push(link.to_owned());
+                    resource_links_type.insert(link, extractor.get_name());
+                })
         });
 
         loop {
             resources_links = download_all(
                 application_settings,
                 resources_links,
+                &resource_links_type,
                 config,
                 processed_resources,
                 processed_resources_hash,
@@ -98,6 +104,7 @@ pub async fn extract_links_and_process_data(
 async fn download_all(
     application_settings: &ApplicationSettings,
     resources_links: Vec<String>,
+    resource_links_type: &HashMap<String, String>,
     config: &Config,
     processed_resources: &mut Processed,
     processed_resources_hash: &mut ProcessedHash,
@@ -124,10 +131,21 @@ async fn download_all(
                 let is_success = handler_result.1;
                 let handler_file = handler_result.2;
                 if is_success {
+                    let acceptable_size = retrieve_size_for_file_type(
+                        resource_links_type.get(&handler_link).unwrap(),
+                        config,
+                    );
                     processed_resources.push(&handler_link);
                     if processed_resources_hash.was_already_processed(&handler_file) {
                         file_delete(&handler_file);
                         println!("Huston! We have already another file with the same hash. This file will be discarded. Details: {}", handler_link)
+                    } else if file_len_less_than(&handler_file, acceptable_size) {
+                        file_delete(&handler_file);
+                        println!(
+                            "File discarded because it's length is less than expected ({}). Details: {}",
+                            acceptable_size,
+                            handler_link
+                        )
                     } else {
                         processed_resources_hash.push(&handler_file);
                         file_rename(
@@ -150,4 +168,14 @@ async fn download_all(
         .map(|link| link.to_owned())
         .filter(|link| !processed_resources.was_already_processed(&link))
         .collect();
+}
+
+fn retrieve_size_for_file_type(extractor_type: &str, config: &Config) -> u64 {
+    match extractor_type {
+        "image-extractor" => config.image_extractor_minimum_size,
+        "audio-extractor" => config.audio_extractor_minimum_size,
+        "video-extractor" => config.video_extractor_minimum_size,
+        "other-extractor" => config.other_file_extractor_minimum_size,
+        _ => u64::MAX,
+    }
 }

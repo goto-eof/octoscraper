@@ -47,5 +47,9 @@ pub fn load_default_settings() -> Config {
             ".gz".to_string(),
             ".tar".to_string(),
         ],
+        image_extractor_minimum_size: u64::MAX,
+        video_extractor_minimum_size: u64::MAX,
+        audio_extractor_minimum_size: u64::MAX,
+        other_file_extractor_minimum_size: u64::MAX,
     };
 }

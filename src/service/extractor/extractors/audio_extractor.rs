@@ -21,6 +21,10 @@ impl ResourceExtractor for AudioExtractor {
         self.enabled = enabled;
     }
 
+    fn get_name(&self) -> String {
+        return "audio-extractor".to_string();
+    }
+
     fn extract(&self, resource_str: &str) -> Vec<String> {
         let mut links: Vec<String> = Vec::new();
 

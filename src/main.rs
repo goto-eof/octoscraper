@@ -20,6 +20,12 @@ const ARGUMENT_EXTENSIONS_IMAGE: &str = "-ei";
 const ARGUMENT_EXTENSIONS_VIDEO: &str = "-ev";
 const ARGUMENT_EXTENSIONS_AUDIO: &str = "-ea";
 const ARGUMENT_EXTENSIONS_OTHER_FILE: &str = "-eo";
+
+const ARGUMENT_MINIMUM_SIZE_IMAGE: &str = "-si";
+const ARGUMENT_MINIMUM_SIZE_VIDEO: &str = "-sv";
+const ARGUMENT_MINIMUM_SIZE_AUDIO: &str = "-sa";
+const ARGUMENT_MINIMUM_SIZE_OTHER_FILE: &str = "-so";
+
 const ARGUMENT_ENABLE_IMAGE_EXTRACTOR: &str = "-oi";
 const ARGUMENT_ENABLE_VIDEO_EXTRACTOR: &str = "-ov";
 const ARGUMENT_ENABLE_AUDIO_EXTRACTOR: &str = "-oa";
@@ -116,6 +122,7 @@ fn update_config_with_argument_values(config: &mut Config) -> Flow {
         println!("Invalid number of arguments!");
         panic!("Exiting, because you provided an invalid number of arguments.")
     }
+
     let mut commands: HashMap<String, String> = HashMap::new();
     for i in 0..(args.len()) {
         if i % 2 == 1 {
@@ -257,6 +264,38 @@ fn update_config_with_argument_values(config: &mut Config) -> Flow {
             .unwrap();
     }
 
+    if commands.get(ARGUMENT_MINIMUM_SIZE_IMAGE).is_some() {
+        config.image_extractor_minimum_size = commands
+            .get(ARGUMENT_MINIMUM_SIZE_IMAGE)
+            .unwrap()
+            .parse()
+            .unwrap();
+    }
+
+    if commands.get(ARGUMENT_MINIMUM_SIZE_AUDIO).is_some() {
+        config.audio_extractor_minimum_size = commands
+            .get(ARGUMENT_MINIMUM_SIZE_AUDIO)
+            .unwrap()
+            .parse()
+            .unwrap();
+    }
+
+    if commands.get(ARGUMENT_MINIMUM_SIZE_VIDEO).is_some() {
+        config.video_extractor_minimum_size = commands
+            .get(ARGUMENT_MINIMUM_SIZE_VIDEO)
+            .unwrap()
+            .parse()
+            .unwrap();
+    }
+
+    if commands.get(ARGUMENT_MINIMUM_SIZE_OTHER_FILE).is_some() {
+        config.other_file_extractor_minimum_size = commands
+            .get(ARGUMENT_MINIMUM_SIZE_OTHER_FILE)
+            .unwrap()
+            .parse()
+            .unwrap();
+    }
+
     if !config._is_audio_extractor_enabled
         && !config._is_image_extractor_enabled
         && !config._is_video_extractor_enabled
@@ -305,6 +344,24 @@ fn print_help() {
         "{}	list of other file extensions separated by comma",
         ARGUMENT_EXTENSIONS_OTHER_FILE
     );
+
+    println!(
+        "{} minimum image size (in bytes)",
+        ARGUMENT_MINIMUM_SIZE_IMAGE
+    );
+    println!(
+        "{} minimum audio size (in bytes)",
+        ARGUMENT_MINIMUM_SIZE_AUDIO
+    );
+    println!(
+        "{} minimum video size (in bytes)",
+        ARGUMENT_MINIMUM_SIZE_VIDEO
+    );
+    println!(
+        "{} minimum other file size (in bytes)",
+        ARGUMENT_MINIMUM_SIZE_OTHER_FILE
+    );
+
     println!(
         "{}	directory where files will be saved",
         ARGUMENT_RESOURCE_DIRECTORY

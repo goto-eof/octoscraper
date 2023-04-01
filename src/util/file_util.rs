@@ -42,6 +42,10 @@ pub fn file_delete(path: &str) {
     fs::remove_file(path).unwrap();
 }
 
+pub fn file_len_less_than(file_name: &str, size: u64) -> bool {
+    fs::metadata(file_name).unwrap().len() < size
+}
+
 pub fn extract_extension(filename: &str) -> String {
     return Path::new(filename)
         .extension()

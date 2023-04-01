@@ -8,6 +8,7 @@ use crate::util::{
 pub trait ResourceExtractor {
     fn enabled(&mut self, enabled: bool);
     fn extract(&self, resource_str: &str) -> Vec<String>;
+    fn get_name(&self) -> String;
 }
 
 pub fn strategy_a_common_extractor(

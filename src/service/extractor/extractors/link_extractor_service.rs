@@ -19,6 +19,10 @@ impl ResourceExtractor for LinkExtractor {
         self.enabled = enabled;
     }
 
+    fn get_name(&self) -> String {
+        return "link-extractor".to_string();
+    }
+
     fn extract(&self, resource_str: &str) -> Vec<String> {
         if self.enabled {
             let document = Document::from(resource_str);

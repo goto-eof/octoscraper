@@ -28,9 +28,6 @@ pub fn extract_fname_from_link(link: &str, alternative_file_name: Option<String>
         .to_string();
 }
 
-// cases
-// <a href="download/midi_files/Armageddon1.mid">
-// <a href="http://ininternet.org/download/midi_files/aladdin.mid">
 pub fn add_base_url_if_not_present(link: &str, domain: &str) -> String {
     let base_url = get_domain_base_url_string(domain);
     let mut link = link.to_string();
@@ -43,7 +40,7 @@ pub fn add_base_url_if_not_present(link: &str, domain: &str) -> String {
         if link.starts_with("//") {
             // substring
             link = link[2..link.len()].to_string();
-            link = format!("{}/{}", "http://", link);
+            link = format!("http://{}", link);
             return link.to_owned();
         }
 
@@ -135,6 +132,14 @@ mod tests {
         let domain = "http://www.dodu.it";
         let result = add_base_url_if_not_present(link, domain);
         assert_eq!("http://www.dodu.it/resource/something.png", result);
+    }
+
+    #[test]
+    fn add_base_url_if_not_present_test4() {
+        let link = "//dodu.it/resource/something.png";
+        let domain = "http://www.dodu.it";
+        let result = add_base_url_if_not_present(link, domain);
+        assert_eq!("http://dodu.it/resource/something.png", result);
     }
 
     #[test]

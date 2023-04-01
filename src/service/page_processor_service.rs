@@ -85,15 +85,17 @@ pub async fn extract_links_and_process_data(
                 if resources_links.is_empty() {
                     break;
                 } else {
-                    println!("Not all resources were downloaded correclty or there is a download limitation. Trying to download all remaining resources....\n\n");
+                    println!("Not all resources were downloaded (perhaps there is a download limitation). 
+                             \nTrying to download all remaining resources....\n\n");
                 }
             } else {
                 if resources_links.is_empty() {
                     break;
                 } else {
                     println!(
-                    "Not all resources were downloaded correctly. Retrying to download them...."
-                )
+                        "Not all resources were downloaded correctly.
+                    \nRetrying to download them...."
+                    )
                 }
             }
         }

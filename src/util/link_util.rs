@@ -40,6 +40,10 @@ pub fn add_base_url_if_not_present(link: &str, domain: &str) -> String {
         && !link.contains("http://")
         && !link.contains("https://")
     {
+        if link.starts_with("/") {
+            // substring
+            link = link[1..link.len()].to_string();
+        }
         link = format!("{}{}", base_url, link);
     }
     return link.to_owned();
@@ -74,6 +78,15 @@ pub fn add_http_if_not_present(link: String) -> String {
     return link;
 }
 
+pub fn has_extension(link: &str, extensions: Vec<String>) -> Option<String> {
+    for extension in extensions.iter() {
+        if link.ends_with(extension) {
+            return Some(link.to_string());
+        }
+    }
+    return None;
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -101,6 +114,14 @@ mod tests {
     #[test]
     fn add_base_url_if_not_present_test2() {
         let link = "resource/something.png";
+        let domain = "http://www.dodu.it";
+        let result = add_base_url_if_not_present(link, domain);
+        assert_eq!("http://www.dodu.it/resource/something.png", result);
+    }
+
+    #[test]
+    fn add_base_url_if_not_present_test3() {
+        let link = "/resource/something.png";
         let domain = "http://www.dodu.it";
         let result = add_base_url_if_not_present(link, domain);
         assert_eq!("http://www.dodu.it/resource/something.png", result);

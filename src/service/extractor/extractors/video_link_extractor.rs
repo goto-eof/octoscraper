@@ -100,4 +100,26 @@ mod tests {
             result.iter().next().unwrap()
         );
     }
+
+    #[test]
+    fn strategy_b_test_extract_from_video_tag_2_links() {
+        let audio_extractor = VideoLinkExtractor {
+            domain: "http://dodu.it".to_owned(),
+            enabled: true,
+            extensions: vec![".mp4".to_owned(), ".ogg".to_owned(), "mpg".to_owned()],
+            is_same_domain_enabled: false,
+            processing_page_link: "http://dodu.it/test/index.html".to_string(),
+        };
+        let resource_str = r#"
+                <video width="320" height="240" controls>
+                    <source src="movie.mp4" type="video/mp4">
+                    <source src="movie.ogg" type="video/ogg">
+                    Your browser does not support the video tag.
+                </video>
+        "#;
+        let result = audio_extractor.extract(resource_str);
+        assert_eq!(2, result.len());
+        assert_eq!(true, result.get("http://dodu.it/test/movie.mp4").is_some());
+        assert_eq!(true, result.get("http://dodu.it/test/movie.ogg").is_some());
+    }
 }

@@ -106,4 +106,26 @@ mod tests {
             result.iter().next().unwrap()
         );
     }
+
+    #[test]
+    fn strategy_b_test_extract_from_audio_tag_2_liunks() {
+        let audio_extractor = AudioLinkExtractor {
+            domain: "http://dodu.it".to_owned(),
+            enabled: true,
+            extensions: vec![".ogg".to_owned(), ".mp3".to_owned(), ".mid".to_owned()],
+            is_same_domain_enabled: false,
+            processing_page_link: "http://dodu.it/test/index.html".to_owned(),
+        };
+        let resource_str = r#"
+                    <audio controls>
+                        <source src="horse.mp3" type="audio/mpeg">
+                        <source src="horse.ogg" type="audio/ogg">
+                        Your browser does not support the audio element.
+                    </audio>
+        "#;
+        let result = audio_extractor.extract(resource_str);
+        assert_eq!(2, result.len());
+        assert_eq!(true, result.get("http://dodu.it/test/horse.mp3").is_some());
+        assert_eq!(true, result.get("http://dodu.it/test/horse.ogg").is_some());
+    }
 }

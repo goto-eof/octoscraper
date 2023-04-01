@@ -1,4 +1,4 @@
-use select::{document::Document, predicate::Name};
+use select::{document::Document, node::Node, predicate::Name};
 
 use crate::util::{
     link_util::{add_base_url_if_not_present, normalize_link_replace_spaces},
@@ -21,8 +21,9 @@ impl ResourceExtractor for LinkExtractor {
 
     fn extract(&self, resource_str: &str) -> Vec<String> {
         if self.enabled {
-            if resource_str.contains("<html") || resource_str.contains("<HTML") {
-                return Document::from(resource_str)
+            let document = Document::from(resource_str);
+            if is_document_html_file(&document) {
+                return document
                     .find(Name("a"))
                     .filter_map(|n| n.attr("href"))
                     .map(|item| item.to_string())
@@ -39,4 +40,15 @@ impl ResourceExtractor for LinkExtractor {
         }
         return vec![];
     }
+}
+
+pub fn is_html_file(resource_str: &str) -> bool {
+    let document = Document::from(resource_str);
+    let is_html: Vec<Node> = document.find(Name("html")).collect();
+    return is_html.len() == 1;
+}
+
+pub fn is_document_html_file(document: &Document) -> bool {
+    let is_html: Vec<Node> = document.find(Name("html")).collect();
+    return is_html.len() == 1;
 }

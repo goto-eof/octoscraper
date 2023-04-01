@@ -53,7 +53,7 @@ pub async fn extract_links_and_process_data(
         }
 
         let extractors: Vec<ExtractorType> = retrieve_extractors(config, link);
-        let mut resources_links: Vec<String> = Vec::new();
+        let mut resources_links: HashSet<String> = HashSet::new();
 
         extractors.iter().for_each(|extractor| {
             extractor
@@ -61,7 +61,7 @@ pub async fn extract_links_and_process_data(
                 .iter()
                 .map(|link| add_base_url_if_not_present(&link.to_string(), &config.website, link))
                 .for_each(|link| {
-                    resources_links.push(link.to_owned());
+                    resources_links.insert(link.to_owned());
                     resource_links_type.insert(link, extractor.get_name());
                 })
         });
@@ -105,13 +105,13 @@ pub async fn extract_links_and_process_data(
 
 async fn download_all(
     application_settings: &ApplicationSettings,
-    resources_links: Vec<String>,
+    resources_links: HashSet<String>,
     resource_links_type: &HashMap<String, String>,
     config: &Config,
     processed_resources: &mut Processed,
     processed_resources_hash: &mut ProcessedHash,
     limit: i32,
-) -> Vec<String> {
+) -> HashSet<String> {
     let mut handlers = vec![];
     let mut i = 1;
     for resource_link in resources_links.iter() {

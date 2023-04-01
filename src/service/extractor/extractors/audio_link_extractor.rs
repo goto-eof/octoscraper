@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use super::resource_extractor::{strategy_a_common_extractor, ResourceExtractor};
 use crate::util::{
     link_util::{add_base_url_if_not_present, normalize_link_replace_spaces},
@@ -25,7 +27,7 @@ impl ResourceExtractor for AudioLinkExtractor {
         return AudioLinkExtractor::EXTRACTOR_NAME.to_string();
     }
 
-    fn extract(&self, resource_str: &str) -> Vec<String> {
+    fn extract(&self, resource_str: &str) -> HashSet<String> {
         let mut links: Vec<String> = Vec::new();
 
         if self.enabled {
@@ -37,7 +39,7 @@ impl ResourceExtractor for AudioLinkExtractor {
                 .for_each(|elem| links.push(elem.to_string()));
         }
 
-        return links;
+        return HashSet::from_iter(links.iter().cloned());
     }
 }
 
@@ -93,14 +95,15 @@ mod tests {
         };
         let resource_str = r#"
                     <audio controls>
-                        <source src="horse.ogg" type="audio/ogg">
                         <source src="horse.mp3" type="audio/mpeg">
                         Your browser does not support the audio element.
                     </audio>
         "#;
         let result = audio_extractor.extract(resource_str);
-        assert_eq!(2, result.len());
-        assert_eq!("http://dodu.it/test/horse.ogg", result.get(0).unwrap());
-        assert_eq!("http://dodu.it/test/horse.mp3", result.get(1).unwrap());
+        assert_eq!(1, result.len());
+        assert_eq!(
+            "http://dodu.it/test/horse.mp3",
+            result.iter().next().unwrap()
+        );
     }
 }

@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use select::{document::Document, predicate::Name};
 
 use crate::util::{
@@ -7,7 +9,7 @@ use crate::util::{
 
 pub trait ResourceExtractor {
     fn enabled(&mut self, enabled: bool);
-    fn extract(&self, resource_str: &str) -> Vec<String>;
+    fn extract(&self, resource_str: &str) -> HashSet<String>;
     fn get_name(&self) -> String;
 }
 

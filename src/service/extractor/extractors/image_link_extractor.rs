@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use crate::util::{
     link_util::add_base_url_if_not_present,
     validation_util::{contains_extension, is_same_domain_ext},
@@ -23,7 +25,7 @@ impl ResourceExtractor for ImageLinkExtractor {
         return ImageLinkExtractor::EXTRACTOR_NAME.to_string();
     }
 
-    fn extract(&self, resource_str: &str) -> Vec<String> {
+    fn extract(&self, resource_str: &str) -> HashSet<String> {
         let mut links: Vec<String> = Vec::new();
 
         if self.enabled {
@@ -35,7 +37,7 @@ impl ResourceExtractor for ImageLinkExtractor {
                 .for_each(|elem| links.push(elem.to_string()));
         }
 
-        return links;
+        return HashSet::from_iter(links.iter().cloned());
     }
 }
 
@@ -86,7 +88,10 @@ mod tests {
         "#;
         let result = audio_extractor.extract(resource_str);
         assert_eq!(1, result.len());
-        assert_eq!("http://dodu.it/test/ciao.png", result.get(0).unwrap());
+        assert_eq!(
+            "http://dodu.it/test/ciao.png",
+            result.iter().next().unwrap()
+        );
     }
 
     #[test]
@@ -103,7 +108,10 @@ mod tests {
         "#;
         let result = audio_extractor.extract(resource_str);
         assert_eq!(1, result.len());
-        assert_eq!("http://dodu.it/test/ciao.png", result.get(0).unwrap());
+        assert_eq!(
+            "http://dodu.it/test/ciao.png",
+            result.iter().next().unwrap()
+        );
     }
 
     #[test]
@@ -120,7 +128,7 @@ mod tests {
         "#;
         let result = audio_extractor.extract(resource_str);
         assert_eq!(1, result.len());
-        assert_eq!("http://dodu.it/ciao.png", result.get(0).unwrap());
+        assert_eq!("http://dodu.it/ciao.png", result.iter().next().unwrap());
     }
 
     #[test]
@@ -140,7 +148,7 @@ mod tests {
         "#;
         let result = audio_extractor.extract(resource_str);
         assert_eq!(1, result.len());
-        assert_eq!("http://dodu.it/ciao.jpg", result.get(0).unwrap());
+        assert_eq!("http://dodu.it/ciao.jpg", result.iter().next().unwrap());
     }
 
     #[test]
@@ -160,7 +168,10 @@ mod tests {
         "#;
         let result = audio_extractor.extract(resource_str);
         assert_eq!(1, result.len());
-        assert_eq!("http://dodu.it/test/ciao.jpg", result.get(0).unwrap());
+        assert_eq!(
+            "http://dodu.it/test/ciao.jpg",
+            result.iter().next().unwrap()
+        );
     }
 
     #[test]
@@ -180,7 +191,10 @@ mod tests {
         "#;
         let result = audio_extractor.extract(resource_str);
         assert_eq!(1, result.len());
-        assert_eq!("http://dodu.it/test/ciao.jpg", result.get(0).unwrap());
+        assert_eq!(
+            "http://dodu.it/test/ciao.jpg",
+            result.iter().next().unwrap()
+        );
     }
 
     #[test]
@@ -200,6 +214,6 @@ mod tests {
         "#;
         let result = audio_extractor.extract(resource_str);
         assert_eq!(1, result.len());
-        assert_eq!("http://dodu.it/ciao.jpg", result.get(0).unwrap());
+        assert_eq!("http://dodu.it/ciao.jpg", result.iter().next().unwrap());
     }
 }

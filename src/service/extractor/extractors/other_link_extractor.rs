@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use super::resource_extractor::{strategy_a_common_extractor, ResourceExtractor};
 
 pub struct OtherFileLinkExtractor {
@@ -17,7 +19,7 @@ impl ResourceExtractor for OtherFileLinkExtractor {
         return OtherFileLinkExtractor::EXTRACTOR_NAME.to_string();
     }
 
-    fn extract(&self, resource_str: &str) -> Vec<String> {
+    fn extract(&self, resource_str: &str) -> HashSet<String> {
         let mut links: Vec<String> = Vec::new();
 
         if self.enabled {
@@ -26,7 +28,7 @@ impl ResourceExtractor for OtherFileLinkExtractor {
                 .for_each(|elem| links.push(elem.to_string()));
         }
 
-        return links;
+        return HashSet::from_iter(links.iter().cloned());
     }
 }
 

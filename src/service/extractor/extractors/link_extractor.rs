@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use select::{document::Document, node::Node, predicate::Name};
 
 use crate::util::{
@@ -23,11 +25,11 @@ impl ResourceExtractor for LinkExtractor {
         return LinkExtractor::EXTRACTOR_NAME.to_string();
     }
 
-    fn extract(&self, resource_str: &str) -> Vec<String> {
+    fn extract(&self, resource_str: &str) -> HashSet<String> {
         if self.enabled {
             let document = Document::from(resource_str);
             if is_document_html_file(&document) {
-                return document
+                let links: Vec<String> = document
                     .find(Name("a"))
                     .filter_map(|n| n.attr("href"))
                     .map(|item| item.to_string())
@@ -39,10 +41,10 @@ impl ResourceExtractor for LinkExtractor {
                     })
                     .filter_map(|link| normalize_link_replace_spaces(&link))
                     .collect();
+                return HashSet::from_iter(links.iter().cloned());
             }
-            return vec![];
         }
-        return vec![];
+        return HashSet::new();
     }
 }
 

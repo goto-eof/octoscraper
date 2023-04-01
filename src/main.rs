@@ -1,6 +1,6 @@
-use service::default_settings::load_default_settings;
 use std::collections::{HashMap, HashSet};
 use std::env;
+use util::settings_util::load_default_settings;
 
 use crate::service::page_processor_service::extract_links_and_process_data;
 use crate::structure::config_struct::Config;

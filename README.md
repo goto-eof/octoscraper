@@ -28,9 +28,9 @@ Download image files, no same domain
 ```
 ./octoscraper -w https://wallpaper.mob.org/ -oi true -sd false
 ```
-Download video
+Download video, process only the page passed as parameter
 ```
-./octoscraper -w http://www.w3schools.com/html/html5_video.asp -ov true
+./octoscraper -w http://www.w3schools.com/html/html5_video.asp -ov true -r true
 ```
 
 where 

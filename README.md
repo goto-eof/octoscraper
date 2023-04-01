@@ -33,11 +33,11 @@ where
  | -w       |website - with http/https                     |  http://dodu.it or http://audiomidimania.com or http://wallpaper.mob.org|
  | -sd      |same domain                                                         |  true|
  |   -oi    | enable image extractor                                            | true |
- |   -ov    |(WIP)  enable video extractor                                            | true |
- |   -oa    |(WIP)  enable audio extractor                                            | true |
+ |   -ov    | enable video extractor                                            | true |
+ |   -oa    |  enable audio extractor                                            | true |
  |   -ei	|list of image extensions separated by comma                        | .jpg,.JPG,.png,.PNG |
- |   -ev	|(WIP) list of video extensions separated by comma                       | .ogg,.OGG,.MP4,.mp4 |
- |   -ea	|(WIP) list of audio extensions separated by comma                      | .mp3,.MP3,.midi,.MIDI |
+ |   -ev	| list of video extensions separated by comma                       | .ogg,.OGG,.MP4,.mp4 |
+ |   -ea	| list of audio extensions separated by comma                      | .mp3,.MP3,.midi,.MIDI |
  | -d       |directory where files will be saved                                 | Images|
  | -s       |sleep time in millis before making the request                      | 1000|
  | -t       |download timeout                                                    | 90000|

@@ -1,6 +1,6 @@
-use crate::service::{
-    link_service::{add_base_url_if_not_present, add_http_if_not_present},
-    validation_service::{contains_extension, is_same_domain_ext},
+use crate::util::{
+    link_util::{add_base_url_if_not_present, add_http_if_not_present},
+    validation_util::{contains_extension, is_same_domain_ext},
 };
 use select::{document::Document, predicate::Name};
 

@@ -6,15 +6,14 @@ use super::{
             link_extractor_service::LinkExtractor, resource_extractor::ResourceExtractor,
         },
     },
-    link_service::link_normalizer_add_http,
 };
 use crate::{
-    service::{
-        file_service::{file_delete, file_rename},
-        link_service::extract_fname_from_link,
-    },
     structure::{
         config_struct::Config, processed_hash_struct::ProcessedHash, processed_struct::Processed,
+    },
+    util::{
+        file_util::{file_delete, file_rename},
+        link_util::{extract_fname_from_link, link_normalizer_add_http},
     },
 };
 use std::collections::HashSet;

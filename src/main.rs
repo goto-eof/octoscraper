@@ -2,14 +2,15 @@ use service::default_settings::load_default_settings;
 use std::collections::{HashMap, HashSet};
 use std::env;
 
-use crate::service::file_service::initialize_download_directory;
 use crate::service::page_processor_service::extract_links_and_process_data;
 use crate::structure::config_struct::Config;
 use crate::structure::processed_hash_struct::ProcessedHash;
 use crate::structure::processed_struct::Processed;
+use crate::util::file_util::initialize_download_directory;
 
 mod service;
 mod structure;
+mod util;
 
 const ARGUMENT_HELP: &str = "-h";
 const ARGUMENT_WEBSITE: &str = "-w";
@@ -53,12 +54,11 @@ async fn main() {
     if update_config_with_argument_values(&mut config) == Flow::EXIT {
         return;
     }
-    let mut website = config.website.clone();
     let mut processing: HashSet<String> = HashSet::new();
     let mut processed: HashSet<String> = HashSet::new();
     let mut processed_resources: Processed = Processed::new();
     let mut processed_resources_hash: ProcessedHash = ProcessedHash::new(config.hash_check);
-    processing.insert(website.to_string());
+    processing.insert(config.website.to_string());
     println!(
         "initializing download directory [./{}]...",
         config.resources_directory

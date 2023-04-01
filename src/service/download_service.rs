@@ -1,5 +1,4 @@
-use super::file_service::generate_file_name;
-use crate::structure;
+use crate::{structure, util::file_util::generate_file_name};
 use std::{
     cmp::min,
     fs::File,

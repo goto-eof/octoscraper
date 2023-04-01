@@ -1,8 +1,11 @@
-use crate::service::link_service::{
-    add_base_url_if_not_present, add_http_if_not_present, normalize_link_replace_spaces,
-};
-use crate::service::validation_service::is_same_domain_ext;
 use select::{document::Document, predicate::Name};
+
+use crate::util::{
+    link_util::{
+        add_base_url_if_not_present, add_http_if_not_present, normalize_link_replace_spaces,
+    },
+    validation_util::is_same_domain_ext,
+};
 
 use super::resource_extractor::ResourceExtractor;
 

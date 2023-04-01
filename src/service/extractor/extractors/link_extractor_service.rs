@@ -20,7 +20,7 @@ impl ResourceExtractor for LinkExtractor {
     }
 
     fn get_name(&self) -> String {
-        return "link-extractor".to_string();
+        return LinkExtractor::EXTRACTOR_NAME.to_string();
     }
 
     fn extract(&self, resource_str: &str) -> Vec<String> {
@@ -44,6 +44,10 @@ impl ResourceExtractor for LinkExtractor {
         }
         return vec![];
     }
+}
+
+impl LinkExtractor {
+    pub const EXTRACTOR_NAME: &str = "link-extractor";
 }
 
 pub fn is_document_html_file(document: &Document) -> bool {

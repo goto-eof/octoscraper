@@ -14,7 +14,7 @@ impl ResourceExtractor for OtherFileExtractor {
     }
 
     fn get_name(&self) -> String {
-        return "other-extractor".to_string();
+        return OtherFileExtractor::EXTRACTOR_NAME.to_string();
     }
 
     fn extract(&self, resource_str: &str) -> Vec<String> {
@@ -31,6 +31,8 @@ impl ResourceExtractor for OtherFileExtractor {
 }
 
 impl OtherFileExtractor {
+    pub const EXTRACTOR_NAME: &str = "other-link-extractor";
+
     fn strategy_a(&self, resource_str: &str) -> Vec<String> {
         return strategy_a_common_extractor(
             resource_str,

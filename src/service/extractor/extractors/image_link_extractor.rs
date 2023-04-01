@@ -20,7 +20,7 @@ impl ResourceExtractor for ImageExtractor {
     }
 
     fn get_name(&self) -> String {
-        return "image-extractor".to_string();
+        return ImageExtractor::EXTRACTOR_NAME.to_string();
     }
 
     fn extract(&self, resource_str: &str) -> Vec<String> {
@@ -40,6 +40,8 @@ impl ResourceExtractor for ImageExtractor {
 }
 
 impl ImageExtractor {
+    pub const EXTRACTOR_NAME: &str = "image-link-extractor";
+
     fn strategy_a(&self, resource_str: &str) -> Vec<String> {
         return strategy_a_common_extractor(
             resource_str,

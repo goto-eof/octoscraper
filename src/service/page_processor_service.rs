@@ -3,7 +3,9 @@ use super::{
     extractor::{
         extractor_service::{retrieve_extractors, ExtractorType},
         extractors::{
-            link_extractor_service::LinkExtractor, resource_extractor::ResourceExtractor,
+            audio_link_extractor::AudioExtractor, image_link_extractor::ImageExtractor,
+            link_extractor_service::LinkExtractor, other_link_extractor::OtherFileExtractor,
+            resource_extractor::ResourceExtractor, video_link_extractor::VideoExtractor,
         },
     },
 };
@@ -172,10 +174,10 @@ async fn download_all(
 
 fn retrieve_size_for_file_type(extractor_type: &str, config: &Config) -> u64 {
     match extractor_type {
-        "image-extractor" => config.image_extractor_minimum_size,
-        "audio-extractor" => config.audio_extractor_minimum_size,
-        "video-extractor" => config.video_extractor_minimum_size,
-        "other-extractor" => config.other_file_extractor_minimum_size,
+        ImageExtractor::EXTRACTOR_NAME => config.image_extractor_minimum_size,
+        AudioExtractor::EXTRACTOR_NAME => config.audio_extractor_minimum_size,
+        VideoExtractor::EXTRACTOR_NAME => config.video_extractor_minimum_size,
+        OtherFileExtractor::EXTRACTOR_NAME => config.other_file_extractor_minimum_size,
         _ => u64::MAX,
     }
 }

@@ -22,7 +22,7 @@ impl ResourceExtractor for AudioExtractor {
     }
 
     fn get_name(&self) -> String {
-        return "audio-extractor".to_string();
+        return AudioExtractor::EXTRACTOR_NAME.to_string();
     }
 
     fn extract(&self, resource_str: &str) -> Vec<String> {
@@ -42,6 +42,8 @@ impl ResourceExtractor for AudioExtractor {
 }
 
 impl AudioExtractor {
+    pub const EXTRACTOR_NAME: &str = "audio-link-extractor";
+
     fn strategy_a(&self, resource_str: &str) -> Vec<String> {
         return strategy_a_common_extractor(
             resource_str,

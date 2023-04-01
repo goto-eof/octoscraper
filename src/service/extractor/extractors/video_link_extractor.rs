@@ -24,7 +24,7 @@ impl ResourceExtractor for VideoExtractor {
     }
 
     fn get_name(&self) -> String {
-        return "video-extractor".to_string();
+        return VideoExtractor::EXTRACTOR_NAME.to_string();
     }
 
     fn extract(&self, resource_str: &str) -> Vec<String> {
@@ -44,6 +44,8 @@ impl ResourceExtractor for VideoExtractor {
 }
 
 impl VideoExtractor {
+    pub const EXTRACTOR_NAME: &str = "video-link-extractor";
+
     fn strategy_a(&self, resource_str: &str) -> Vec<String> {
         return strategy_a_common_extractor(
             resource_str,

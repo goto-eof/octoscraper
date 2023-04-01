@@ -86,7 +86,7 @@ cargo test
 
 
 ### Screenshot
-![image](https://user-images.githubusercontent.com/6343630/228950041-c8621873-7757-4c68-953b-7a0fbe4b9389.png)
+![image](https://user-images.githubusercontent.com/6343630/229301705-de5ac86a-d44e-4e8b-99eb-99e30bc17296.png)
 
 
 

@@ -1,7 +1,9 @@
 use crate::structure::application_settings::ApplicationSettings;
 use crate::structure::config_struct::Config;
 use rand::{distributions::Uniform, prelude::Distribution};
+use sha2::{Digest, Sha256};
 use std::ffi::OsStr;
+use std::io;
 use std::{fs, path::Path};
 
 pub fn initialize_download_directory(config: &Config) -> () {
@@ -61,4 +63,22 @@ pub fn extract_filename_prefix(filename: &str) -> String {
         .to_str()
         .unwrap()
         .to_owned()
+}
+
+pub fn file_already_exists_with_same_hash(ready_file: &str, processing_file: &str) -> bool {
+    return std::path::Path::new(&ready_file).exists()
+        && calculate_file_hash(ready_file).eq(&calculate_file_hash(processing_file));
+}
+
+pub fn calculate_file_hash(path_and_fname: &str) -> String {
+    let mut file = fs::File::open(&path_and_fname).unwrap();
+    let mut hasher = Sha256::new();
+    io::copy(&mut file, &mut hasher).unwrap();
+    let hash = hasher.finalize();
+    let result = hex::encode(hash);
+    return result;
+}
+
+pub fn calculate_file_path(config: &Config, fname: &str) -> String {
+    format!("{}/{}", config.resources_directory, fname)
 }

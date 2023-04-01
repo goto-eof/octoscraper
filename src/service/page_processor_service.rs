@@ -15,7 +15,10 @@ use crate::{
         processed_hash_struct::ProcessedHash, processed_struct::Processed,
     },
     util::{
-        file_util::{file_delete, file_len_less_than, file_rename},
+        file_util::{
+            calculate_file_path, file_already_exists_with_same_hash, file_delete,
+            file_len_less_than, file_rename,
+        },
         link_util::{add_base_url_if_not_present, extract_fname_from_link},
     },
 };
@@ -140,12 +143,21 @@ async fn download_all(
                     processed_resources.push(&handler_link);
                     if processed_resources_hash.was_already_processed(&handler_file) {
                         file_delete(&handler_file);
-                        println!("HFile discarder because we have already another file with the same hash. Details: {}", handler_link)
+                        println!("File discarder because we have already another file with the same hash. Details: {}", handler_link)
                     } else if file_len_less_than(&handler_file, acceptable_size) {
                         file_delete(&handler_file);
                         println!(
                             "File discarded because it's length is less than expected ({}). Details: {}",
                             acceptable_size,
+                            handler_link
+                        )
+                    } else if file_already_exists_with_same_hash(
+                        &calculate_file_path(config, &extract_fname_from_link(&handler_link, None)),
+                        &handler_file,
+                    ) {
+                        file_delete(&handler_file);
+                        println!(
+                            "File discarded because it already exists. Details: {}",
                             handler_link
                         )
                     } else {

@@ -2,6 +2,8 @@ use sha2::{Digest, Sha256};
 use std::collections::HashSet;
 use std::{fs, io};
 
+use crate::util::file_util::calculate_file_hash;
+
 pub struct ProcessedHash {
     processed_resources: HashSet<String>,
     enabled: bool,
@@ -32,11 +34,6 @@ impl ProcessedHash {
     }
 
     fn calculate_hash(path: &str) -> String {
-        let mut file = fs::File::open(&path).unwrap();
-        let mut hasher = Sha256::new();
-        io::copy(&mut file, &mut hasher).unwrap();
-        let hash = hasher.finalize();
-        let result = hex::encode(hash);
-        return result;
+        calculate_file_hash(path)
     }
 }

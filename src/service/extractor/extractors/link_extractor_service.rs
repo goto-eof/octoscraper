@@ -42,12 +42,6 @@ impl ResourceExtractor for LinkExtractor {
     }
 }
 
-pub fn is_html_file(resource_str: &str) -> bool {
-    let document = Document::from(resource_str);
-    let is_html: Vec<Node> = document.find(Name("html")).collect();
-    return is_html.len() == 1;
-}
-
 pub fn is_document_html_file(document: &Document) -> bool {
     let is_html: Vec<Node> = document.find(Name("html")).collect();
     return is_html.len() == 1;

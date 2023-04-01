@@ -12,7 +12,7 @@ OctoScraper is a multithread web scraper tool implemented in Rust.
 ### Execute it
 Download the executable from [here](https://github.com/goto-eof/octoscraper/releases) and run it.
 ```
-./octoscraper -w dodu.it -e .png,.PNG -d DIRECTORY_NAME -s 100 -t 90000 -i true -l 3 -a OctoScraper
+./octoscraper -w http://dodu.it -e .png,.PNG -d DIRECTORY_NAME -s 100 -t 90000 -i true -l 3 -a OctoScraper
 ```
 
 ### Examples

@@ -178,6 +178,6 @@ fn retrieve_size_for_file_type(extractor_type: &str, config: &Config) -> u64 {
         AudioLinkExtractor::EXTRACTOR_NAME => config.audio_extractor_minimum_size,
         VideoLinkExtractor::EXTRACTOR_NAME => config.video_extractor_minimum_size,
         OtherFileLinkExtractor::EXTRACTOR_NAME => config.other_file_extractor_minimum_size,
-        _ => u64::MAX,
+        _ => u64::MIN,
     }
 }

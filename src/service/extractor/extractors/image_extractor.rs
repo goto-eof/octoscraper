@@ -4,7 +4,7 @@ use crate::util::{
 };
 use select::{document::Document, predicate::Name};
 
-use super::resource_extractor::ResourceExtractor;
+use super::resource_extractor::{strategy_a_common_extractor, ResourceExtractor};
 
 pub struct ImageExtractor {
     pub enabled: bool,
@@ -25,6 +25,9 @@ impl ResourceExtractor for ImageExtractor {
             self.strategy_a(resource_str)
                 .iter()
                 .for_each(|elem| links.push(elem.to_string()));
+            self.strategy_b(resource_str)
+                .iter()
+                .for_each(|elem| links.push(elem.to_string()));
         }
 
         return links;
@@ -33,6 +36,15 @@ impl ResourceExtractor for ImageExtractor {
 
 impl ImageExtractor {
     fn strategy_a(&self, resource_str: &str) -> Vec<String> {
+        return strategy_a_common_extractor(
+            resource_str,
+            self.extensions.clone(),
+            &self.domain,
+            self.is_same_domain_enabled,
+        );
+    }
+
+    fn strategy_b(&self, resource_str: &str) -> Vec<String> {
         return Document::from(resource_str)
             .find(Name("img"))
             .filter_map(|n| n.attr("src"))

@@ -1,14 +1,12 @@
-use select::{
-    document::Document,
-    predicate::{self, Name, Predicate},
-};
-
+use super::resource_extractor::{strategy_a_common_extractor, ResourceExtractor};
 use crate::util::{
     link_util::{add_base_url_if_not_present, normalize_link_replace_spaces},
     validation_util::is_same_domain_ext,
 };
-
-use super::resource_extractor::ResourceExtractor;
+use select::{
+    document::Document,
+    predicate::{self, Predicate},
+};
 
 pub struct AudioExtractor {
     pub enabled: bool,
@@ -40,22 +38,12 @@ impl ResourceExtractor for AudioExtractor {
 
 impl AudioExtractor {
     fn strategy_a(&self, resource_str: &str) -> Vec<String> {
-        return Document::from(resource_str)
-            .find(Name("a"))
-            .filter_map(|n| n.attr("href"))
-            .map(|item| item.to_string())
-            .filter(|link| {
-                for extension in self.extensions.iter() {
-                    if link.ends_with(extension) {
-                        return true;
-                    }
-                }
-                return false;
-            })
-            .map(|link| add_base_url_if_not_present(&link, &self.domain))
-            .filter_map(|link| normalize_link_replace_spaces(&link))
-            .filter_map(|link| is_same_domain_ext(self.is_same_domain_enabled, &self.domain, &link))
-            .collect();
+        return strategy_a_common_extractor(
+            resource_str,
+            self.extensions.clone(),
+            &self.domain,
+            self.is_same_domain_enabled,
+        );
     }
 
     fn strategy_b(&self, resource_str: &str) -> Vec<String> {

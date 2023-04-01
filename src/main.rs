@@ -322,7 +322,7 @@ fn print_help() {
     check_and_insert(
         &mut help_map,
         ARGUMENT_WEBSITE,
-        "website - without http and www prefix",
+        "website - with http/https prefix",
     );
 
     check_and_insert(

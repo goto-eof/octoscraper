@@ -80,11 +80,16 @@ async fn main() {
         "initializing download directory [./{}]...",
         config.resources_directory
     );
-    initialize_download_directory(&config);
+    initialize_download_directory(&config, &application_settings);
     while processing.len() > 0 {
         let link = processing.clone();
         let link = link.iter().next().unwrap();
-        println!("\nprocessing: {}", link);
+        println!(
+            "\n--------------[ processing ]--------------------
+            \n {}
+            \n",
+            link
+        );
         processing.remove(link.as_str());
         let result = extract_links_and_process_data(
             &application_settings,
@@ -103,7 +108,7 @@ async fn main() {
             println!("ERROR: {}", exit_message);
         }
     }
-    println!("{} processd.\nExiting from applciation.", config.website);
+    println!("{} processd.\nExiting from application.", config.website);
 }
 
 fn update_config_with_argument_values(config: &mut Config) -> Flow {

@@ -6,10 +6,21 @@ use std::ffi::OsStr;
 use std::io;
 use std::{fs, path::Path};
 
-pub fn initialize_download_directory(config: &Config) -> () {
+pub fn initialize_download_directory(config: &Config, app_settings: &ApplicationSettings) -> () {
     let resources_directory = format!("./{}", config.resources_directory);
     if !Path::new(&resources_directory).is_dir() {
         fs::create_dir(&resources_directory).unwrap();
+    } else {
+        println!("cleaning directory from old octoscraper's temporary files...");
+        fs::read_dir(resources_directory)
+            .unwrap()
+            .for_each(|entry| {
+                let path = entry.unwrap().path().to_str().unwrap().to_owned();
+                if path.ends_with(format!(".{}", app_settings.file_extension).as_str()) {
+                    file_delete(&path);
+                }
+            });
+        println!("done!");
     }
 }
 

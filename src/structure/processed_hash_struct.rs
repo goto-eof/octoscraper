@@ -1,6 +1,4 @@
-use sha2::{Digest, Sha256};
 use std::collections::HashSet;
-use std::{fs, io};
 
 use crate::util::file_util::calculate_file_hash;
 

@@ -1,5 +1,5 @@
 use config_file::FromConfigFile;
-use std::collections::{BTreeMap, HashMap, HashSet};
+use std::collections::{HashMap, HashSet};
 use std::env;
 use util::settings_util::load_default_settings;
 
@@ -312,7 +312,7 @@ fn update_config_with_argument_values(config: &mut Config) -> Flow {
 fn check_and_insert(map: &mut Vec<(String, String)>, key: &str, value: &str) {
     let duplicates: Vec<(String, String)> = map
         .iter()
-        .filter(|(vec_key, vec_value)| vec_key.eq(key))
+        .filter(|(vec_key, _)| vec_key.eq(key))
         .map(|item| item.to_owned())
         .collect();
     if duplicates.len() != 0 {
@@ -454,4 +454,17 @@ fn print_help() {
 enum Flow {
     CONTINUE,
     EXIT,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    #[should_panic]
+    fn strategy_b_test_extract_from_video_tag() {
+        let mut map: Vec<(String, String)> = Vec::new();
+        check_and_insert(&mut map, "-ad", "value 1");
+        check_and_insert(&mut map, "-ad", "value 2");
+    }
 }

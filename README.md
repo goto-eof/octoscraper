@@ -60,6 +60,12 @@ Download image files, no same domain
 ```
 cargo run -- -w https://wallpaper.mob.org/ -oi true -sd false
 ```
+Download video
+```
+cargo run -- -w http://www.w3schools.com/html/html5_video.asp -ov true
+```
+
+
 ### Tests
 ```
 cargo test

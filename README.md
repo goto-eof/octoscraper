@@ -7,7 +7,7 @@
                                            |_|              
 ```    
 ### Description
-OctoScraper is a multithread web scraper tool implemented in Rust. Currenlty it clones only images and audio files from websites.
+OctoScraper is a multithread web scraper tool implemented in Rust.
 
 ### Execute it
 Download the executable from [here](https://github.com/goto-eof/octoscraper/releases) and run it.

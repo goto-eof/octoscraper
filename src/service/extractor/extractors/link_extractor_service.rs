@@ -1,9 +1,7 @@
 use select::{document::Document, predicate::Name};
 
 use crate::util::{
-    link_util::{
-        add_base_url_if_not_present, add_http_if_not_present, normalize_link_replace_spaces,
-    },
+    link_util::{add_base_url_if_not_present, normalize_link_replace_spaces},
     validation_util::is_same_domain_ext,
 };
 
@@ -27,7 +25,6 @@ impl ResourceExtractor for LinkExtractor {
                     .find(Name("a"))
                     .filter_map(|n| n.attr("href"))
                     .map(|item| item.to_string())
-                    .map(|link| add_http_if_not_present(link))
                     .map(|link| add_base_url_if_not_present(&link, &self.domain))
                     .filter_map(|link| {
                         is_same_domain_ext(self.is_same_domain_enabled, &self.domain, &link)

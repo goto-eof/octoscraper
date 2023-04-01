@@ -14,7 +14,7 @@ pub struct AudioExtractor {
     pub is_same_domain_enabled: bool,
     pub domain: String,
 }
-// TODO
+
 impl ResourceExtractor for AudioExtractor {
     fn enabled(&mut self, enabled: bool) {
         self.enabled = enabled;

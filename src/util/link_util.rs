@@ -40,6 +40,13 @@ pub fn add_base_url_if_not_present(link: &str, domain: &str) -> String {
         && !link.contains("http://")
         && !link.contains("https://")
     {
+        if link.starts_with("//") {
+            // substring
+            link = link[2..link.len()].to_string();
+            link = format!("{}/{}", "http://", link);
+            return link.to_owned();
+        }
+
         if link.starts_with("/") {
             // substring
             link = link[1..link.len()].to_string();
@@ -69,11 +76,14 @@ pub fn get_domain_base_url_string(domain: &str) -> String {
 }
 
 pub fn add_http_if_not_present(link: String) -> String {
-    if !link.starts_with("//") && !link.starts_with("http://") && !link.starts_with("https://") {
-        return format!("http://{}", link);
-    }
-    if link.starts_with("//") && !link.starts_with("http:") && !link.starts_with("https:") {
-        return format!("http:{}", link);
+    if !link.starts_with("javascript") {
+        if !link.starts_with("//") && !link.starts_with("http://") && !link.starts_with("https://")
+        {
+            return format!("http://{}", link);
+        }
+        if link.starts_with("//") && !link.starts_with("http:") && !link.starts_with("https:") {
+            return format!("http:{}", link);
+        }
     }
     return link;
 }

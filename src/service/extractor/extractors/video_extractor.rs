@@ -17,7 +17,6 @@ pub struct VideoExtractor {
     pub domain: String,
 }
 
-// TODO
 impl ResourceExtractor for VideoExtractor {
     fn enabled(&mut self, enabled: bool) {
         self.enabled = enabled;

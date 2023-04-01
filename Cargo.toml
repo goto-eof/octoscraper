@@ -2,7 +2,7 @@
 name = "octoscraper"
 description = "A web scraper tool"
 license = "MIT"
-version = "0.4.2"
+version = "0.4.3"
 edition = "2021"
 authors=["Andrei Dodu"]
 

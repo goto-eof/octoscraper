@@ -103,6 +103,7 @@ async fn main() {
             println!("ERROR: {}", exit_message);
         }
     }
+    println!("{} processd.\nExiting from applciation.", config.website);
 }
 
 fn update_config_with_argument_values(config: &mut Config) -> Flow {

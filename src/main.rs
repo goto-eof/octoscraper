@@ -1,8 +1,10 @@
+use config_file::FromConfigFile;
 use std::collections::{HashMap, HashSet};
 use std::env;
 use util::settings_util::load_default_settings;
 
 use crate::service::page_processor_service::extract_links_and_process_data;
+use crate::structure::application_settings::ApplicationSettings;
 use crate::structure::config_struct::Config;
 use crate::structure::processed_hash_struct::ProcessedHash;
 use crate::structure::processed_struct::Processed;
@@ -48,7 +50,8 @@ async fn main() {
         VERSION.unwrap()
     );
     println!("====================================================================");
-
+    let application_settings =
+        ApplicationSettings::from_config_file("configuration/configuration.json").unwrap();
     let mut config: Config = load_default_settings();
 
     if update_config_with_argument_values(&mut config) == Flow::EXIT {
@@ -70,6 +73,7 @@ async fn main() {
         println!("\nprocessing: {}", link);
         processing.remove(link.as_str());
         let result = extract_links_and_process_data(
+            &application_settings,
             link,
             &config,
             &mut processing,

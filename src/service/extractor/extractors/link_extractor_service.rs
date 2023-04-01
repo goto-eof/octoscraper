@@ -20,7 +20,7 @@ impl ResourceExtractor for LinkExtractor {
 
     fn extract(&self, resource_str: &str) -> Vec<String> {
         if self.enabled {
-            if resource_str.contains("<html") {
+            if resource_str.contains("<html") || resource_str.contains("<HTML") {
                 return Document::from(resource_str)
                     .find(Name("a"))
                     .filter_map(|n| n.attr("href"))

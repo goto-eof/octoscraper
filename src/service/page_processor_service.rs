@@ -9,7 +9,8 @@ use super::{
 };
 use crate::{
     structure::{
-        config_struct::Config, processed_hash_struct::ProcessedHash, processed_struct::Processed,
+        application_settings::ApplicationSettings, config_struct::Config,
+        processed_hash_struct::ProcessedHash, processed_struct::Processed,
     },
     util::{
         file_util::{file_delete, file_rename},
@@ -19,6 +20,7 @@ use crate::{
 use std::collections::HashSet;
 
 pub async fn extract_links_and_process_data(
+    application_settings: &ApplicationSettings,
     link: &str,
     config: &Config,
     processing: &mut HashSet<String>,
@@ -58,6 +60,7 @@ pub async fn extract_links_and_process_data(
 
         loop {
             resources_links = download_all(
+                application_settings,
                 resources_links,
                 config,
                 processed_resources,
@@ -89,6 +92,7 @@ pub async fn extract_links_and_process_data(
 }
 
 async fn download_all(
+    application_settings: &ApplicationSettings,
     resources_links: Vec<String>,
     config: &Config,
     processed_resources: &mut Processed,
@@ -100,7 +104,7 @@ async fn download_all(
     for resource_link in resources_links.iter() {
         if !processed_resources.was_already_processed(&resource_link) {
             println!("downloading: {}...", resource_link);
-            handlers.push(download(resource_link, &config).await);
+            handlers.push(download(application_settings, resource_link, &config).await);
             i = i + 1;
             if i >= limit {
                 break;

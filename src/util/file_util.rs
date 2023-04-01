@@ -1,3 +1,4 @@
+use crate::structure::application_settings::ApplicationSettings;
 use crate::structure::config_struct::Config;
 use rand::{distributions::Uniform, prelude::Distribution};
 use std::ffi::OsStr;
@@ -10,11 +11,14 @@ pub fn initialize_download_directory(config: &Config) -> () {
     }
 }
 
-pub fn generate_file_name(extension_opt: Option<String>) -> String {
+pub fn generate_file_name(
+    application_settings: &ApplicationSettings,
+    extension_opt: Option<String>,
+) -> String {
     let mut rng = rand::thread_rng();
     let die = Uniform::from(1..10000000);
     let rndd = die.sample(&mut rng);
-    let mut extension = "os".to_owned();
+    let mut extension = application_settings.file_extension.to_owned();
     if extension_opt.is_some() {
         extension = extension_opt.unwrap();
     }

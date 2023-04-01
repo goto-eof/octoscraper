@@ -1,4 +1,7 @@
-use crate::{structure, util::file_util::generate_file_name};
+use crate::{
+    structure::{self, application_settings::ApplicationSettings},
+    util::file_util::generate_file_name,
+};
 use std::{
     cmp::min,
     fs::File,
@@ -10,7 +13,11 @@ use std::{
 use structure::config_struct::Config;
 use tokio::{spawn, task::JoinHandle};
 
-pub async fn download(link: &str, config: &Config) -> Option<JoinHandle<(String, bool, String)>> {
+pub async fn download(
+    application_settings: &ApplicationSettings,
+    link: &str,
+    config: &Config,
+) -> Option<JoinHandle<(String, bool, String)>> {
     sleep(config);
     let image_file = retrieve_resource(config, link).await;
     if image_file.is_ok() {
@@ -22,10 +29,10 @@ pub async fn download(link: &str, config: &Config) -> Option<JoinHandle<(String,
         }
 
         let resources_directory = format!("./{}", config.resources_directory);
-        let mut file_name = generate_file_name(None);
+        let mut file_name = generate_file_name(application_settings, None);
         let mut full_path = format!("{}/{}", &resources_directory, file_name);
         while Path::exists(Path::new(&full_path)) {
-            file_name = generate_file_name(None);
+            file_name = generate_file_name(application_settings, None);
             full_path = format!("{}/{}", &resources_directory, file_name);
         }
 

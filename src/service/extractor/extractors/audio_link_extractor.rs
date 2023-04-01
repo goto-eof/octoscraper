@@ -8,7 +8,7 @@ use select::{
     predicate::{self, Predicate},
 };
 
-pub struct AudioExtractor {
+pub struct AudioLinkExtractor {
     pub enabled: bool,
     pub extensions: Vec<String>,
     pub is_same_domain_enabled: bool,
@@ -16,13 +16,13 @@ pub struct AudioExtractor {
     pub processing_page_link: String,
 }
 
-impl ResourceExtractor for AudioExtractor {
+impl ResourceExtractor for AudioLinkExtractor {
     fn enabled(&mut self, enabled: bool) {
         self.enabled = enabled;
     }
 
     fn get_name(&self) -> String {
-        return AudioExtractor::EXTRACTOR_NAME.to_string();
+        return AudioLinkExtractor::EXTRACTOR_NAME.to_string();
     }
 
     fn extract(&self, resource_str: &str) -> Vec<String> {
@@ -41,7 +41,7 @@ impl ResourceExtractor for AudioExtractor {
     }
 }
 
-impl AudioExtractor {
+impl AudioLinkExtractor {
     pub const EXTRACTOR_NAME: &str = "audio-link-extractor";
 
     fn strategy_a(&self, resource_str: &str) -> Vec<String> {
@@ -84,7 +84,7 @@ mod tests {
 
     #[test]
     fn strategy_b_test_extract_from_audio_tag() {
-        let audio_extractor = AudioExtractor {
+        let audio_extractor = AudioLinkExtractor {
             domain: "http://dodu.it".to_owned(),
             enabled: true,
             extensions: vec![".ogg".to_owned(), ".mp3".to_owned(), ".mid".to_owned()],

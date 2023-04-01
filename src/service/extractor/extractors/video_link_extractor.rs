@@ -10,7 +10,7 @@ use crate::util::{
 
 use super::resource_extractor::{strategy_a_common_extractor, ResourceExtractor};
 
-pub struct VideoExtractor {
+pub struct VideoLinkExtractor {
     pub enabled: bool,
     pub extensions: Vec<String>,
     pub is_same_domain_enabled: bool,
@@ -18,13 +18,13 @@ pub struct VideoExtractor {
     pub processing_page_link: String,
 }
 
-impl ResourceExtractor for VideoExtractor {
+impl ResourceExtractor for VideoLinkExtractor {
     fn enabled(&mut self, enabled: bool) {
         self.enabled = enabled;
     }
 
     fn get_name(&self) -> String {
-        return VideoExtractor::EXTRACTOR_NAME.to_string();
+        return VideoLinkExtractor::EXTRACTOR_NAME.to_string();
     }
 
     fn extract(&self, resource_str: &str) -> Vec<String> {
@@ -43,7 +43,7 @@ impl ResourceExtractor for VideoExtractor {
     }
 }
 
-impl VideoExtractor {
+impl VideoLinkExtractor {
     pub const EXTRACTOR_NAME: &str = "video-link-extractor";
 
     fn strategy_a(&self, resource_str: &str) -> Vec<String> {
@@ -78,7 +78,7 @@ mod tests {
 
     #[test]
     fn strategy_b_test_extract_from_video_tag() {
-        let audio_extractor = VideoExtractor {
+        let audio_extractor = VideoLinkExtractor {
             domain: "http://dodu.it".to_owned(),
             enabled: true,
             extensions: vec![".mp4".to_owned(), ".ogg".to_owned(), "mpg".to_owned()],

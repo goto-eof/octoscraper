@@ -1,6 +1,6 @@
 use super::resource_extractor::{strategy_a_common_extractor, ResourceExtractor};
 
-pub struct OtherFileExtractor {
+pub struct OtherFileLinkExtractor {
     pub enabled: bool,
     pub extensions: Vec<String>,
     pub is_same_domain_enabled: bool,
@@ -8,13 +8,13 @@ pub struct OtherFileExtractor {
     pub processing_page_link: String,
 }
 
-impl ResourceExtractor for OtherFileExtractor {
+impl ResourceExtractor for OtherFileLinkExtractor {
     fn enabled(&mut self, enabled: bool) {
         self.enabled = enabled;
     }
 
     fn get_name(&self) -> String {
-        return OtherFileExtractor::EXTRACTOR_NAME.to_string();
+        return OtherFileLinkExtractor::EXTRACTOR_NAME.to_string();
     }
 
     fn extract(&self, resource_str: &str) -> Vec<String> {
@@ -30,7 +30,7 @@ impl ResourceExtractor for OtherFileExtractor {
     }
 }
 
-impl OtherFileExtractor {
+impl OtherFileLinkExtractor {
     pub const EXTRACTOR_NAME: &str = "other-link-extractor";
 
     fn strategy_a(&self, resource_str: &str) -> Vec<String> {

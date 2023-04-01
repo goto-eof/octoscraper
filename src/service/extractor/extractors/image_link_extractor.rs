@@ -6,7 +6,7 @@ use select::{document::Document, predicate::Name};
 
 use super::resource_extractor::{strategy_a_common_extractor, ResourceExtractor};
 
-pub struct ImageExtractor {
+pub struct ImageLinkExtractor {
     pub enabled: bool,
     pub extensions: Vec<String>,
     pub is_same_domain_enabled: bool,
@@ -14,13 +14,13 @@ pub struct ImageExtractor {
     pub processing_page_link: String,
 }
 
-impl ResourceExtractor for ImageExtractor {
+impl ResourceExtractor for ImageLinkExtractor {
     fn enabled(&mut self, enabled: bool) {
         self.enabled = enabled;
     }
 
     fn get_name(&self) -> String {
-        return ImageExtractor::EXTRACTOR_NAME.to_string();
+        return ImageLinkExtractor::EXTRACTOR_NAME.to_string();
     }
 
     fn extract(&self, resource_str: &str) -> Vec<String> {
@@ -39,7 +39,7 @@ impl ResourceExtractor for ImageExtractor {
     }
 }
 
-impl ImageExtractor {
+impl ImageLinkExtractor {
     pub const EXTRACTOR_NAME: &str = "image-link-extractor";
 
     fn strategy_a(&self, resource_str: &str) -> Vec<String> {
@@ -74,7 +74,7 @@ mod tests {
 
     #[test]
     fn strategy_b_tag_and_attribute_upper_case() {
-        let audio_extractor = ImageExtractor {
+        let audio_extractor = ImageLinkExtractor {
             domain: "http://dodu.it".to_owned(),
             enabled: true,
             extensions: vec![".png".to_owned()],
@@ -91,7 +91,7 @@ mod tests {
 
     #[test]
     fn strategy_b_test_tag_and_attribute_lower_case() {
-        let audio_extractor = ImageExtractor {
+        let audio_extractor = ImageLinkExtractor {
             domain: "http://dodu.it".to_owned(),
             enabled: true,
             extensions: vec![".png".to_owned()],
@@ -108,7 +108,7 @@ mod tests {
 
     #[test]
     fn strategy_b_test_domain_root() {
-        let audio_extractor = ImageExtractor {
+        let audio_extractor = ImageLinkExtractor {
             domain: "http://dodu.it".to_owned(),
             enabled: true,
             extensions: vec![".png".to_owned()],
@@ -125,7 +125,7 @@ mod tests {
 
     #[test]
     fn strategy_b_link_root_test() {
-        let audio_extractor = ImageExtractor {
+        let audio_extractor = ImageLinkExtractor {
             domain: "http://dodu.it".to_owned(),
             enabled: true,
             extensions: vec![".jpg".to_owned()],
@@ -145,7 +145,7 @@ mod tests {
 
     #[test]
     fn strategy_b_link_relative_test() {
-        let audio_extractor = ImageExtractor {
+        let audio_extractor = ImageLinkExtractor {
             domain: "http://dodu.it".to_owned(),
             enabled: true,
             extensions: vec![".jpg".to_owned()],
@@ -165,7 +165,7 @@ mod tests {
 
     #[test]
     fn strategy_b_link_relative_second_test() {
-        let audio_extractor = ImageExtractor {
+        let audio_extractor = ImageLinkExtractor {
             domain: "http://dodu.it".to_owned(),
             enabled: true,
             extensions: vec![".jpg".to_owned()],
@@ -185,7 +185,7 @@ mod tests {
 
     #[test]
     fn strategy_b_link_absolute_double_slash_test() {
-        let audio_extractor = ImageExtractor {
+        let audio_extractor = ImageLinkExtractor {
             domain: "http://dodu.it".to_owned(),
             enabled: true,
             extensions: vec![".jpg".to_owned()],

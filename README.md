@@ -47,7 +47,7 @@ where
  |   -ei	|list of image extensions separated by comma                        | .jpg,.JPG,.png,.PNG |
  |   -ev	| list of video extensions separated by comma                       | .ogg,.OGG,.MP4,.mp4 |
  |   -ea	| list of audio extensions separated by comma                      | .mp3,.MP3,.midi,.MIDI |
- |   -eo	| list of other file extensions separated by comma                      | .zip,.ZIP,.exe,.EXE |
+ |   -eo	| list of other file extensions separated by comma                      | .zip,.ZIP,.exe,.EXE,.pdf,.PDF |
  | -d       |directory where files will be saved                                 | Images|
  | -s       |sleep time in millis before making the request                      | 1000|
  | -t       |download timeout                                                    | 90000|

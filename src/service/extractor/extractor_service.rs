@@ -2,7 +2,8 @@ use crate::structure::config_struct::Config;
 
 use super::extractors::{
     audio_extractor::AudioExtractor, image_extractor::ImageExtractor,
-    resource_extractor::ResourceExtractor, video_extractor::VideoExtractor,
+    other_extractor::OtherFileExtractor, resource_extractor::ResourceExtractor,
+    video_extractor::VideoExtractor,
 };
 
 pub type ExtractorType = Box<dyn ResourceExtractor>;
@@ -23,6 +24,12 @@ pub fn retrieve_extractors(config: &Config) -> Vec<ExtractorType> {
     extractors.push(Box::new(AudioExtractor {
         enabled: config._is_audio_extractor_enabled,
         extensions: config._audio_extractor_extensions.to_owned(),
+        is_same_domain_enabled: config.processing_same_domain,
+        domain: config.website.clone(),
+    }));
+    extractors.push(Box::new(OtherFileExtractor {
+        enabled: config._is_other_extractor_enabled,
+        extensions: config._other_extractor_extensions.to_owned(),
         is_same_domain_enabled: config.processing_same_domain,
         domain: config.website.clone(),
     }));

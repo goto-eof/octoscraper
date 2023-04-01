@@ -19,4 +19,6 @@ pub struct Config {
     pub _video_extractor_extensions: Vec<String>,
     pub _is_audio_extractor_enabled: bool,
     pub _audio_extractor_extensions: Vec<String>,
+    pub _is_other_extractor_enabled: bool,
+    pub _other_extractor_extensions: Vec<String>,
 }

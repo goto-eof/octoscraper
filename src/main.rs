@@ -19,9 +19,11 @@ const ARGUMENT_WEBSITE: &str = "-w";
 const ARGUMENT_EXTENSIONS_IMAGE: &str = "-ei";
 const ARGUMENT_EXTENSIONS_VIDEO: &str = "-ev";
 const ARGUMENT_EXTENSIONS_AUDIO: &str = "-ea";
+const ARGUMENT_EXTENSIONS_OTHER_FILE: &str = "-eo";
 const ARGUMENT_ENABLE_IMAGE_EXTRACTOR: &str = "-oi";
 const ARGUMENT_ENABLE_VIDEO_EXTRACTOR: &str = "-ov";
 const ARGUMENT_ENABLE_AUDIO_EXTRACTOR: &str = "-oa";
+const ARGUMENT_ENABLE_OTHER_FILE_EXTRACTOR: &str = "-oo";
 const ARGUMENT_RESOURCE_DIRECTORY: &str = "-d";
 const ARGUMENT_SLEEP_TIME: &str = "-s";
 const ARGUMENT_RESOURCE_DOWNLOAD_TIMEOUT: &str = "-t";
@@ -181,6 +183,23 @@ fn update_config_with_argument_values(config: &mut Config) -> Flow {
         }
     }
 
+    if commands.get(ARGUMENT_ENABLE_OTHER_FILE_EXTRACTOR).is_some() {
+        config._is_other_extractor_enabled = commands
+            .get(ARGUMENT_ENABLE_OTHER_FILE_EXTRACTOR)
+            .unwrap()
+            .parse()
+            .unwrap();
+
+        if commands.get(ARGUMENT_EXTENSIONS_OTHER_FILE).is_some() {
+            config._other_extractor_extensions = commands
+                .get(ARGUMENT_EXTENSIONS_OTHER_FILE)
+                .unwrap()
+                .split(",")
+                .map(|str| str.to_owned())
+                .collect::<Vec<String>>();
+        }
+    }
+
     if commands.get(ARGUMENT_RESOURCE_DIRECTORY).is_some() {
         config.resources_directory = commands
             .get(ARGUMENT_RESOURCE_DIRECTORY)
@@ -235,6 +254,7 @@ fn update_config_with_argument_values(config: &mut Config) -> Flow {
     if !config._is_audio_extractor_enabled
         && !config._is_image_extractor_enabled
         && !config._is_video_extractor_enabled
+        && !config._is_other_extractor_enabled
     {
         println!("No job selected. Please select at least one job: image extraction, video extraction, audio extraction");
         return Flow::EXIT;
@@ -260,6 +280,10 @@ fn print_help() {
         ARGUMENT_ENABLE_AUDIO_EXTRACTOR
     );
     println!(
+        "{}   enable other file extractor",
+        ARGUMENT_ENABLE_OTHER_FILE_EXTRACTOR
+    );
+    println!(
         "{}	list of image extensions separated by comma",
         ARGUMENT_EXTENSIONS_IMAGE
     );
@@ -270,6 +294,10 @@ fn print_help() {
     println!(
         "{}	list of audio extensions separated by comma",
         ARGUMENT_EXTENSIONS_AUDIO
+    );
+    println!(
+        "{}	list of other file extensions separated by comma",
+        ARGUMENT_EXTENSIONS_OTHER_FILE
     );
     println!(
         "{}	directory where files will be saved",

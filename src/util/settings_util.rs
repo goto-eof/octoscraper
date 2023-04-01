@@ -40,5 +40,12 @@ pub fn load_default_settings() -> Config {
             ".mid".to_string(),
             ".MID".to_string(),
         ],
+        _is_other_extractor_enabled: false,
+        _other_extractor_extensions: vec![
+            ".exe".to_string(),
+            ".zip".to_string(),
+            ".gz".to_string(),
+            ".tar".to_string(),
+        ],
     };
 }

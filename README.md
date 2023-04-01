@@ -38,7 +38,7 @@ where
  | argument | meaning                                                            | value example                  |
  -----------|--------------------------------------------------------------------|--------------------------|
  | -h       |Help                                                                |
- | -w       |website - with http/https                     |  http://dodu.it or http://audiomidimania.com or http://wallpaper.mob.org|
+ | -w       |website - with http/https                     |  http://dodu.it or http://audiomidimania.com or http://wallpaper.mob.org or http://www.w3schools.com/html/html5_video.asp|
  | -sd      |same domain                                                         |  true|
  |   -oi    | enable image extractor                                            | true |
  |   -ov    | enable video extractor                                            | true |

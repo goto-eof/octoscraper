@@ -1,16 +1,13 @@
-use std::collections::HashSet;
-
-use select::{
-    document::Document,
-    predicate::{self, Predicate},
-};
-
+use super::resource_extractor::{strategy_a_common_extractor, ResourceExtractor};
 use crate::util::{
     link_util::{add_base_url_if_not_present, has_extension, normalize_link_replace_spaces},
     validation_util::is_same_domain_ext,
 };
-
-use super::resource_extractor::{strategy_a_common_extractor, ResourceExtractor};
+use select::{
+    document::Document,
+    predicate::{self, Predicate},
+};
+use std::collections::HashSet;
 
 pub struct VideoLinkExtractor {
     pub enabled: bool,

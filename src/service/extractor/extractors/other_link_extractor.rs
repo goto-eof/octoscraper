@@ -1,7 +1,5 @@
-use std::collections::HashSet;
-
 use super::resource_extractor::{strategy_a_common_extractor, ResourceExtractor};
-
+use std::collections::HashSet;
 pub struct OtherFileLinkExtractor {
     pub enabled: bool,
     pub extensions: Vec<String>,

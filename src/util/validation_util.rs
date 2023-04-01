@@ -1,6 +1,5 @@
-use reqwest::Url;
-
 use super::link_util::base_url;
+use reqwest::Url;
 
 pub fn is_same_domain_ext(enabled: bool, domain: &str, link: &str) -> Option<String> {
     if enabled {

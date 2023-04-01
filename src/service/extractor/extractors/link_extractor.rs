@@ -1,13 +1,10 @@
-use std::collections::HashSet;
-
-use select::{document::Document, node::Node, predicate::Name};
-
+use super::resource_extractor::ResourceExtractor;
 use crate::util::{
     link_util::{add_base_url_if_not_present, normalize_link_replace_spaces},
     validation_util::is_same_domain_ext,
 };
-
-use super::resource_extractor::ResourceExtractor;
+use select::{document::Document, node::Node, predicate::Name};
+use std::collections::HashSet;
 
 pub struct LinkExtractor {
     pub enabled: bool,

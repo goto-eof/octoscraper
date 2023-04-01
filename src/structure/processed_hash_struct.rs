@@ -1,6 +1,5 @@
-use std::collections::HashSet;
-
 use crate::util::file_util::calculate_file_hash;
+use std::collections::HashSet;
 
 pub struct ProcessedHash {
     processed_resources: HashSet<String>,

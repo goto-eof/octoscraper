@@ -1,5 +1,3 @@
-use std::collections::HashSet;
-
 use super::resource_extractor::{strategy_a_common_extractor, ResourceExtractor};
 use crate::util::link_util::has_extension;
 use crate::util::{
@@ -10,6 +8,7 @@ use select::{
     document::Document,
     predicate::{self, Predicate},
 };
+use std::collections::HashSet;
 
 pub struct AudioLinkExtractor {
     pub enabled: bool,

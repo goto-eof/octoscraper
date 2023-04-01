@@ -2,14 +2,7 @@ use crate::{
     structure::{self, application_settings::ApplicationSettings},
     util::file_util::generate_file_name,
 };
-use std::{
-    cmp::min,
-    fs::File,
-    io::Write,
-    path::Path,
-    thread::{self},
-    time,
-};
+use std::{cmp::min, fs::File, io::Write, path::Path, thread, time};
 use structure::config_struct::Config;
 use tokio::{spawn, task::JoinHandle};
 

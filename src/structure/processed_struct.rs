@@ -1,6 +1,5 @@
-use std::collections::HashSet;
-
 use reqwest::Url;
+use std::collections::HashSet;
 
 pub struct Processed {
     processed_resources: HashSet<String>,

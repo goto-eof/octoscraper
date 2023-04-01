@@ -1,11 +1,9 @@
-use std::collections::HashSet;
-
-use select::{document::Document, predicate::Name};
-
 use crate::util::{
     link_util::{add_base_url_if_not_present, has_extension, normalize_link_replace_spaces},
     validation_util::is_same_domain_ext,
 };
+use select::{document::Document, predicate::Name};
+use std::collections::HashSet;
 
 pub trait ResourceExtractor {
     fn enabled(&mut self, enabled: bool);

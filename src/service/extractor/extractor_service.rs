@@ -1,10 +1,9 @@
-use crate::structure::config_struct::Config;
-
 use super::extractors::{
     audio_link_extractor::AudioLinkExtractor, image_link_extractor::ImageLinkExtractor,
     other_link_extractor::OtherFileLinkExtractor, resource_extractor::ResourceExtractor,
     video_link_extractor::VideoLinkExtractor,
 };
+use crate::structure::config_struct::Config;
 
 pub type ExtractorType = Box<dyn ResourceExtractor>;
 pub fn retrieve_extractors(config: &Config, processing_page_link: &str) -> Vec<ExtractorType> {

@@ -1,5 +1,5 @@
 use crate::util::{
-    link_util::{add_base_url_if_not_present, add_http_if_not_present},
+    link_util::add_base_url_if_not_present,
     validation_util::{contains_extension, is_same_domain_ext},
 };
 use select::{document::Document, predicate::Name};
@@ -49,7 +49,6 @@ impl ImageExtractor {
             .find(Name("img"))
             .filter_map(|n| n.attr("src"))
             .map(|item| item.to_string())
-            .map(|link| add_http_if_not_present(link))
             .map(|link| add_base_url_if_not_present(&link, &self.domain))
             .filter_map(|link| {
                 is_same_domain_ext(self.is_same_domain_enabled, self.domain.as_str(), &link)

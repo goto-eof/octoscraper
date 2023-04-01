@@ -72,19 +72,6 @@ pub fn get_domain_base_url_string(domain: &str) -> String {
     base_url
 }
 
-pub fn add_http_if_not_present(link: String) -> String {
-    if !link.starts_with("javascript") {
-        if !link.starts_with("//") && !link.starts_with("http://") && !link.starts_with("https://")
-        {
-            return format!("http://{}", link);
-        }
-        if link.starts_with("//") && !link.starts_with("http:") && !link.starts_with("https:") {
-            return format!("http:{}", link);
-        }
-    }
-    return link;
-}
-
 pub fn has_extension(link: &str, extensions: Vec<String>) -> Option<String> {
     for extension in extensions.iter() {
         if link.ends_with(extension) {
@@ -97,18 +84,6 @@ pub fn has_extension(link: &str, extensions: Vec<String>) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn add_http_slash_if_not_present_test() {
-        let result = add_http_if_not_present("ciao.com".to_owned());
-        assert_eq!(result, "http://ciao.com");
-    }
-
-    #[test]
-    fn add_http_if_not_present_test() {
-        let result = add_http_if_not_present("//ciao.com".to_owned());
-        assert_eq!(result, "http://ciao.com");
-    }
 
     #[test]
     fn add_base_url_if_not_present_test() {

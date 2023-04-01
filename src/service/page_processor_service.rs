@@ -13,7 +13,7 @@ use crate::{
     },
     util::{
         file_util::{file_delete, file_rename},
-        link_util::{add_http_if_not_present, extract_fname_from_link},
+        link_util::{add_base_url_if_not_present, extract_fname_from_link},
     },
 };
 use std::collections::HashSet;
@@ -38,7 +38,7 @@ pub async fn extract_links_and_process_data(
             };
             let extracted_links = link_extractor.extract(&response_str);
             extracted_links.iter().for_each(|item| {
-                let item = &add_http_if_not_present(item.to_string());
+                let item = &add_base_url_if_not_present(&item.to_string(), &config.website);
                 if !processed.contains(item.as_str()) {
                     processing.insert(item.to_string());
                 }
@@ -52,7 +52,7 @@ pub async fn extract_links_and_process_data(
             extractor
                 .extract(&response_str)
                 .iter()
-                .map(|link| add_http_if_not_present(link.to_string()))
+                .map(|link| add_base_url_if_not_present(&link.to_string(), &config.website))
                 .for_each(|link| resources_links.push(link))
         });
 

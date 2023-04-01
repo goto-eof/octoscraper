@@ -1,6 +1,7 @@
 use std::collections::HashSet;
 
 use super::resource_extractor::{strategy_a_common_extractor, ResourceExtractor};
+use crate::util::link_util::has_extension;
 use crate::util::{
     link_util::{add_base_url_if_not_present, normalize_link_replace_spaces},
     validation_util::is_same_domain_ext,
@@ -62,14 +63,7 @@ impl AudioLinkExtractor {
             .find(predicate)
             .filter_map(|n| n.attr("src"))
             .map(|item| item.to_string())
-            .filter(|link| {
-                for extension in self.extensions.iter() {
-                    if link.ends_with(extension) {
-                        return true;
-                    }
-                }
-                return false;
-            })
+            .filter_map(|link| has_extension(&link, self.extensions.clone()))
             .map(|link| {
                 add_base_url_if_not_present(&link, &self.domain, &self.processing_page_link)
             })
@@ -168,5 +162,25 @@ mod tests {
         assert_eq!(2, result.len());
         assert_eq!(true, result.get("http://dodu.it/test/horse.mp3").is_some());
         assert_eq!(true, result.get("http://dodu.it/test/horses.mp3").is_some());
+    }
+
+    #[test]
+    fn strategy_b_test_has_extension() {
+        let audio_extractor = AudioLinkExtractor {
+            domain: "http://dodu.it".to_owned(),
+            enabled: true,
+            extensions: vec![".ogg".to_owned(), ".mp3".to_owned(), ".mid".to_owned()],
+            is_same_domain_enabled: false,
+            processing_page_link: "http://dodu.it/test/index.html".to_owned(),
+        };
+        let resource_str = r#"
+                    <audio controls>
+                        <source src="horse.uknown" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                    <a href="horses.uknown2">Download</a>
+        "#;
+        let result = audio_extractor.extract(resource_str);
+        assert_eq!(0, result.len());
     }
 }

@@ -1,12 +1,11 @@
-use std::collections::HashSet;
-
+use super::resource_extractor::{strategy_a_common_extractor, ResourceExtractor};
+use crate::util::link_util::has_extension;
 use crate::util::{
     link_util::add_base_url_if_not_present,
     validation_util::{contains_extension, is_same_domain_ext},
 };
 use select::{document::Document, predicate::Name};
-
-use super::resource_extractor::{strategy_a_common_extractor, ResourceExtractor};
+use std::collections::HashSet;
 
 pub struct ImageLinkExtractor {
     pub enabled: bool,
@@ -59,6 +58,7 @@ impl ImageLinkExtractor {
             .find(Name("img"))
             .filter_map(|n| n.attr("src"))
             .map(|item| item.to_string())
+            .filter_map(|link| has_extension(&link, self.extensions.clone()))
             .map(|link| {
                 add_base_url_if_not_present(&link, &self.domain, &self.processing_page_link)
             })

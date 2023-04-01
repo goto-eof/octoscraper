@@ -147,14 +147,14 @@ fn update_config_with_argument_values(config: &mut Config) -> Flow {
     }
 
     if commands.get(ARGUMENT_ENABLE_IMAGE_EXTRACTOR).is_some() {
-        config._is_image_extractor_enabled = commands
+        config.is_image_extractor_enabled = commands
             .get(ARGUMENT_ENABLE_IMAGE_EXTRACTOR)
             .unwrap()
             .parse()
             .unwrap();
 
         if commands.get(ARGUMENT_EXTENSIONS_IMAGE).is_some() {
-            config._image_extractor_extensions = commands
+            config.image_extractor_extensions = commands
                 .get(ARGUMENT_EXTENSIONS_IMAGE)
                 .unwrap()
                 .split(",")
@@ -164,14 +164,14 @@ fn update_config_with_argument_values(config: &mut Config) -> Flow {
     }
 
     if commands.get(ARGUMENT_ENABLE_VIDEO_EXTRACTOR).is_some() {
-        config._is_video_extractor_enabled = commands
+        config.is_video_extractor_enabled = commands
             .get(ARGUMENT_ENABLE_VIDEO_EXTRACTOR)
             .unwrap()
             .parse()
             .unwrap();
 
         if commands.get(ARGUMENT_EXTENSIONS_VIDEO).is_some() {
-            config._video_extractor_extensions = commands
+            config.video_extractor_extensions = commands
                 .get(ARGUMENT_EXTENSIONS_VIDEO)
                 .unwrap()
                 .split(",")
@@ -181,14 +181,14 @@ fn update_config_with_argument_values(config: &mut Config) -> Flow {
     }
 
     if commands.get(ARGUMENT_ENABLE_AUDIO_EXTRACTOR).is_some() {
-        config._is_audio_extractor_enabled = commands
+        config.is_audio_extractor_enabled = commands
             .get(ARGUMENT_ENABLE_AUDIO_EXTRACTOR)
             .unwrap()
             .parse()
             .unwrap();
 
         if commands.get(ARGUMENT_EXTENSIONS_AUDIO).is_some() {
-            config._audio_extractor_extensions = commands
+            config.audio_extractor_extensions = commands
                 .get(ARGUMENT_EXTENSIONS_AUDIO)
                 .unwrap()
                 .split(",")
@@ -198,14 +198,14 @@ fn update_config_with_argument_values(config: &mut Config) -> Flow {
     }
 
     if commands.get(ARGUMENT_ENABLE_OTHER_FILE_EXTRACTOR).is_some() {
-        config._is_other_extractor_enabled = commands
+        config.is_other_extractor_enabled = commands
             .get(ARGUMENT_ENABLE_OTHER_FILE_EXTRACTOR)
             .unwrap()
             .parse()
             .unwrap();
 
         if commands.get(ARGUMENT_EXTENSIONS_OTHER_FILE).is_some() {
-            config._other_extractor_extensions = commands
+            config.other_extractor_extensions = commands
                 .get(ARGUMENT_EXTENSIONS_OTHER_FILE)
                 .unwrap()
                 .split(",")
@@ -297,10 +297,10 @@ fn update_config_with_argument_values(config: &mut Config) -> Flow {
             .unwrap();
     }
 
-    if !config._is_audio_extractor_enabled
-        && !config._is_image_extractor_enabled
-        && !config._is_video_extractor_enabled
-        && !config._is_other_extractor_enabled
+    if !config.is_audio_extractor_enabled
+        && !config.is_image_extractor_enabled
+        && !config.is_video_extractor_enabled
+        && !config.is_other_extractor_enabled
     {
         println!("No job selected. Please select at least one job: image extraction, video extraction, audio extraction");
         return Flow::EXIT;

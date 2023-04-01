@@ -13,8 +13,8 @@ pub fn load_default_settings() -> Config {
         user_agent: "".to_string(),
         hash_check: true,
 
-        _is_image_extractor_enabled: false,
-        _image_extractor_extensions: vec![
+        is_image_extractor_enabled: false,
+        image_extractor_extensions: vec![
             ".jpg".to_string(),
             ".jpeg".to_string(),
             ".png".to_string(),
@@ -26,22 +26,22 @@ pub fn load_default_settings() -> Config {
             ".svg".to_string(),
             ".SVG".to_string(),
         ],
-        _is_video_extractor_enabled: false,
-        _video_extractor_extensions: vec![
+        is_video_extractor_enabled: false,
+        video_extractor_extensions: vec![
             ".mp4".to_string(),
             ".MP4".to_string(),
             ".ogg".to_string(),
             ".OGG".to_string(),
         ],
-        _is_audio_extractor_enabled: false,
-        _audio_extractor_extensions: vec![
+        is_audio_extractor_enabled: false,
+        audio_extractor_extensions: vec![
             ".mp3".to_string(),
             ".MP3".to_string(),
             ".mid".to_string(),
             ".MID".to_string(),
         ],
-        _is_other_extractor_enabled: false,
-        _other_extractor_extensions: vec![
+        is_other_extractor_enabled: false,
+        other_extractor_extensions: vec![
             ".exe".to_string(),
             ".zip".to_string(),
             ".gz".to_string(),

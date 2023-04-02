@@ -26,7 +26,7 @@ Download midi and mp3 files, same domain, only from the page passed as parameter
 ```
 Download image files, no same domain
 ```
-./octoscraper -w https://wallpaper.mob.org/ -oi true -sd false
+./octoscraper -w https://wallpaper.mob.org/ -oi true -sd false -si 1000000
 ```
 Download video, process only the page passed as parameter
 ```

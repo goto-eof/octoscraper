@@ -85,6 +85,6 @@ cargo test
 
 
 
-Tested on Linux and MacOS.
+Tested on Linux, MacOS and Windows.
 
 if any problems arise, feel free to [contact me](https://andre-i.dev/#contactme).

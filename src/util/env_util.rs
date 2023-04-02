@@ -5,8 +5,8 @@ use super::help_util::{
     ARGUMENT_EXTENSIONS_VIDEO, ARGUMENT_HASH_CHECK, ARGUMENT_HELP, ARGUMENT_INSISTENT_MODE,
     ARGUMENT_MINIMUM_SIZE_AUDIO, ARGUMENT_MINIMUM_SIZE_IMAGE, ARGUMENT_MINIMUM_SIZE_OTHER_FILE,
     ARGUMENT_MINIMUM_SIZE_VIDEO, ARGUMENT_PROCESS_ONLY_ROOT, ARGUMENT_RESOURCE_DIRECTORY,
-    ARGUMENT_RESOURCE_DOWNLOAD_TIMEOUT, ARGUMENT_SAME_DOMAIN, ARGUMENT_SLEEP_TIME,
-    ARGUMENT_USER_AGENT, ARGUMENT_WEBSITE,
+    ARGUMENT_RESOURCE_DOWNLOAD_TIMEOUT, ARGUMENT_RESOURCE_PROCESS_UNIQUE_METHOD,
+    ARGUMENT_SAME_DOMAIN, ARGUMENT_SLEEP_TIME, ARGUMENT_USER_AGENT, ARGUMENT_WEBSITE,
 };
 use crate::{
     structure::config_struct::Config,
@@ -200,6 +200,17 @@ pub fn update_config_with_argument_values(config: &mut Config) -> Flow {
     if commands.get(ARGUMENT_MINIMUM_SIZE_OTHER_FILE).is_some() {
         config.other_file_extractor_minimum_size = commands
             .get(ARGUMENT_MINIMUM_SIZE_OTHER_FILE)
+            .unwrap()
+            .parse()
+            .unwrap();
+    }
+
+    if commands
+        .get(ARGUMENT_RESOURCE_PROCESS_UNIQUE_METHOD)
+        .is_some()
+    {
+        config.resource_unique_method = commands
+            .get(ARGUMENT_RESOURCE_PROCESS_UNIQUE_METHOD)
             .unwrap()
             .parse()
             .unwrap();

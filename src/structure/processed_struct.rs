@@ -3,18 +3,31 @@ use std::collections::HashSet;
 
 pub struct Processed {
     processed_resources: HashSet<String>,
+    unique_process_method: UniqueProcessMethod,
+}
+
+pub enum UniqueProcessMethod {
+    FileUnique = 1,
+    LinkUnique = 2,
 }
 
 impl Processed {
-    pub fn new() -> Processed {
+    pub fn new(unique_process_method: UniqueProcessMethod) -> Processed {
         Processed {
             processed_resources: HashSet::new(),
+            unique_process_method,
         }
     }
 
     pub fn was_already_processed(&self, link: &str) -> bool {
-        self.processed_resources
-            .contains(&Processed::extract_fname(link, None))
+        self.processed_resources.contains(&self.retrieve_name(link))
+    }
+
+    fn retrieve_name(&self, link: &str) -> String {
+        match self.unique_process_method {
+            UniqueProcessMethod::FileUnique => Processed::extract_fname(link, None),
+            UniqueProcessMethod::LinkUnique => link.to_owned(),
+        }
     }
 
     pub fn push(&mut self, link: &str) {

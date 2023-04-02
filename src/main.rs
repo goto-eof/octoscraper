@@ -2,7 +2,7 @@ use crate::service::page_processor_service::extract_links_and_process_data;
 use crate::structure::application_settings::ApplicationSettings;
 use crate::structure::config_struct::Config;
 use crate::structure::processed_hash_struct::ProcessedHash;
-use crate::structure::processed_struct::Processed;
+use crate::structure::processed_struct::{Processed, UniqueProcessMethod};
 use crate::util::env_util::update_config_with_argument_values;
 use crate::util::file_util::initialize_download_directory;
 use crate::util::help_util::Flow;
@@ -44,9 +44,19 @@ async fn main() {
     if update_config_with_argument_values(&mut config) == Flow::EXIT {
         return;
     }
+
+    if config.resource_unique_method == 2 {
+        println!("hash check will be disabled.");
+        config.hash_check = false;
+    }
+
     let mut processing: HashSet<String> = HashSet::new();
     let mut processed: HashSet<String> = HashSet::new();
-    let mut processed_resources: Processed = Processed::new();
+    let mut processed_resources: Processed = Processed::new(match config.resource_unique_method {
+        1 => UniqueProcessMethod::FileUnique,
+        2 => UniqueProcessMethod::LinkUnique,
+        _ => UniqueProcessMethod::FileUnique,
+    });
     let mut processed_resources_hash: ProcessedHash = ProcessedHash::new(config.hash_check);
     processing.insert(config.website.to_string());
     println!(

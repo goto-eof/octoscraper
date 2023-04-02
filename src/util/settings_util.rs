@@ -51,5 +51,6 @@ pub fn load_default_settings() -> Config {
         video_extractor_minimum_size: u64::MIN,
         audio_extractor_minimum_size: u64::MIN,
         other_file_extractor_minimum_size: u64::MIN,
+        resource_unique_method: 1,
     };
 }

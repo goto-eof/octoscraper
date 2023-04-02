@@ -25,4 +25,6 @@ pub struct Config {
     pub is_other_extractor_enabled: bool,
     pub other_file_extractor_minimum_size: u64,
     pub other_extractor_extensions: Vec<String>,
+
+    pub resource_unique_method: u8,
 }

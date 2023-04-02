@@ -22,6 +22,7 @@ pub const ARGUMENT_USER_AGENT: &str = "-a";
 pub const ARGUMENT_HASH_CHECK: &str = "-c";
 pub const ARGUMENT_SAME_DOMAIN: &str = "-sd";
 pub const ARGUMENT_PROCESS_ONLY_ROOT: &str = "-r";
+pub const ARGUMENT_RESOURCE_PROCESS_UNIQUE_METHOD: &str = "-u";
 
 fn check_and_insert(map: &mut Vec<(String, String)>, key: &str, value: &str) {
     let duplicates: Vec<(String, String)> = map
@@ -148,6 +149,11 @@ pub fn print_help() {
     );
 
     check_and_insert(&mut help_map, ARGUMENT_SAME_DOMAIN, "same domain");
+    check_and_insert(
+        &mut help_map,
+        ARGUMENT_RESOURCE_PROCESS_UNIQUE_METHOD,
+        "consider unique resources by filename (1) or by link (2). Allowed valued: 1 or 2",
+    );
     check_and_insert(
         &mut help_map,
         ARGUMENT_PROCESS_ONLY_ROOT,

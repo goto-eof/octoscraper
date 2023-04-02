@@ -36,7 +36,6 @@ impl ResourceExtractor for LinkExtractor {
                             &self.domain,
                             &self.processing_page_link,
                         );
-                        println!("processed: {}", result);
                         return result;
                     })
                     .filter_map(|link| {

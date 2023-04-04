@@ -60,7 +60,7 @@ where
  | -a       |user agent                                                          | OctoScraper|
  | -c       |enables downloaded file hash check for avoiding duplicate downloads | true|
  |-r        | process only the root link (process only one page)                                         | false|
- | -u       | consider unique resources by filename (1) or by link (2). Allowed valued: 1 or 2| 1 |
+ | -u       | consider unique resources by filename (1) or by link (2). Allowed values: 1 or 2| 1 |
 
 
 ### For developers

@@ -88,4 +88,4 @@ cargo test
 
 Tested on Linux, MacOS and Windows.
 
-if any problems arise, feel free to [contact me](https://andre-i.dev/#contactme).
+if any problems arise, feel free to [contact me](http://andre-i.eu/#contactme).
